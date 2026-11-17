@@ -9,6 +9,7 @@ type Button = { text: string; href: string };
 
 type NavbarSlashLinksProps = {
   brand?: string;
+  logoImageSrc?: string;
   mark?: string;
   navItems?: NavItem[];
   primaryButton?: Button;
@@ -29,6 +30,7 @@ const DEFAULT_ITEMS: NavItem[] = [
 
 const NavbarSlashLinks = ({
   brand = "Crumb & Butter",
+  logoImageSrc = "https://storage.googleapis.com/webild/users/user_3MEga9cursqZnupWG2nTy9in2oL/uploaded-1794924053353-qycvma4f.png",
   mark,
   navItems = DEFAULT_ITEMS,
   primaryButton = { text: "Reserve table", href: "#contact" },
@@ -51,9 +53,18 @@ const NavbarSlashLinks = ({
         className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background text-primary"
       >
         <div className="mx-auto flex h-[4rem] w-[var(--container)] items-center justify-between gap-[1.5rem]">
-          <a href="#" className="flex min-w-0 shrink-0 items-start gap-[0.1rem]">
-            <p className="-mb-[0.2em] truncate pb-[0.2em] text-[length:var(--text-body-lg)] font-semibold leading-none tracking-[-0.02em]">{brand}</p>
-            {mark && <p className="text-[length:0.6em] font-semibold leading-none">{mark}</p>}
+          <a href="#" className="flex min-w-0 shrink-0 items-center gap-[0.75rem]">
+            {logoImageSrc && (
+              <img
+                src={logoImageSrc}
+                alt={brand}
+                className="h-9 w-auto max-h-9 object-contain rounded-sm"
+              />
+            )}
+            <div className="flex flex-col">
+              <p className="-mb-[0.2em] truncate pb-[0.2em] text-[length:var(--text-body-lg)] font-bold leading-none tracking-[-0.02em]">{brand}</p>
+              {mark && <p className="text-[length:0.6em] font-semibold leading-none">{mark}</p>}
+            </div>
           </a>
 
           {navItems.length > 0 && (
@@ -107,7 +118,12 @@ const NavbarSlashLinks = ({
             className="fixed inset-0 z-[70] flex flex-col bg-background text-primary min-[94.5rem]:hidden"
           >
             <div className="mx-auto flex h-[4rem] w-[var(--container)] flex-none items-center justify-between border-b border-border">
-              <p className="-mb-[0.2em] truncate pb-[0.2em] text-[length:var(--text-body-lg)] font-semibold leading-none tracking-[-0.02em]">{brand}</p>
+              <div className="flex items-center gap-2 min-w-0">
+                {logoImageSrc && (
+                  <img src={logoImageSrc} alt={brand} className="h-8 w-auto max-h-8 object-contain rounded-sm" />
+                )}
+                <p className="-mb-[0.2em] truncate pb-[0.2em] text-[length:var(--text-body-lg)] font-bold leading-none tracking-[-0.02em]">{brand}</p>
+              </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}

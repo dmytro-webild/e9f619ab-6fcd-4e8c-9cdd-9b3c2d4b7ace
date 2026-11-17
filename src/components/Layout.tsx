@@ -8,6 +8,7 @@ export default function Layout() {
       <header data-webild-section="Header">
         <NavbarSlashLinks
           brand="SPRITZ & BURGER"
+          logoImageSrc="https://storage.googleapis.com/webild/users/user_3MEga9cursqZnupWG2nTy9in2oL/uploaded-1794924053353-qycvma4f.png"
           navItems={[
             {
               name: "Il Menu",

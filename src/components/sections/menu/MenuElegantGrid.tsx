@@ -5,17 +5,27 @@ import { twMerge } from "tailwind-merge";
 import { useKitMotion } from "@/components/kit/kitMotion";
 import Media from "@/components/kit/Media";
 import SnellenbergWordRise from "@/components/kit/SnellenbergWordRise";
-import { Utensils, Wine, Beer, Sparkles, X, ChevronRight, Check } from "lucide-react";
+import { Utensils, Flame, Sparkles, Smile, Salad, ChevronRight, X, Check, Search } from "lucide-react";
 
 const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
+
+export type MenuCategoryKey =
+  | "all"
+  | "burgers"
+  | "special-burgers"
+  | "gli-incredibili"
+  | "veggie"
+  | "per-i-piccoli"
+  | "contorni-insalate";
 
 export type MenuItem = {
   id: string;
   name: string;
-  category: "burger" | "spritz" | "sfizi" | "birre" | "dolci";
+  category: MenuCategoryKey;
   price: string;
   description: string;
   ingredients?: string[];
+  grammage?: string;
   imageSrc: string;
   imageAlt?: string;
   tag?: string;
@@ -24,215 +34,503 @@ export type MenuItem = {
 };
 
 export type MenuCategory = {
-  key: "all" | "burger" | "spritz" | "sfizi" | "birre" | "dolci";
+  key: MenuCategoryKey;
   label: string;
   icon?: typeof Utensils;
 };
 
 const DEFAULT_CATEGORIES: MenuCategory[] = [
-  { key: "all", label: "Tutti i Piatti & Drink", icon: Sparkles },
-  { key: "burger", label: "Hamburger Gourmet", icon: Utensils },
-  { key: "spritz", label: "Spritz & Aperitivi", icon: Wine },
-  { key: "sfizi", label: "Sfizi & Patate", icon: Utensils },
-  { key: "birre", label: "Birre & Drink", icon: Beer },
-  { key: "dolci", label: "Dolci & Finale", icon: Sparkles },
+  { key: "all", label: "Tutti i Prodotti", icon: Sparkles },
+  { key: "burgers", label: "Burgers", icon: Utensils },
+  { key: "special-burgers", label: "Special Burgers", icon: Flame },
+  { key: "gli-incredibili", label: "Gli Incredibili", icon: Sparkles },
+  { key: "veggie", label: "Veggie", icon: Salad },
+  { key: "per-i-piccoli", label: "Per I Piccoli", icon: Smile },
+  { key: "contorni-insalate", label: "Contorni & Insalate", icon: Salad },
 ];
 
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
+  // --- BURGERS ---
   {
     id: "b1",
-    name: "Classic Royal Burger",
-    category: "burger",
-    price: "€14.00",
-    description: "carne fresca 100% manzo selezionato ogni giorno, formaggio cheddar fuso, insalata croccante, pomodoro fresco e la nostra maionese speciale della casa.",
-    ingredients: ["200g Manzo Scelto", "Cheddar Fuso", "Pomodoro e Insalata", "Pane Artigianale Dorato", "Salsa Speciale"],
+    name: "Classic",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane fragrante, carne di manzo scelta, bacon croccante, insalata fresca, pomodoro, cipolla, formaggio fuso e la nostra salsa speciale della casa.",
+    grammage: "Disponibile da: 150g (€9.50), 200g (€11.50), 300g (€13.50), 400g (€15.50)",
+    ingredients: ["Pane Artigianale", "Carne Scelta 100% Manzo", "Bacon Croccante", "Insalata & Pomodoro", "Cipolla & Formaggio Fuso", "Salsa della Casa"],
     imageSrc: "https://img.b2bpic.net/free-photo/front-view-meat-burger-with-salad-cheese-tomatoes-dark-desk-bun-sandwich-fast-food_140725-89542.jpg",
-    imageAlt: "Classic Royal Burger servito caldo",
-    tag: "Bestseller",
+    imageAlt: "Classic Burger con bacon e formaggio",
+    tag: "Classico",
     badgeColor: "primary",
-    allergens: "Glutine, Lattosio, Uova"
-  },
-  {
-    id: "b2",
-    name: "Crispy Bacon Deluxe",
-    category: "burger",
-    price: "€16.00",
-    description: "Doppio bacon croccante dorato, manzo fresco 200g, cheddar stagionato, cipolle caramellate al vino rosso e salsa BBQ affumicata.",
-    ingredients: ["200g Manzo Fresco", "Doppio Bacon Croccante", "Cheddar Stagionato", "Cipolla Caramellata", "Salsa BBQ"],
-    imageSrc: "https://img.b2bpic.net/free-photo/side-view-burger-with-beef-patty-grilled-red-onion-tomato-lettuce-burger-buns-french-fries-orange-drink-table_141793-3607.jpg",
-    imageAlt: "Crispy Bacon Deluxe con patatine",
-    tag: "Il Più Amato",
-    badgeColor: "accent",
     allergens: "Glutine, Lattosio"
   },
   {
+    id: "b2",
+    name: "Chicken",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane croccante, deliziosa cotoletta di pollo impanata dorata, insalata fresca, pomodoro, formaggio fuso e salsa speciale della casa.",
+    ingredients: ["Pane Artigianale", "Cotoletta di Pollo Croccante", "Insalata Fresca", "Pomodoro Rosso", "Formaggio Fuso", "Salsa della Casa"],
+    imageSrc: "https://images.pexels.com/photos/5639466/pexels-photo-5639466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Chicken Burger con cotoletta di pollo",
+    tag: "Croccante",
+    badgeColor: "accent",
+    allergens: "Glutine, Lattosio, Uova"
+  },
+  {
     id: "b3",
-    name: "Truffle & Mushroom Special",
-    category: "burger",
-    price: "€18.00",
-    description: "Crema al tartufo nero del Garda, manzo 100% italiano, funghi trifolati in padella, provola affumicata e rucola selvatica.",
-    ingredients: ["Manzo Selezionato 200g", "Crema di Tartufi del Garda", "Funghi Trifolati", "Provola Affumicata", "Rucola"],
-    imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg",
-    imageAlt: "Truffle & Mushroom Special burger gourmet",
-    tag: "Gourmet",
-    badgeColor: "primary",
+    name: "Asia",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane artigianale, saporita carne di manzo, insalata croccante, pomodoro fresco, morbida mozzarella filante e salsa agrodolce aromatica.",
+    ingredients: ["Pane Artigianale", "Carne di Manzo", "Mozzarella Filante", "Insalata & Pomodoro", "Salsa Agrodolce"],
+    imageSrc: "https://images.pexels.com/photos/4628466/pexels-photo-4628466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Asia Burger con mozzarella e salsa agrodolce",
+    tag: "Fusion",
+    badgeColor: "secondary",
     allergens: "Glutine, Lattosio"
   },
   {
     id: "b4",
-    name: "Spicy Desenzano Fire",
-    category: "burger",
-    price: "€17.00",
-    description: "Manzo piccante speziato, formaggio pepper jack fuso, jalapeños croccanti sott'olio, cipolla croccante e maionese al peperoncino.",
-    ingredients: ["Manzo Speziato 200g", "Pepper Jack", "Jalapeños Sott'olio", "Maionese al Peperoncino"],
+    name: "French",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane artigianale soffice, carne di manzo gustosa, bacon croccante, insalata, pomodoro fresco, cremoso formaggio Brie fuso e salsa della casa.",
+    ingredients: ["Pane Artigianale", "Carne di Manzo", "Formaggio Brie Cremoso", "Bacon Croccante", "Pomodoro & Insalata", "Salsa della Casa"],
+    imageSrc: "https://images.pexels.com/photos/687824/pexels-photo-687824.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "French Burger con formaggio brie",
+    tag: "Brie Cremoso",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "b5",
+    name: "Genovese",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane dorato, carne fresca, insalata, pomodoro, profumato pesto alla genovese artigianale, mozzarella filante e salsa della casa.",
+    ingredients: ["Pane Dorato", "Carne Fresca", "Pesto Fresco alla Genovese", "Mozzarella Filante", "Pomodoro & Insalata", "Salsa della Casa"],
+    imageSrc: "https://images.pexels.com/photos/31450802/pexels-photo-31450802.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Genovese Burger con pesto e mozzarella",
+    tag: "Pesto Fresco",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio, Frutta a guscio"
+  },
+  {
+    id: "b6",
+    name: "Lago",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane soffice, insalata fresca, croccante filetto di nasello fritto in pastella dorata, pomodoro e salsa speciale della casa.",
+    grammage: "Disponibile da: 100g (€9.50), 200g (€12.50)",
+    ingredients: ["Filetto di Nasello Fritto", "Pane Soffice", "Insalata Croccante", "Pomodoro Rosso", "Salsa Speciale della Casa"],
+    imageSrc: "https://images.pexels.com/photos/31463149/pexels-photo-31463149.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Lago Burger con filetto di nasello",
+    tag: "Specialità Pesce",
+    badgeColor: "accent",
+    allergens: "Glutine, Pesce, Uova"
+  },
+  {
+    id: "b7",
+    name: "Monte",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane dorato, carne di manzo, bacon croccante, insalata, pomodoro, cipolla e saporito gorgonzola cremoso con salsa della casa.",
+    ingredients: ["Carne Scelta", "Gorgonzola Cremoso DOP", "Bacon Croccante", "Cipolla", "Pomodoro & Insalata", "Salsa della Casa"],
+    imageSrc: "https://images.pexels.com/photos/15523382/pexels-photo-15523382.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Monte Burger con gorgonzola e bacon",
+    tag: "Gorgonzola",
+    badgeColor: "secondary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "b8",
+    name: "Forest",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane artigianale, carne saporita, bacon croccante, deliziosi funghi porcini saltati in padella, cipolla, insalata, pomodoro e salsa della casa.",
+    ingredients: ["Funghi Porcini Saltati", "Carne di Manzo", "Bacon Croccante", "Cipolla", "Pomodoro & Insalata", "Salsa della Casa"],
+    imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg",
+    imageAlt: "Forest Burger con funghi porcini",
+    tag: "Funghi Porcini",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "b9",
+    name: "Hawaii",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane soffice, carne di manzo, ananas dolce, insalata fresca, formaggio fuso, salsa alle fragole e salsa speciale della casa.",
+    ingredients: ["Ananas Grigliato", "Carne di Manzo", "Formaggio Fuso", "Salsa alle Fragole", "Insalata", "Salsa della Casa"],
+    imageSrc: "https://images.pexels.com/photos/28760156/pexels-photo-28760156.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Hawaii Burger con ananas",
+    tag: "Exotic",
+    badgeColor: "accent",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "b10",
+    name: "Greco",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane artigianale, carne di manzo gustosa, insalata croccante, pomodoro, cipolla rossa, formaggio feta sbriciolato e salsa all'aglio.",
+    ingredients: ["Carne di Manzo", "Feta Greca", "Cipolla Rossa", "Salsa all'Aglio", "Pomodoro & Insalata"],
+    imageSrc: "https://images.pexels.com/photos/2299981/pexels-photo-2299981.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Greco Burger con feta e aglio",
+    tag: "Feta & Aglio",
+    badgeColor: "secondary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "b11",
+    name: "Philadelphia",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane artigianale dorato, carne saporita, bacon croccante, insalata, pomodoro fresco, morbida crema Philadelphia e salsa della casa.",
+    ingredients: ["Crema Philadelphia", "Carne di Manzo", "Bacon Croccante", "Pomodoro & Insalata", "Salsa della Casa"],
+    imageSrc: "https://picsum.photos/seed/223816668/1200/800",
+    imageAlt: "Philadelphia Burger con formaggio spalmabile",
+    tag: "Philadelphia",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "b12",
+    name: "Fish & Chips",
+    category: "burgers",
+    price: "€10.50",
+    description: "Croccanti filetti di nasello fritti in pastella dorata, serviti con abbondanti patatine fritte croccanti e deliziosa salsa tartar.",
+    ingredients: ["Filetti di Nasello in Pastella", "Patatine Fritte Croccanti", "Salsa Tartar", "Spicchio di Limone"],
+    imageSrc: "https://picsum.photos/seed/744315841/1200/800",
+    imageAlt: "Fish and Chips servito con patatine",
+    tag: "Piatto Unico",
+    badgeColor: "accent",
+    allergens: "Glutine, Pesce, Uova"
+  },
+
+  // --- SPECIAL BURGERS ---
+  {
+    id: "sb1",
+    name: "Tartufo",
+    category: "special-burgers",
+    price: "€12.50",
+    description: "Pane artigianale, carne scelta di manzo, pregiato olio al tartufo nero, formaggio Brie cremoso, insalata fresca e pomodoro.",
+    grammage: "Disponibile da: 150g (€12.50), 200g (€14.50), 300g (€16.50), 400g (€18.50)",
+    ingredients: ["Carne Scelta 100% Manzo", "Olio al Tartufo Nero", "Formaggio Brie Cremoso", "Insalata Fresca", "Pomodoro Rosso"],
+    imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg",
+    imageAlt: "Special Burger Tartufo con brie",
+    tag: "Tartufo Gourmet",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "sb2",
+    name: "Datterino",
+    category: "special-burgers",
+    price: "€12.50",
+    description: "Pane artigianale, carne scelta, saporiti pomodorini secchi datterini, philadelphia, bacon croccante, insalata e salsa della casa.",
+    ingredients: ["Pomodorini Secchi Datterini", "Philadelphia Cremoso", "Carne Scelta", "Bacon Croccante", "Insalata & Salsa"],
+    imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg",
+    imageAlt: "Special Burger Datterino",
+    tag: "Datterini Secchi",
+    badgeColor: "accent",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "sb3",
+    name: "Smoky Forest",
+    category: "special-burgers",
+    price: "€12.50",
+    description: "Pane brioche, carne saporita, bacon croccante affumicato, provola affumicata fusa, funghi porcini e profumata salsa BBQ affumicata.",
+    ingredients: ["Provola Affumicata Fusa", "Funghi Porcini", "Bacon Affumicato", "Salsa BBQ", "Carne di Manzo"],
     imageSrc: "https://img.b2bpic.net/free-photo/black-burger-with-side-fries-cola_140725-2702.jpg",
-    imageAlt: "Spicy Desenzano Fire burger",
-    tag: "Piccante",
+    imageAlt: "Smoky Forest Burger affumicato",
+    tag: "Smoky BBQ",
+    badgeColor: "secondary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "sb4",
+    name: "Pistacchio & Bacon",
+    category: "special-burgers",
+    price: "€13.00",
+    description: "Pane artigianale soffice, carne di manzo, vellutata crema di pistacchio artigianale, bacon croccante, provola fusa e abbondante granella di pistacchi.",
+    ingredients: ["Crema di Pistacchio", "Granella di Pistacchio", "Bacon Croccante", "Provola Fusa", "Carne Scelta"],
+    imageSrc: "https://images.pexels.com/photos/15523382/pexels-photo-15523382.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Special Burger Pistacchio & Bacon",
+    tag: "Top Seller",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio, Frutta a guscio"
+  },
+  {
+    id: "sb5",
+    name: "Pulled Pork",
+    category: "special-burgers",
+    price: "€12.50",
+    description: "Pane artigianale, succulenta spalla di maiale sfilacciata cotta a bassa temperatura in salsa BBQ, insalata coleslaw e formaggio fuso.",
+    ingredients: ["Pulled Pork Cotto 12h", "Salsa BBQ", "Coleslaw Fresco", "Formaggio Fuso", "Pane Artigianale"],
+    imageSrc: "https://images.pexels.com/photos/5639466/pexels-photo-5639466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Pulled Pork Burger con coleslaw",
+    tag: "Slow Cooked",
+    badgeColor: "accent",
+    allergens: "Glutine, Lattosio, Senape"
+  },
+  {
+    id: "sb6",
+    name: "Pulled Chicken",
+    category: "special-burgers",
+    price: "€12.00",
+    description: "Pane dorato, tenero pollo sfilacciato e speziato, insalata croccante, maionese alla paprika dolce e formaggio cheddar fuso.",
+    ingredients: ["Pulled Chicken Speziato", "Cheddar Fuso", "Maionese alla Paprika", "Insalata Croccante"],
+    imageSrc: "https://picsum.photos/seed/1921229844/1200/800",
+    imageAlt: "Pulled Chicken Burger speziato",
+    tag: "Pollo Speziato",
     badgeColor: "secondary",
     allergens: "Glutine, Lattosio, Uova"
   },
   {
-    id: "b5",
-    name: "Garden Fresh Veggie",
-    category: "burger",
-    price: "€15.00",
-    description: "Burger 100% vegetale alle verdure grigliate e legumi, scamorza affumicata, maionese al basilico e pomodori secchi del Garda.",
-    ingredients: ["Burger di Legumi e Verdure", "Scamorza Affumicata", "Pomodori Secchi", "Maionese al Basilico"],
+    id: "sb7",
+    name: "Bacon Cheese",
+    category: "special-burgers",
+    price: "€12.50",
+    description: "Pane artigianale, carne scelta, abbondante doppio bacon croccante, doppio formaggio cheddar fuso, cipolla caramellata e salsa house.",
+    ingredients: ["Doppio Bacon Croccante", "Doppio Cheddar Fuso", "Cipolla Caramellata", "Salsa della Casa"],
+    imageSrc: "https://img.b2bpic.net/free-photo/side-view-burger-with-beef-patty-grilled-red-onion-tomato-lettuce-burger-buns-french-fries-orange-drink-table_141793-3607.jpg",
+    imageAlt: "Bacon Cheese Burger con doppio cheddar",
+    tag: "Doppio Bacon",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+
+  // --- GLI INCREDIBILI ---
+  {
+    id: "inc1",
+    name: "Smash Burger",
+    category: "gli-incredibili",
+    price: "€13.50",
+    description: "Soffice pane brioche, doppio patty smash 200g schiacciato sulla piastra rovente per bordi super croccanti, cheddar fuso, bacon e salsa Smash.",
+    ingredients: ["Doppio Patty Smash 200g", "Cheddar Fuso", "Bacon Croccante", "Pane Brioche Tostato", "Salsa Smash"],
+    imageSrc: "https://images.pexels.com/photos/4628466/pexels-photo-4628466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Smash Burger doppio patty",
+    tag: "Smash Style",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "inc2",
+    name: "Pulled Pork Deluxe",
+    category: "gli-incredibili",
+    price: "€14.00",
+    description: "Pane brioche tostato, spalla di maiale sfilacciata marinata 12 ore e affumicata, cheddar fuso, cipolla croccante e coleslaw fresco.",
+    ingredients: ["Pulled Pork 12h", "Cipolla Croccante", "Coleslaw", "Cheddar Fuso", "Pane Brioche"],
+    imageSrc: "https://images.pexels.com/photos/5639466/pexels-photo-5639466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Pulled Pork Deluxe in pane brioche",
+    tag: "Deluxe",
+    badgeColor: "accent",
+    allergens: "Glutine, Lattosio, Senape"
+  },
+  {
+    id: "inc3",
+    name: "Monster Burger",
+    category: "gli-incredibili",
+    price: "€17.50",
+    description: "Il re del menu! Pane brioche, triplo patty 450g di carne fresca, triplo bacon croccante, triplo cheddar, anelli di cipolla e salsa BBQ.",
+    ingredients: ["Triplo Patty 450g Manzo", "Triplo Bacon Croccante", "Triplo Cheddar", "Anelli di Cipolla", "Salsa BBQ"],
+    imageSrc: "https://img.b2bpic.net/free-photo/front-view-meat-burger-with-salad-cheese-tomatoes-dark-desk-bun-sandwich-fast-food_140725-89542.jpg",
+    imageAlt: "Monster Burger gigante con 3 patty",
+    tag: "XL 450g",
+    badgeColor: "secondary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "inc4",
+    name: "Double Bacon Cheese",
+    category: "gli-incredibili",
+    price: "€14.50",
+    description: "Pane brioche tostato, doppio patty 300g di carne fresca, 4 fette di bacon croccante, doppio cheddar fuso e salsa speciale della casa.",
+    ingredients: ["Doppio Patty 300g Manzo", "4x Bacon Croccante", "Doppio Cheddar", "Salsa della Casa"],
+    imageSrc: "https://img.b2bpic.net/free-photo/side-view-burger-with-beef-patty-grilled-red-onion-tomato-lettuce-burger-buns-french-fries-orange-drink-table_141793-3607.jpg",
+    imageAlt: "Double Bacon Cheese Burger incredibile",
+    tag: "Double 300g",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "inc5",
+    name: "Tower Burger",
+    category: "gli-incredibili",
+    price: "€16.50",
+    description: "Torre spettacolare con quadruplo patty di manzo 100%, abbondante cheddar fuso a cascata, bacon croccante e salsa speciale house.",
+    ingredients: ["Quadruplo Patty Manzo", "Cheddar Fuso a Cascata", "Bacon Croccante", "Salsa House"],
+    imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg",
+    imageAlt: "Tower Burger torre di carne",
+    tag: "Quadruplo Patty",
+    badgeColor: "accent",
+    allergens: "Glutine, Lattosio"
+  },
+
+  // --- VEGGIE ---
+  {
+    id: "v1",
+    name: "Veggie Classic",
+    category: "veggie",
+    price: "€9.50",
+    description: "Pane artigianale soffice, burger vegetale saporito a base di legumi e verdure, insalata fresca, pomodoro, formaggio e salsa della casa.",
+    ingredients: ["Burger Vegetale ai Legumi", "Insalata Fresca", "Pomodoro Rosso", "Formaggio Fuso", "Salsa della Casa"],
     imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg",
-    imageAlt: "Garden Fresh Veggie burger vegetariano",
+    imageAlt: "Veggie Classic burger vegetariano",
     tag: "Vegetariano",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
   },
   {
-    id: "b6",
-    name: "Bavarian Smoked Burger",
-    category: "burger",
-    price: "€16.50",
-    description: "Carne di manzo scelta, wurstel artigianale grigliato, sauerkraut delicato, formaggio emmental e senape dolce bavarese.",
-    ingredients: ["Manzo 200g", "Wurstel Artigianale", "Emmental Fuso", "Sauerkraut", "Senape Dolce"],
-    imageSrc: "https://img.b2bpic.net/free-photo/american-diner-aesthetics_23-2151854439.jpg",
-    imageAlt: "Bavarian Smoked Burger gourmet",
-    tag: "Specialità",
-    badgeColor: "secondary",
-    allergens: "Glutine, Lattosio, Senape"
-  },
-  {
-    id: "s1",
-    name: "Aperol Spritz Classic",
-    category: "spritz",
-    price: "€7.00",
-    description: "L'iconico aperitivo veneto-lombardo con Aperol, Prosecco DOC selezionato, soda vivace e fetta d'arancia fresca servito nel nostro cortile.",
-    ingredients: ["Aperol Originale", "Prosecco DOC", "Soda Rinfrescante", "Fetta d'Arancia"],
-    imageSrc: "https://img.b2bpic.net/free-photo/delicious-italian-cocktail-with-realistic-background_23-2150062921.jpg",
-    imageAlt: "Aperol Spritz servito freddo",
-    tag: "Icona del Cortile",
+    id: "v2",
+    name: "Veggie Genovese",
+    category: "veggie",
+    price: "€10.00",
+    description: "Pane artigianale, gustoso burger vegetale, pesto fresco alla genovese con basilico, mozzarella fresca filante e pomodoro maturo.",
+    ingredients: ["Burger Vegetale", "Pesto alla Genovese", "Mozzarella Fresca", "Pomodoro Rosso"],
+    imageSrc: "https://images.pexels.com/photos/687824/pexels-photo-687824.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Veggie Genovese con pesto",
+    tag: "Pesto & Mozzarella",
     badgeColor: "accent",
-    allergens: "Solfiti"
+    allergens: "Glutine, Lattosio, Frutta a guscio"
   },
   {
-    id: "s2",
-    name: "Campari Spritz Deciso",
-    category: "spritz",
-    price: "€7.50",
-    description: "Gusto amaro intenso e raffinato: Campari Bitter, Prosecco DOC, seltz e scorza d'arancia biologica espresso.",
-    ingredients: ["Campari Bitter", "Prosecco DOC", "Seltz", "Scorza d'Arancia Bio"],
-    imageSrc: "https://img.b2bpic.net/free-photo/hand-holding-italian-cocktail-still-life_23-2150645773.jpg",
-    imageAlt: "Campari Spritz bicchiere con arancia",
-    tag: "Carattere Deciso",
-    badgeColor: "primary",
-    allergens: "Solfiti"
+    id: "v3",
+    name: "Veggie Greco",
+    category: "veggie",
+    price: "€10.00",
+    description: "Pane artigianale dorato, burger vegetale alle verdure, formaggio feta saporito, cipolla croccante, pomodoro, insalata e salsa all'aglio.",
+    ingredients: ["Burger Vegetale", "Formaggio Feta Greca", "Cipolla Croccante", "Salsa all'Aglio", "Insalata & Pomodoro"],
+    imageSrc: "https://images.pexels.com/photos/2299981/pexels-photo-2299981.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Veggie Greco con feta",
+    tag: "Feta & Aglio",
+    badgeColor: "secondary",
+    allergens: "Glutine, Lattosio"
   },
+
+  // --- PER I PICCOLI ---
   {
-    id: "s3",
-    name: "Hugo Spritz del Garda",
-    category: "spritz",
-    price: "€7.50",
-    description: "Profumato e leggero: Liquore ai fiori di sambuco, Prosecco DOC frizzante, menta profumata e spruzzo di lime.",
-    ingredients: ["Liquore ai Fiori di Sambuco", "Prosecco DOC", "Menta Fresca", "Lime e Soda"],
-    imageSrc: "https://img.b2bpic.net/free-photo/tropical-cocktail-with-grapefruit-flavor_140725-65.jpg",
-    imageAlt: "Hugo Spritz ai fiori di sambuco e menta",
-    tag: "Fresco & Aromatico",
-    badgeColor: "primary",
-    allergens: "Solfiti"
-  },
-  {
-    id: "s4",
-    name: "Spritz Maracuja & Red Fruit",
-    category: "spritz",
+    id: "p1",
+    name: "Mini Burger & Patatine",
+    category: "per-i-piccoli",
     price: "€8.50",
-    description: "Cocktail firma Spritz & Burger: Aperol, succo al frutto della passione, Prosecco DOC e guarnizione ai frutti rossi.",
-    ingredients: ["Aperol", "Frutto della Passione", "Prosecco DOC", "Frutti di Bosco Freschi"],
-    imageSrc: "https://img.b2bpic.net/free-photo/side-view-friends-holding-cocktails_23-2150124815.jpg",
-    imageAlt: "Spritz Maracuja servito con frutti di bosco",
-    tag: "Firma della Casa",
-    badgeColor: "accent",
-    allergens: "Solfiti"
-  },
-  {
-    id: "f1",
-    name: "Patate a Spicchi Speziali",
-    category: "sfizi",
-    price: "€6.00",
-    description: "Patate fresche tagliate a spicchi con buccia croccante, speziate alle erbe aromatiche e servite con salsa maionese alla paprica dolce.",
-    ingredients: ["Patate Fresche a Spicchi", "Erbe del Garda", "Salsa Maionese alla Paprica"],
-    imageSrc: "https://img.b2bpic.net/free-photo/chicken-cutlet-with-zucchini_2829-10809.jpg",
-    imageAlt: "Patate a spicchi dorate e croccanti",
-    tag: "Imperdibile",
-    badgeColor: "secondary",
-    allergens: "Uova (nella salsa)"
-  },
-  {
-    id: "f2",
-    name: "Onion Rings Artigianali",
-    category: "sfizi",
-    price: "€6.50",
-    description: "Anelli di cipolla dolci impastellati alla birra artigianale, fritti croccanti e serviti con salsa BBQ affumicata.",
-    ingredients: ["Cipolle bionde dolci", "Pastella alla Birra", "Salsa BBQ"],
-    imageSrc: "https://img.b2bpic.net/free-photo/closeup-shot-appetizing-burger-with-onion-rings_181624-46590.jpg",
-    imageAlt: "Onion rings croccanti dorati",
-    tag: "Sfizio della Casa",
+    description: "Mini hamburger di manzo 100g con formaggio fuso, servito con un'abbondante porzione di patatine fritte dorate e bibita a scelta.",
+    ingredients: ["Hamburger 100g Manzo", "Formaggio Fuso", "Patatine Fritte Dorate", "Bibita a scelta"],
+    imageSrc: "https://images.pexels.com/photos/4628466/pexels-photo-4628466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Mini Burger & Patatine per bambini",
+    tag: "Menu Bimbi",
     badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "p2",
+    name: "Cotoletta & Patatine",
+    category: "per-i-piccoli",
+    price: "€8.00",
+    description: "Tenera cotoletta di petto di pollo dorata e croccante impanata, servita con patatine fritte e ketchup della casa.",
+    ingredients: ["Cotoletta di Pollo Croccante", "Patatine Fritte Dorate", "Ketchup della Casa"],
+    imageSrc: "https://img.b2bpic.net/free-photo/chicken-cutlet-with-zucchini_2829-10809.jpg",
+    imageAlt: "Cotoletta di pollo e patatine per bimbi",
+    tag: "Menu Bimbi",
+    badgeColor: "accent",
+    allergens: "Glutine, Uova"
+  },
+  {
+    id: "p3",
+    name: "Nuggets & Patatine",
+    category: "per-i-piccoli",
+    price: "€7.50",
+    description: "6 croccanti bocconcini di pollo fritti, accompagnati da patatine fritte croccanti e maionese delicata.",
+    ingredients: ["6x Nuggets di Pollo Croccanti", "Patatine Fritte", "Maionese Delicata"],
+    imageSrc: "https://picsum.photos/seed/107682344/1200/800",
+    imageAlt: "Nuggets di pollo con patatine per bimbi",
+    tag: "Menu Bimbi",
+    badgeColor: "secondary",
+    allergens: "Glutine, Uova"
+  },
+
+  // --- CONTORNI E INSALATE ---
+  {
+    id: "ci1",
+    name: "Patatine Fritte",
+    category: "contorni-insalate",
+    price: "€4.50",
+    description: "Patate fritte classiche dorate e croccanti all'esterno, soffici all'interno, speziate con sale marino fino.",
+    ingredients: ["Patate Fritte Croccanti", "Sale Marino Fino"],
+    imageSrc: "https://img.b2bpic.net/free-photo/chicken-cutlet-with-zucchini_2829-10809.jpg",
+    imageAlt: "Patatine fritte dorate",
+    tag: "Classico Contorno",
+    badgeColor: "primary",
+    allergens: "Nessun allergene diretto"
+  },
+  {
+    id: "ci2",
+    name: "Anelli di Cipolla",
+    category: "contorni-insalate",
+    price: "€5.50",
+    description: "8 anelli di cipolla dolce bionda pastellati alla birra artigianale e fritti dorati, serviti con salsa BBQ affumicata.",
+    ingredients: ["8x Anelli di Cipolla", "Pastella alla Birra Artigianale", "Salsa BBQ"],
+    imageSrc: "https://img.b2bpic.net/free-photo/closeup-shot-appetizing-burger-with-onion-rings_181624-46590.jpg",
+    imageAlt: "Anelli di cipolla dorati",
+    tag: "Croccanti",
+    badgeColor: "accent",
     allergens: "Glutine"
   },
   {
-    id: "dr1",
-    name: "Birra Artigianale Bionda 0.4L",
-    category: "birre",
+    id: "ci3",
+    name: "Mozzarelline Fritte",
+    category: "contorni-insalate",
     price: "€6.00",
-    description: "Birra alla spina dorata non filtrata, dal corpo equilibrato e profumo di luppolo fresco. Perfetta in abbinamento ai nostri burger.",
-    ingredients: ["Acqua di Sorgente", "Malto d'Orzo", "Luppoli Selezionati"],
-    imageSrc: "https://img.b2bpic.net/free-photo/man-with-glass-beer_107420-65569.jpg",
-    imageAlt: "Bicchiere di birra artigianale alla spina",
-    tag: "Alla Spina",
-    badgeColor: "primary",
-    allergens: "Glutine (Orzo)"
+    description: "8 deliziosi bocconcini di mozzarella fresca italiana impanati con erbe aromatiche e fritti al momento.",
+    ingredients: ["8x Mozzarelline Impanate", "Mozzarella Fresca", "Erbe Aromatiche"],
+    imageSrc: "https://picsum.photos/seed/1736047732/1200/800",
+    imageAlt: "Mozzarelline fritte dorate e filanti",
+    tag: "Filanti",
+    badgeColor: "secondary",
+    allergens: "Glutine, Lattosio"
   },
   {
-    id: "dr2",
-    name: "Birra Artigianale Rossa 0.4L",
-    category: "birre",
+    id: "ci4",
+    name: "Chicken Nuggets",
+    category: "contorni-insalate",
     price: "€6.50",
-    description: "Birra ambrata doppio malto dal gusto ricco e note tostate di caramello e nocciola. Ottima con hamburger strutturati.",
-    ingredients: ["Malto Tostato", "Luppoli Aromatici"],
-    imageSrc: "https://img.b2bpic.net/free-photo/couple-drinking-craft-beer-outdoors_23-2148111307.jpg",
-    imageAlt: "Birra rossa artigianale versata nel bicchiere",
-    tag: "Doppio Malto",
-    badgeColor: "accent",
-    allergens: "Glutine (Orzo)"
+    description: "8 bocconcini croccanti di puro filetto di pollo fritti in panatura saporita, serviti con salsa a scelta.",
+    ingredients: ["8x Nuggets di Pollo", "Panatura Speziata", "Salsa a Scelta"],
+    imageSrc: "https://picsum.photos/seed/107682344/1200/800",
+    imageAlt: "8 chicken nuggets croccanti",
+    tag: "8 Pezzi",
+    badgeColor: "primary",
+    allergens: "Glutine, Uova"
   },
   {
-    id: "d1",
-    name: "Tiramisù Tradizionale",
-    category: "dolci",
-    price: "€6.00",
-    description: "Fatto in casa secondo la ricetta classica: savoiardi artigianali impregnati di caffè espresso del Garda e morbida crema al mascarpone.",
-    ingredients: ["Mascarpone Fresco", "Savoiardi Artigianali", "Caffè Espresso", "Cacao Amaro"],
-    imageSrc: "https://img.b2bpic.net/free-photo/tasty-sandwich-red-fork-wooden-cutting-board-dark-mix-color-surface_179666-42257.jpg",
-    imageAlt: "Tiramisu fatto in casa servito al piatto",
-    tag: "Fatto in Casa",
-    badgeColor: "primary",
-    allergens: "Glutine, Lattosio, Uova"
+    id: "ci5",
+    name: "Insalata Caesar",
+    category: "contorni-insalate",
+    price: "€9.50",
+    description: "Insalata misto verde croccante, bocconcini di pollo grigliato speziato, crostini dorati, scaglie di Grana Padano e salsa Caesar originale.",
+    ingredients: ["Pollo Grigliato Speziato", "Insalata Mista Fresca", "Crostini Dorati", "Grana Padano", "Salsa Caesar"],
+    imageSrc: "https://picsum.photos/seed/430703175/1200/800",
+    imageAlt: "Insalata Caesar fresca con pollo e crostini",
+    tag: "Insalata Ricca",
+    badgeColor: "accent",
+    allergens: "Glutine, Lattosio, Uova, Pesce (nella salsa)"
+  },
+  {
+    id: "ci6",
+    name: "Insalata Greca",
+    category: "contorni-insalate",
+    price: "€9.00",
+    description: "Fresca insalata misto verde, pomodoro maturo, cetrioli freschi, cipolla rossa di Tropea, olive nere, formaggio feta greca e origano.",
+    ingredients: ["Formaggio Feta Greca", "Pomodoro Maturo", "Cetrioli Freschi", "Cipolla Rossa di Tropea", "Olive Nere", "Origano"],
+    imageSrc: "https://picsum.photos/seed/1002397820/1200/800",
+    imageAlt: "Insalata Greca con feta e olive",
+    tag: "Fresca & Light",
+    badgeColor: "secondary",
+    allergens: "Lattosio"
   }
 ];
 
@@ -247,23 +545,30 @@ export type MenuGridProps = {
 };
 
 export default function MenuElegantGrid({
-  label = "/Il Menu di Desenzano",
-  title = "Scopri il nostro menu artigianale",
-  description = "Carne fresca 100% manzo selezionata ogni giorno, pane fragrante, contorni croccanti e i leggendari Spritz serviti nel cortile coperto a Desenzano del Garda.",
+  label = "/Il Menu di Spritz & Burger",
+  title = "Menu completo & specialità della casa",
+  description = "Tutti i nostri hamburger con carne fresca 100% manzo, i nostri Special Burgers gourmet, la linea Gli Incredibili, opzioni Veggie, menu Bimbi, contorni croccanti e fresche insalate a Desenzano del Garda.",
   categories = DEFAULT_CATEGORIES,
   items = DEFAULT_MENU_ITEMS,
-  ariaLabel = "Menu di Spritz & Burger",
+  ariaLabel = "Menu completo di Spritz & Burger",
   className,
 }: MenuGridProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const kit = useKitMotion();
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [activeCategory, setActiveCategory] = useState<MenuCategoryKey>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
 
-  const filteredItems = activeCategory === "all" 
-    ? items 
-    : items.filter((item) => item.category === activeCategory);
+  const filteredItems = items.filter((item) => {
+    const matchesCategory = activeCategory === "all" || item.category === activeCategory;
+    const matchesSearch =
+      searchQuery.trim() === "" ||
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.ingredients?.some((ing) => ing.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <section
@@ -276,7 +581,7 @@ export default function MenuElegantGrid({
     >
       <div className="mx-auto w-[var(--container)]">
         {/* Header */}
-        <div className="mx-auto mb-[clamp(2.5rem,5vw,4rem)] flex max-w-[48rem] flex-col items-center gap-[clamp(0.875rem,1.8vw,1.5rem)] text-center">
+        <div className="mx-auto mb-[clamp(2.5rem,5vw,3.5rem)] flex max-w-[48rem] flex-col items-center gap-[clamp(0.875rem,1.8vw,1.5rem)] text-center">
           {label && (
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 12 }}
@@ -314,32 +619,94 @@ export default function MenuElegantGrid({
           )}
         </div>
 
-        {/* Category Filters */}
+        {/* Search Bar & Category Filters */}
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: kit.base, ease: kit.ease, delay: 0.2 }}
-          className="mb-12 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3"
+          className="mb-10 flex flex-col items-center gap-6"
         >
-          {categories.map((cat) => {
-            const isActive = activeCategory === cat.key;
-            return (
+          {/* Search Input */}
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Cerca per nome o ingrediente (es. tartufo, bacon, feta)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-full border border-border/80 bg-card py-2.5 pl-10 pr-4 font-sans text-[length:var(--text-small)] text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all shadow-sm"
+            />
+            {searchQuery && (
               <button
-                key={cat.key}
-                onClick={() => setActiveCategory(cat.key)}
-                className={cn(
-                  "relative inline-flex items-center gap-2 rounded-full px-4 py-2.5 font-mono text-[length:var(--text-small)] transition-all duration-300",
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "bg-card text-foreground hover:bg-muted border border-border/60"
-                )}
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
-                {cat.label}
+                <X className="size-4" />
               </button>
-            );
-          })}
+            )}
+          </div>
+
+          {/* Category Tabs */}
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+            {categories.map((cat) => {
+              const isActive = activeCategory === cat.key;
+              const Icon = cat.icon;
+              return (
+                <button
+                  key={cat.key}
+                  type="button"
+                  onClick={() => {
+                    setActiveCategory(cat.key);
+                  }}
+                  className={cn(
+                    "relative inline-flex items-center gap-2 rounded-full px-4 py-2.5 font-mono text-[length:var(--text-small)] transition-all duration-300 cursor-pointer select-none",
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-md scale-105"
+                      : "bg-card text-foreground hover:bg-muted border border-border/70"
+                  )}
+                >
+                  {Icon && <Icon className="size-3.5 shrink-0" />}
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </motion.div>
+
+        {/* Results Counter / Category Title */}
+        <div className="mb-6 flex items-center justify-between border-b border-border/50 pb-3">
+          <h3 className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-accent before:content-['/']">
+            {categories.find((c) => c.key === activeCategory)?.label ?? "Prodotti"} ({filteredItems.length})
+          </h3>
+          {searchQuery && (
+            <p className="font-mono text-[length:var(--text-small)] text-muted-foreground">
+              Risultati per &quot;{searchQuery}&quot;
+            </p>
+          )}
+        </div>
+
+        {/* Empty state */}
+        {filteredItems.length === 0 && (
+          <div className="my-12 flex flex-col items-center justify-center text-center p-8 rounded-[var(--radius-card)] bg-card border border-border/60">
+            <Utensils className="size-10 text-muted-foreground mb-3 opacity-50" />
+            <p className="font-heading text-[length:var(--text-h3)] text-foreground">Nessun prodotto trovato</p>
+            <p className="font-sans text-[length:var(--text-small)] text-muted-foreground mt-1">
+              Prova a cambiare la ricerca o la categoria selezionata.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveCategory("all");
+                setSearchQuery("");
+              }}
+              className="btn-secondary mt-4"
+            >
+              <span className="btn-label">Mostra tutti i prodotti</span>
+            </button>
+          </div>
+        )}
 
         {/* Items Grid */}
         <motion.div
@@ -354,7 +721,7 @@ export default function MenuElegantGrid({
                 initial={reduce ? false : { opacity: 0, scale: 0.94, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.94, y: -20 }}
-                transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.2) }}
+                transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.25) }}
                 className="group relative flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-card border border-border/70 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               >
                 {/* Image Container */}
@@ -365,18 +732,20 @@ export default function MenuElegantGrid({
                     loading="lazy"
                     className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
-                  
+
                   {/* Tag / Badge */}
                   {item.tag && (
                     <div className="absolute top-3 left-3 z-10">
-                      <span className={cn(
-                        "inline-flex items-center gap-1 rounded-full px-3 py-1 font-mono text-[0.75rem] font-medium tracking-wide uppercase shadow-sm",
-                        item.badgeColor === "accent"
-                          ? "bg-accent text-accent-foreground"
-                          : item.badgeColor === "secondary"
-                          ? "bg-secondary text-secondary-foreground"
-                          : "bg-primary text-primary-foreground"
-                      )}>
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1 rounded-full px-3 py-1 font-mono text-[0.75rem] font-medium tracking-wide uppercase shadow-sm",
+                          item.badgeColor === "accent"
+                            ? "bg-accent text-accent-foreground"
+                            : item.badgeColor === "secondary"
+                            ? "bg-secondary text-secondary-foreground"
+                            : "bg-primary text-primary-foreground"
+                        )}
+                      >
                         {item.tag}
                       </span>
                     </div>
@@ -398,9 +767,16 @@ export default function MenuElegantGrid({
                     </h3>
                   </div>
 
-                  <p className="mt-2.5 flex-1 font-sans text-[length:var(--text-small)] leading-relaxed text-muted-foreground line-clamp-3">
+                  <p className="mt-2 flex-1 font-sans text-[length:var(--text-small)] leading-relaxed text-muted-foreground line-clamp-3">
                     {item.description}
                   </p>
+
+                  {/* Grammage / Note */}
+                  {item.grammage && (
+                    <p className="mt-2 font-mono text-[0.75rem] text-accent/90 bg-accent/10 px-2.5 py-1 rounded">
+                      {item.grammage}
+                    </p>
+                  )}
 
                   {/* Ingredients Preview */}
                   {item.ingredients && item.ingredients.length > 0 && (
@@ -410,7 +786,7 @@ export default function MenuElegantGrid({
                           key={i}
                           className="inline-flex items-center gap-1 font-mono text-[0.75rem] text-muted-foreground/90 bg-muted/60 px-2 py-0.5 rounded"
                         >
-                          <Check className="size-3 text-accent" />
+                          <Check className="size-3 text-accent shrink-0" />
                           {ing}
                         </span>
                       ))}
@@ -427,7 +803,7 @@ export default function MenuElegantGrid({
                     <button
                       type="button"
                       onClick={() => setSelectedItem(item)}
-                      className="inline-flex items-center gap-1.5 font-mono text-[length:var(--text-small)] text-primary hover:text-accent transition-colors duration-200 font-medium"
+                      className="inline-flex items-center gap-1.5 font-mono text-[length:var(--text-small)] text-primary hover:text-accent transition-colors duration-200 font-medium cursor-pointer"
                     >
                       <span>Vedi Dettagli & Foto</span>
                       <ChevronRight className="size-4" />
@@ -445,7 +821,7 @@ export default function MenuElegantGrid({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: kit.base, ease: kit.ease, delay: 0.3 }}
-          className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 rounded-[var(--radius-card)] bg-card border border-border/80 p-6 sm:p-8"
+          className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 rounded-[var(--radius-card)] bg-card border border-border/80 p-6 sm:p-8 shadow-sm"
         >
           <div className="flex items-center gap-4">
             <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
@@ -453,17 +829,14 @@ export default function MenuElegantGrid({
             </div>
             <div>
               <h4 className="font-heading text-[length:var(--text-h3)] text-foreground">
-                Desideri un tavolo nel nostro cortile coperto?
+                Vuoi un tavolo nel nostro cortile coperto a Desenzano?
               </h4>
               <p className="font-sans text-[length:var(--text-small)] text-muted-foreground mt-0.5">
-                Prenota in anticipo per garantirti i posti migliori nel centro di Desenzano del Garda.
+                Prenota in anticipo per goderti hamburger gourmet e spritz rinfrescanti.
               </p>
             </div>
           </div>
-          <a
-            href="#contact-reserve-form"
-            className="btn-primary shrink-0"
-          >
+          <a href="#contact-reserve-form" className="btn-primary shrink-0">
             <span className="btn-label">Prenota un Tavolo</span>
           </a>
         </motion.div>
@@ -478,7 +851,7 @@ export default function MenuElegantGrid({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.25 }}
-              className="relative w-full max-w-2xl overflow-hidden rounded-2xl bg-card border border-border shadow-2xl text-foreground"
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-card border border-border shadow-2xl text-foreground"
             >
               {/* Close Button */}
               <button
@@ -519,10 +892,18 @@ export default function MenuElegantGrid({
                   {selectedItem.description}
                 </p>
 
+                {selectedItem.grammage && (
+                  <div className="mt-4 p-3 rounded-lg bg-accent/10 border border-accent/20">
+                    <p className="font-mono text-[length:var(--text-small)] text-accent font-semibold">
+                      {selectedItem.grammage}
+                    </p>
+                  </div>
+                )}
+
                 {selectedItem.ingredients && selectedItem.ingredients.length > 0 && (
                   <div className="mt-6">
                     <h4 className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-foreground mb-3 before:content-['/']">
-                      Ingredienti & Preparazione
+                      Ingredienti & Composizione
                     </h4>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {selectedItem.ingredients.map((ing, i) => (

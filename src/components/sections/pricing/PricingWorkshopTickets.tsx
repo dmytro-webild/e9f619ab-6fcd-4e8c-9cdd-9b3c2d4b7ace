@@ -3,6 +3,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import DepthTiltCard from "@/components/library/effects/DepthTiltCard";
 import SnellenbergWordRise from "@/components/kit/SnellenbergWordRise";
+import { useLanguage } from "@/context/LanguageContext";
 
 const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -26,45 +27,95 @@ type PricingWorkshopTicketsProps = {
   className?: string;
 };
 
-const DEFAULT_ITEMS: Ticket[] = [
-  { label: "Saturday class", name: "Burger Lab", price: "$65", period: "per person", features: ["Two hours with our chef", "Your own smash burger", "A drink on us"], cta: { text: "Book a seat", href: "#" } },
-  { label: "Weekend table", name: "Brunch Feast", price: "$48", period: "per person", features: ["Four shared courses", "Bottomless coffee", "Seats up to ten"], cta: { text: "Book a table", href: "#" }, featured: true },
-  { label: "Morning class", name: "Laminated Dough", price: "$80", period: "per person", features: ["Croissants from scratch", "Take home a dozen", "Small groups of eight"], cta: { text: "Book a seat", href: "#" } },
-];
-
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const PricingWorkshopTickets = ({
-  label = "Workshops",
-  title = "Workshops and set menus",
-  description = "Pull up a stool, roll up your sleeves, then eat what you made.",
-  featuredTag = "/Most booked",
-  items = DEFAULT_ITEMS,
+  label,
+  title,
+  description,
+  featuredTag,
+  items,
   ariaLabel,
   className,
 }: PricingWorkshopTicketsProps) => {
+  const { t } = useLanguage();
   const reduce = useReducedMotion();
 
+  const displayLabel = label ?? t("pricing.label", "Menu Speciali");
+  const displayTitle = title ?? t("pricing.title", "Formule e menu speciali");
+  const displayDescription = description ?? t("pricing.description", "Scopri le nostre proposte per abbinare hamburger gourmet, contorni croccanti e i classici spritz del Garda.");
+  const displayFeaturedTag = featuredTag ?? t("pricing.featuredTag", "Più richiesto");
+
+  const displayItems: Ticket[] = items ?? [
+    {
+      label: "Aperitivo Classic",
+      name: "Spritz & Chips",
+      price: "€12",
+      period: t("pricing.perPerson", "a persona"),
+      features: [
+        t("pricing.f1", "1 Spritz a scelta"),
+        t("pricing.f2", "Patate speziate croccanti"),
+        t("pricing.f3", "Selezione di salse della casa"),
+      ],
+      cta: {
+        text: t("nav.book", "Prenota tavolo"),
+        href: "#contact-reserve-form",
+      },
+    },
+    {
+      label: "Il più amato",
+      name: "Gourmet Burger Combo",
+      price: "€18",
+      period: t("pricing.perPerson", "a persona"),
+      features: [
+        t("pricing.f4", "1 Hamburger Gourmet a scelta"),
+        t("pricing.f5", "Patate spesa a spicchi"),
+        t("pricing.f6", "1 Spritz o birra alla spina"),
+        t("pricing.f7", "Caffè del Garda"),
+      ],
+      cta: {
+        text: t("nav.book", "Prenota tavolo"),
+        href: "#contact-reserve-form",
+      },
+      featured: true,
+    },
+    {
+      label: "Opzione Veg",
+      name: "Veggie & Spritz",
+      price: "€15",
+      period: t("pricing.perPerson", "a persona"),
+      features: [
+        t("pricing.f8", "1 Burger vegetariano"),
+        t("pricing.f9", "Patate al forno speziate"),
+        t("pricing.f10", "1 Spritz a scelta"),
+      ],
+      cta: {
+        text: t("nav.book", "Prenota tavolo"),
+        href: "#contact-reserve-form",
+      },
+    },
+  ];
+
   return (
-    <section aria-label={ariaLabel ?? title} className={cn("relative z-10 bg-background py-[var(--section-space)] text-foreground", className)}>
+    <section aria-label={ariaLabel ?? displayTitle} className={cn("relative z-10 bg-background py-[var(--section-space)] text-foreground", className)}>
       <div className="mx-auto w-[var(--container)]">
         <div className="mx-auto mb-[clamp(1.5rem,3vw,3rem)] flex max-w-[44rem] flex-col items-center gap-4 text-center">
-          {label && <p className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)]">{label}</p>}
-          <SnellenbergWordRise tag="h2" text={title} className="text-balance text-[length:var(--text-h1)]" />
-          {description && (
+          {displayLabel && <p className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-accent">{displayLabel}</p>}
+          <SnellenbergWordRise tag="h2" text={displayTitle} className="text-balance text-[length:var(--text-h1)]" />
+          {displayDescription && (
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "0px 0px -10% 0px" }}
               transition={{ duration: 0.9, ease, delay: 0.15 }}
-              className="max-w-[32em] text-balance text-[length:var(--text-body-lg)] leading-[1.4]"
+              className="max-w-[32em] text-balance text-[length:var(--text-body-lg)] leading-[1.4] text-muted-foreground"
             >
-              {description}
+              {displayDescription}
             </motion.p>
           )}
         </div>
         <ul className="flex flex-wrap justify-center gap-[var(--gap)]">
-          {items.map((item, index) => {
+          {displayItems.map((item, index) => {
             const tone = item.featured ? "deep" : undefined;
             const ground = item.featured ? "bg-background [--accent:var(--brand)] [--accent-foreground:var(--deep-foreground)]" : "bg-[var(--sand)] [--foreground:var(--brand)] [--primary:var(--brand)] [--accent:var(--background)] [--accent-foreground:var(--brand)]";
             return (
@@ -87,7 +138,7 @@ const PricingWorkshopTickets = ({
                     >
                       <div className="flex items-start justify-between gap-3">
                         {item.label && <p className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)]">{item.label}</p>}
-                        {item.featured && featuredTag && <p className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)]">{featuredTag}</p>}
+                        {item.featured && displayFeaturedTag && <p className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)]">{displayFeaturedTag}</p>}
                       </div>
                       <h3 className="text-[length:var(--text-h2)] [overflow-wrap:anywhere]">{item.name}</h3>
                       {item.price && <p className="mt-2 text-[length:calc(var(--text-h1)*1.25)] leading-none tracking-[var(--heading-tracking)] [font-family:var(--font-heading)]">{item.price}</p>}

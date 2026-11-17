@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import ImageScrollParallax from "@/components/animation/ImageScrollParallax";
 import SnellenbergWordRise from "@/components/kit/SnellenbergWordRise";
 import ToastedSticker from "@/components/kit/ToastedSticker";
+import { useLanguage } from "@/context/LanguageContext";
 
 const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -28,24 +29,44 @@ type ContactReserveFormProps = {
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const ContactReserveForm = ({
-  label = "Reservations",
+  label,
   labels,
-  title = "Reserve a table",
-  description = "Tell us when you are coming and how many are hungry. We hold tables for fifteen minutes.",
-  submitText = "Send request",
-  successText = "Thanks, we will confirm by email",
-  details = ["1824 West Division St, Chicago", "Every day, 8 AM to 4 PM"],
+  title,
+  description,
+  submitText,
+  successText,
+  details,
   imageSrc = "https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  imageAlt = "Dining room with tall windows",
-  stickerText = "say hello",
+  imageAlt = "Tavolo nel cortile coperto di Spritz & Burger",
+  stickerText,
   ariaLabel,
   className,
 }: ContactReserveFormProps) => {
+  const { t } = useLanguage();
   const reduce = useReducedMotion();
   const photoRef = useRef<HTMLDivElement>(null);
   const [sent, setSent] = useState(false);
   const { scrollYProgress } = useScroll({ target: photoRef, offset: ["start end", "center center"] });
   const clipPath = useTransform(scrollYProgress, [0, 1], ["inset(14% 12% 14% 12%)", "inset(0% 0% 0% 0%)"]);
+
+  const displayLabel = label ?? t("contact.label", "INFORMAZIONI");
+  const displayTitle = title ?? t("contact.title", "Domande e prenotazioni");
+  const displayDescription = description ?? t("contact.description", "Contattaci per informazioni o riserva subito un tavolo nel nostro cortile coperto nel centro di Desenzano.");
+  const displaySubmitText = submitText ?? t("contact.submit", "Invia richiesta");
+  const displaySuccessText = successText ?? t("contact.success", "Grazie, ti confermeremo la prenotazione via email.");
+  const displaySticker = stickerText ?? t("contact.sticker", "Ti aspettiamo");
+
+  const displayDetails = details ?? [
+    t("contact.addrLabel", "Via Roma, 27, Desenzano del Garda BS"),
+    t("contact.hoursLabel", "Tutti i giorni: 12-14:30 / 18:30-23"),
+    t("contact.phoneLabel", "Tel: 030 618 9497"),
+  ];
+
+  const nameLabel = labels?.name ?? t("contact.nameLabel", "Nome");
+  const emailLabel = labels?.email ?? t("contact.emailLabel", "Email");
+  const dateLabel = labels?.date ?? t("contact.dateLabel", "Data");
+  const guestsLabel = labels?.guests ?? t("contact.guestsLabel", "Ospiti");
+  const noteLabel = labels?.note ?? t("contact.noteLabel", "Note");
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,27 +74,27 @@ const ContactReserveForm = ({
   };
 
   const fields = [
-    { name: "name", label: `${labels?.name ?? "Name"}*`, type: "text", required: true, wide: true },
-    { name: "email", label: `${labels?.email ?? "Email"}*`, type: "email", required: true, wide: true },
-    { name: "date", label: `${labels?.date ?? "Date"}*`, type: "date", required: true, wide: false },
-    { name: "guests", label: `${labels?.guests ?? "Guests"}*`, type: "number", required: true, wide: false },
+    { name: "name", label: `${nameLabel}*`, type: "text", required: true, wide: true },
+    { name: "email", label: `${emailLabel}*`, type: "email", required: true, wide: true },
+    { name: "date", label: `${dateLabel}*`, type: "date", required: true, wide: false },
+    { name: "guests", label: `${guestsLabel}*`, type: "number", required: true, wide: false },
   ];
 
   return (
-    <section aria-label={ariaLabel ?? title} className={cn("relative bg-background py-[var(--section-space)] text-foreground", className)}>
+    <section aria-label={ariaLabel ?? displayTitle} className={cn("relative bg-background py-[var(--section-space)] text-foreground", className)}>
       <div className="mx-auto grid w-[var(--container)] grid-cols-1 gap-[clamp(2.5rem,5vw,5rem)] lg:grid-cols-2 lg:items-stretch">
         <div className="flex flex-col">
-          {label && <p className="mb-4 font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)]">{label}</p>}
-          <SnellenbergWordRise tag="h2" text={title} className="text-balance text-[length:var(--text-h1)]" />
-          {description && (
+          {displayLabel && <p className="mb-4 font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-accent">{displayLabel}</p>}
+          <SnellenbergWordRise tag="h2" text={displayTitle} className="text-balance text-[length:var(--text-h1)]" />
+          {displayDescription && (
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "0px 0px -10% 0px" }}
               transition={{ duration: 0.9, ease, delay: 0.15 }}
-              className="mt-4 max-w-[30em] text-balance text-[length:var(--text-body-lg)] leading-[1.4]"
+              className="mt-4 max-w-[30em] text-balance text-[length:var(--text-body-lg)] leading-[1.4] text-muted-foreground"
             >
-              {description}
+              {displayDescription}
             </motion.p>
           )}
           <motion.form
@@ -97,20 +118,20 @@ const ContactReserveForm = ({
               </label>
             ))}
             <label className="col-span-2 flex flex-col gap-2">
-              <p className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)]">{labels?.note ?? "Note"}</p>
+              <p className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)]">{noteLabel}</p>
               <textarea name="note" rows={2} className="w-full resize-none border-b border-input bg-transparent py-2.5 text-[length:var(--text-body)] text-foreground outline-none focus:border-foreground" />
             </label>
             <div className="col-span-2 flex flex-wrap items-center gap-4">
               <button type="submit" className="btn-primary">
-                <p className="btn-label font-mono uppercase tracking-[var(--label-tracking)]">{submitText}</p>
+                <p className="btn-label font-mono uppercase tracking-[var(--label-tracking)]">{displaySubmitText}</p>
               </button>
-              {sent && <p role="status" className="text-[length:var(--text-small)]">{successText}</p>}
+              {sent && <p role="status" className="text-[length:var(--text-small)] text-accent">{displaySuccessText}</p>}
             </div>
           </motion.form>
-          {details.length > 0 && (
+          {displayDetails.length > 0 && (
             <div className="mt-[clamp(2rem,4vw,3.5rem)] flex flex-col gap-1 border-t border-border pt-5">
-              {details.map((line, index) => (
-                <p key={index} className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)]">{line}</p>
+              {displayDetails.map((line, index) => (
+                <p key={index} className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] opacity-80">{line}</p>
               ))}
             </div>
           )}
@@ -119,7 +140,7 @@ const ContactReserveForm = ({
           <motion.div style={{ clipPath: reduce ? undefined : clipPath }} className="absolute inset-0">
             <ImageScrollParallax imageSrc={imageSrc} imageAlt={imageAlt} strength={0.18} className="aspect-auto size-full rounded-[var(--radius-image)]" />
           </motion.div>
-          <ToastedSticker text={stickerText} glyph="heart" className="absolute -left-4 -top-6 size-24 lg:-left-10 lg:size-32" />
+          <ToastedSticker text={displaySticker} glyph="heart" className="absolute -left-4 -top-6 size-24 lg:-left-10 lg:size-32" />
         </div>
       </div>
     </section>

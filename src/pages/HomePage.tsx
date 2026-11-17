@@ -25,233 +25,35 @@ export default function HomePage() {
       <div id="hero" data-webild-section="HeroWordmarkWindow" data-webild-section-id="HeroWordmarkWindow-1" data-section="hero" data-scene>
         <HeroWordmarkWindow
           title="Spritz & Burger"
-          description="Gourmet burger e aperitivi a Desenzano. Carne fresca ogni giorno e cortile coperto."
           imageSrc="https://img.b2bpic.net/free-photo/delicious-sandwich-ketchup-tomatoes-with-stem-dark-mix-color-surface-with-free-space_179666-42225.jpg"
           imageAlt="classic beef burger on dark surface"
-          leftLabel="/Attivi dal 2012"
-          rightLabel="/Scopri il menu"
-          marquee={[
-            "Hamburger Gourmet",
-            "Aperitivo Italiano",
-            "Cortile Coperto"
-          ]}
           introDelay={3}
           handoff
         />
       </div>
 
       <div id="menu" data-webild-section="MenuElegantGrid" data-webild-section-id="MenuElegantGrid-1" data-section="menu" data-scene>
-        <MenuElegantGrid
-          label="/Il Menu di Desenzano"
-          title="Le nostre specialità gourmet & aperitivi"
-          description="Carne fresca 100% manzo selezionata ogni giorno, pane artigianale dorato, contorni croccanti e i leggendari Spritz preparati nel nostro cortile a Desenzano del Garda."
-        />
+        <MenuElegantGrid />
       </div>
 
       <div id="services" data-webild-section="FeaturesStackedOffers" data-webild-section-id="FeaturesStackedOffers-1" data-section="services" data-scene>
-        <FeaturesStackedOffers
-          label="APERITIVO SUL GARDA"
-          title="L'ora dello spritz a Desenzano"
-          items={[
-            {
-              title: "Spritz Classici",
-              description: "Aperol, Campari o Hugo preparati a regola d'arte con Prosecco selezionato e guarnizioni fresche nel nostro cortile.",
-              imageSrc: "https://img.b2bpic.net/free-photo/tropical-cocktail-with-grapefruit-flavor_140725-65.jpg?_wi=2",
-              imageAlt: "tropical cocktail with grapefruit flavor",
-              detailSrc: "https://img.b2bpic.net/free-photo/side-view-friends-holding-cocktails_23-2150124815.jpg",
-              detailAlt: "Side view friends holding cocktails",
-              cta: {
-                text: "Scopri i burger",
-                href: "#menu"
-              }
-            },
-            {
-              title: "Birre Artigianali",
-              description: "Bionde e rosse alla spina selezionate per esaltare i sapori intensi dei nostri hamburger di carne fresca.",
-              imageSrc: "https://img.b2bpic.net/free-photo/man-with-glass-beer_107420-65569.jpg?_wi=2",
-              imageAlt: "Man with glass of beer",
-              detailSrc: "https://img.b2bpic.net/free-photo/couple-drinking-craft-beer-outdoors_23-2148111307.jpg",
-              detailAlt: "Couple drinking craft beer outdoors",
-              cta: {
-                text: "Vedi menu",
-                href: "#menu"
-              }
-            },
-            {
-              title: "Cortile Coperto",
-              description: "Un'atmosfera rilassata e accogliente a due passi dal lago, perfetta per la convivialità e il relax serale.",
-              imageSrc: "https://img.b2bpic.net/free-photo/medium-shot-happy-people-with-sangria_23-2149436821.jpg?_wi=2",
-              imageAlt: "Medium shot happy people with sangria",
-              detailSrc: "https://img.b2bpic.net/free-photo/always-is-great-spend-some-time-with-friends_329181-2895.jpg",
-              detailAlt: "Always is great to spend some time with friends",
-              cta: {
-                text: "Prenota tavolo",
-                href: "#contact-reserve-form"
-              }
-            }
-          ]}
-        />
+        <FeaturesStackedOffers />
       </div>
 
       <div id="pricing-workshop-tickets" data-webild-section="PricingWorkshopTickets" data-webild-section-id="PricingWorkshopTickets-1" data-section="pricing-workshop-tickets">
-        <PricingWorkshopTickets
-          label="Menu Speciali"
-          title="Formule e menu speciali"
-          description="Scopri le nostre proposte per abbinare hamburger gourmet, contorni croccanti e i classici spritz del Garda."
-          featuredTag="Più richiesto"
-          items={[
-            {
-              label: "Aperitivo Classic",
-              name: "Spritz & Chips",
-              price: "€12",
-              period: "a persona",
-              features: [
-                "1 Spritz a scelta",
-                "Patate speziate croccanti",
-                "Selezione di salse della casa"
-              ],
-              cta: {
-                text: "Prenota tavolo",
-                href: "#contact-reserve-form"
-              }
-            },
-            {
-              label: "Il più amato",
-              name: "Gourmet Burger Combo",
-              price: "€18",
-              period: "a persona",
-              features: [
-                "1 Hamburger Gourmet a scelta",
-                "Patate spesa a spicchi",
-                "1 Spritz o birra alla spina",
-                "Caffè del Garda"
-              ],
-              cta: {
-                text: "Prenota tavolo",
-                href: "#contact-reserve-form"
-              },
-              featured: true
-            },
-            {
-              label: "Opzione Veg",
-              name: "Veggie & Spritz",
-              price: "€15",
-              period: "a persona",
-              features: [
-                "1 Burger vegetariano",
-                "Patate al forno speziate",
-                "1 Spritz a scelta"
-              ],
-              cta: {
-                text: "Prenota tavolo",
-                href: "#contact-reserve-form"
-              }
-            }
-          ]}
-        />
+        <PricingWorkshopTickets />
       </div>
 
       <div id="gallery-corner-masks" data-webild-section="GalleryCornerMasks" data-webild-section-id="GalleryCornerMasks-1" data-section="gallery-corner-masks">
-        <GalleryCornerMasks
-          label="IL LOCALE"
-          title="Il cortile coperto"
-          ariaLabel="Galleria fotografica del locale"
-          items={[
-            {
-              imageSrc: "https://img.b2bpic.net/free-photo/closeup-shot-appetizing-burger-with-onion-rings_181624-46590.jpg?_wi=2",
-              imageAlt: "Closeup shot of an appetizing burger with onion rings",
-              caption: "I nostri burger e birre"
-            },
-            {
-              imageSrc: "https://img.b2bpic.net/free-photo/hand-holding-italian-cocktail-still-life_23-2150645773.jpg",
-              imageAlt: "Hand holding italian cocktail still life",
-              caption: "Aperitivo Aperol Spritz"
-            },
-            {
-              imageSrc: "https://img.b2bpic.net/free-photo/smiling-waitress-holding-tray_23-2147985012.jpg",
-              imageAlt: "Smiling waitress holding tray",
-              caption: "Ambiente accogliente"
-            },
-            {
-              imageSrc: "https://img.b2bpic.net/free-photo/medium-shot-smiley-women-with-drinks_23-2148947909.jpg",
-              imageAlt: "Medium shot smiley women with drinks",
-              caption: "Serate in compagnia"
-            },
-            {
-              imageSrc: "https://img.b2bpic.net/free-photo/meat-burger-tomato-cucumber-egg-coleslaw-lettuce-cheese-olives-side-view_141793-1801.jpg",
-              imageAlt: "Meat burger tomato cucumber egg coleslaw lettuce cheese olives side view",
-              caption: "Selezione carne dello chef"
-            },
-            {
-              imageSrc: "https://img.b2bpic.net/free-photo/hanging-lamp_1339-2398.jpg",
-              imageAlt: "hanging lamp",
-              caption: "Dettagli del locale"
-            }
-          ]}
-        />
+        <GalleryCornerMasks ariaLabel="Galleria fotografica del locale" />
       </div>
 
       <div id="testimonial" data-webild-section="TestimonialVideoCoverflow" data-webild-section-id="TestimonialVideoCoverflow-1" data-section="testimonial">
-        <TestimonialVideoCoverflow
-          label="Dicono di noi"
-          title="Le opinioni dei nostri ospiti"
-          items={[
-            {
-              name: "Leopoldo Murino",
-              caption: "Cliente abituale",
-              quote: "Carne strepitosa cucinata in modo impeccabile. Lo chef Antonio è davvero superlativo!",
-              imageSrc: "https://img.b2bpic.net/free-photo/view-delicious-burger-with-buns-cheese_23-2150887800.jpg"
-            },
-            {
-              name: "James Christian",
-              caption: "Turista in visita",
-              quote: "Dopo giorni di cucina locale volevo un grande burger. Carne succosa e patate croccanti.",
-              imageSrc: "https://img.b2bpic.net/free-photo/dinner-with-wine_1182-784.jpg?_wi=2"
-            },
-            {
-              name: "Marco Russo",
-              caption: "Cliente di Desenzano",
-              quote: "Aperitivo perfetto nel cortile coperto. Uno Spritz preparato a regola d'arte.",
-              imageSrc: "https://img.b2bpic.net/free-photo/friends-having-fun-white-party_23-2149530394.jpg"
-            },
-            {
-              name: "Martina Conti",
-              caption: "Ospite del weekend",
-              quote: "Ambiente davvero accogliente e hamburger spettacolari. Una garanzia in centro.",
-              imageSrc: "https://img.b2bpic.net/free-photo/delicious-italian-cocktail-with-realistic-background_23-2150062921.jpg?_wi=2"
-            },
-            {
-              name: "Federico Ricci",
-              caption: "Cliente abituale",
-              quote: "Ottime birre alla spina e ingredienti sempre freschissimi. Tappa fissa a Desenzano.",
-              imageSrc: "https://img.b2bpic.net/free-photo/enjoying-street-food-fest_23-2151543708.jpg"
-            }
-          ]}
-        />
+        <TestimonialVideoCoverflow />
       </div>
 
       <div id="contact-reserve-form" data-webild-section="ContactReserveForm" data-webild-section-id="ContactReserveForm-1" data-section="contact-reserve-form">
-        <ContactReserveForm
-          label="INFORMAZIONI"
-          title="Domande e prenotazioni"
-          description="Contattaci per informazioni o riserva subito un tavolo nel nostro cortile coperto nel centro di Desenzano."
-          submitText="Invia richiesta"
-          successText="Grazie, ti confermeremo la prenotazione via email."
-          details={[
-            "Via Roma, 27, Desenzano del Garda BS",
-            "Tutti i giorni: 12-14:30 / 18:30-23",
-            "Tel: 030 618 9497"
-          ]}
-          imageAlt="Tavolo nel cortile coperto di Spritz & Burger"
-          stickerText="Ti aspettiamo"
-          labels={{
-            name: "Nome",
-            email: "Email",
-            date: "Data",
-            guests: "Ospiti",
-            note: "Note"
-          }}
-        />
+        <ContactReserveForm imageAlt="Tavolo nel cortile coperto di Spritz & Burger" />
       </div>
     </>
   );

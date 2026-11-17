@@ -15,10 +15,6 @@ export default function Layout() {
               href: "#menu"
             },
             {
-              name: "I Bestseller",
-              href: "#product"
-            },
-            {
               name: "Spritz Culture",
               href: "#services"
             },
@@ -112,10 +108,6 @@ export default function Layout() {
                 {
                   label: "Il Menu completo",
                   href: "#menu"
-                },
-                {
-                  label: "I nostri bestseller",
-                  href: "#product"
                 },
                 {
                   label: "Aperitivo Spritz",

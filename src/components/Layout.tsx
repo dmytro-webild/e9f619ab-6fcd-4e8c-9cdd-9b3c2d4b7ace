@@ -10,7 +10,11 @@ export default function Layout() {
           brand="SPRITZ & BURGER"
           navItems={[
             {
-              name: "I Nostri Burger",
+              name: "Il Menu",
+              href: "#menu"
+            },
+            {
+              name: "I Bestseller",
               href: "#product"
             },
             {
@@ -105,7 +109,11 @@ export default function Layout() {
               title: "Pagine",
               items: [
                 {
-                  label: "I nostri burger",
+                  label: "Il Menu completo",
+                  href: "#menu"
+                },
+                {
+                  label: "I nostri bestseller",
                   href: "#product"
                 },
                 {

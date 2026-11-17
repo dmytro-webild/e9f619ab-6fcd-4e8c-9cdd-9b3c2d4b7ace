@@ -57,31 +57,31 @@ export default function HomePage() {
             {
               name: "Classic Royal",
               price: "€14",
-              imageSrc: "https://img.b2bpic.net/free-photo/front-view-meat-burger-with-salad-cheese-tomatoes-dark-desk-bun-sandwich-fast-food_140725-89542.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/front-view-meat-burger-with-salad-cheese-tomatoes-dark-desk-bun-sandwich-fast-food_140725-89542.jpg?_wi=3",
               imageAlt: "Front view meat burger with salad cheese and tomatoes on dark desk bun sandwich fast-food"
             },
             {
               name: "Crispy Bacon",
               price: "€16",
-              imageSrc: "https://img.b2bpic.net/free-photo/side-view-burger-with-beef-patty-grilled-red-onion-tomato-lettuce-burger-buns-french-fries-orange-drink-table_141793-3607.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/side-view-burger-with-beef-patty-grilled-red-onion-tomato-lettuce-burger-buns-french-fries-orange-drink-table_141793-3607.jpg?_wi=3",
               imageAlt: "Side view burger with beef patty grilled red onion tomato lettuce in burger buns french fries and orange drink on the table"
             },
             {
               name: "Truffle Delight",
               price: "€18",
-              imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg?_wi=4",
               imageAlt: "Potato patties topped with beef patties and shoe strings"
             },
             {
               name: "Garden Fresh",
               price: "€15",
-              imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg?_wi=3",
               imageAlt: "High angle close-up of burger on wooden board"
             },
             {
               name: "Spicy Desenzano",
               price: "€17",
-              imageSrc: "https://img.b2bpic.net/free-photo/black-burger-with-side-fries-cola_140725-2702.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/black-burger-with-side-fries-cola_140725-2702.jpg?_wi=2",
               imageAlt: "Black burger with side fries and cola"
             },
             {
@@ -93,7 +93,7 @@ export default function HomePage() {
             {
               name: "Patate a spicchi",
               price: "€6",
-              imageSrc: "https://img.b2bpic.net/free-photo/chicken-cutlet-with-zucchini_2829-10809.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/chicken-cutlet-with-zucchini_2829-10809.jpg?_wi=3",
               imageAlt: "Chicken cutlet with zucchini"
             }
           ]}
@@ -214,7 +214,7 @@ export default function HomePage() {
           ariaLabel="Galleria fotografica del locale"
           items={[
             {
-              imageSrc: "https://img.b2bpic.net/free-photo/closeup-shot-appetizing-burger-with-onion-rings_181624-46590.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/closeup-shot-appetizing-burger-with-onion-rings_181624-46590.jpg?_wi=2",
               imageAlt: "Closeup shot of an appetizing burger with onion rings",
               caption: "I nostri burger e birre"
             },

@@ -3,6 +3,8 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import useMenuDialog from "@/components/kit/useMenuDialog";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/context/LanguageContext";
 
 type NavItem = { name: string; href: string };
 type Button = { text: string; href: string };
@@ -20,28 +22,37 @@ type NavbarSlashLinksProps = {
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
-const DEFAULT_ITEMS: NavItem[] = [
-  { name: "Menu", href: "#menu" },
-  { name: "Events", href: "#events" },
-  { name: "Workshops", href: "#workshops" },
-  { name: "Journal", href: "#blog" },
-  { name: "About", href: "#about" },
-];
-
 const NavbarSlashLinks = ({
-  brand = "Crumb & Butter",
+  brand = "SPRITZ & BURGER",
   logoImageSrc = "https://storage.googleapis.com/webild/users/user_3MEga9cursqZnupWG2nTy9in2oL/uploaded-1794924053353-qycvma4f.png",
   mark,
-  navItems = DEFAULT_ITEMS,
-  primaryButton = { text: "Reserve table", href: "#contact" },
-  menuText = "Menu",
-  closeText = "Close",
+  navItems,
+  primaryButton,
+  menuText,
+  closeText,
   introDelay = 0,
 }: NavbarSlashLinksProps) => {
+  const { t } = useLanguage();
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   useMenuDialog(open, panelRef, () => setOpen(false));
+
+  const items: NavItem[] = navItems ?? [
+    { name: t("nav.menu", "Il Menu"), href: "#menu" },
+    { name: t("nav.services", "Spritz Culture"), href: "#services" },
+    { name: t("nav.gallery", "Il Cortile"), href: "#gallery-corner-masks" },
+    { name: t("nav.reviews", "Recensioni"), href: "#testimonial" },
+    { name: t("nav.contact", "Dove Siamo"), href: "#contact-reserve-form" },
+  ];
+
+  const button: Button = primaryButton ?? {
+    text: t("nav.book", "Prenota un Tavolo"),
+    href: "#contact-reserve-form",
+  };
+
+  const displayMenuText = menuText ?? t("nav.openMenu", "Menu");
+  const displayCloseText = closeText ?? t("nav.closeMenu", "Chiudi");
 
   return (
     <>
@@ -50,9 +61,10 @@ const NavbarSlashLinks = ({
         initial={reduce ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: EASE_OUT, delay: introDelay }}
-        className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background text-primary"
+        className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md text-primary"
       >
-        <div className="mx-auto flex h-[4rem] w-[var(--container)] items-center justify-between gap-[1.5rem]">
+        <div className="mx-auto flex h-[4rem] w-[var(--container)] items-center justify-between gap-[1rem] sm:gap-[1.5rem]">
+          {/* Brand Logo */}
           <a href="#" className="flex min-w-0 shrink-0 items-center gap-[0.75rem]">
             {logoImageSrc && (
               <img
@@ -67,13 +79,14 @@ const NavbarSlashLinks = ({
             </div>
           </a>
 
-          {navItems.length > 0 && (
-            <ul className="hidden min-w-0 items-center gap-[clamp(1rem,1.8vw,1.5rem)] min-[94.5rem]:flex">
-              {navItems.map((item, i) => (
+          {/* Desktop Nav Items */}
+          {items.length > 0 && (
+            <ul className="hidden min-w-0 items-center gap-[clamp(0.75rem,1.5vw,1.5rem)] lg:flex">
+              {items.map((item, i) => (
                 <li key={`${i}-${item.href}`}>
                   <a
                     href={item.href}
-                    className="relative whitespace-nowrap font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] after:absolute after:inset-x-0 after:-bottom-[0.3rem] after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100"
+                    className="relative whitespace-nowrap font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] after:absolute after:inset-x-0 after:-bottom-[0.3rem] after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100 hover:text-accent transition-colors"
                   >
                     {`/${item.name}`}
                   </a>
@@ -82,27 +95,33 @@ const NavbarSlashLinks = ({
             </ul>
           )}
 
-          <div className="flex shrink-0 items-center">
-            {primaryButton && (
+          {/* Right Action Area: Language Switcher + Reservation CTA */}
+          <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+            <LanguageSwitcher />
+
+            {button && (
               <a
-                href={primaryButton.href}
-                className="relative hidden whitespace-nowrap font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] after:absolute after:inset-x-0 after:-bottom-[0.3rem] after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100 min-[94.5rem]:block"
+                href={button.href}
+                className="relative hidden whitespace-nowrap font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] after:absolute after:inset-x-0 after:-bottom-[0.3rem] after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100 hover:text-accent transition-colors lg:block"
               >
-                {`/${primaryButton.text}`}
+                {`/${button.text}`}
               </a>
             )}
+
+            {/* Mobile Hamburger Toggle */}
             <button
               type="button"
               aria-expanded={open}
               onClick={() => setOpen(true)}
-              className="flex min-h-[2.75rem] items-center font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] min-[94.5rem]:hidden"
+              className="flex min-h-[2.75rem] items-center font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] lg:hidden hover:text-accent"
             >
-              {`/${menuText}`}
+              {`/${displayMenuText}`}
             </button>
           </div>
         </div>
       </motion.nav>
 
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -110,12 +129,12 @@ const NavbarSlashLinks = ({
             ref={panelRef}
             role="dialog"
             aria-modal="true"
-            aria-label={menuText}
+            aria-label={displayMenuText}
             initial={reduce ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)" }}
             animate={reduce ? { opacity: 1 } : { clipPath: "inset(0 0 0% 0)" }}
             exit={reduce ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
-            className="fixed inset-0 z-[70] flex flex-col bg-background text-primary min-[94.5rem]:hidden"
+            className="fixed inset-0 z-[70] flex flex-col bg-background text-primary lg:hidden"
           >
             <div className="mx-auto flex h-[4rem] w-[var(--container)] flex-none items-center justify-between border-b border-border">
               <div className="flex items-center gap-2 min-w-0">
@@ -124,16 +143,19 @@ const NavbarSlashLinks = ({
                 )}
                 <p className="-mb-[0.2em] truncate pb-[0.2em] text-[length:var(--text-body-lg)] font-bold leading-none tracking-[-0.02em]">{brand}</p>
               </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="flex min-h-[2.75rem] items-center font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)]"
-              >
-                {`/${closeText}`}
-              </button>
+              <div className="flex items-center gap-3">
+                <LanguageSwitcher />
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="flex min-h-[2.75rem] items-center font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)]"
+                >
+                  {`/${displayCloseText}`}
+                </button>
+              </div>
             </div>
             <ul className="mx-auto mt-[clamp(2rem,8svh,4rem)] flex w-[var(--container)] flex-col gap-[0.5rem]">
-              {navItems.map((item, i) => (
+              {items.map((item, i) => (
                 <li key={`${i}-${item.href}`} className="overflow-hidden pb-[0.1em]">
                   <motion.a
                     href={item.href}
@@ -141,17 +163,17 @@ const NavbarSlashLinks = ({
                     initial={reduce ? false : { y: "110%" }}
                     animate={{ y: "0%" }}
                     transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.25 + i * 0.05 }}
-                    className="block font-[family-name:var(--font-heading)] text-[length:var(--text-h1)] leading-[1.05] tracking-[var(--heading-tracking)] [overflow-wrap:anywhere]"
+                    className="block font-[family-name:var(--font-heading)] text-[length:var(--text-h1)] leading-[1.05] tracking-[var(--heading-tracking)] [overflow-wrap:anywhere] hover:text-accent"
                   >
                     {item.name}
                   </motion.a>
                 </li>
               ))}
             </ul>
-            {primaryButton && (
+            {button && (
               <div className="mx-auto mt-auto w-[var(--container)] pb-[var(--gutter)] pt-[2rem]">
-                <a href={primaryButton.href} onClick={() => setOpen(false)} className="btn-primary w-full">
-                  <p className="btn-label">{primaryButton.text}</p>
+                <a href={button.href} onClick={() => setOpen(false)} className="btn-primary w-full">
+                  <p className="btn-label">{button.text}</p>
                 </a>
               </div>
             )}

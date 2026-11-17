@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { useKitMotion } from "@/components/kit/kitMotion";
 import { useCoverNext } from "@/components/kit/sectionNeighbour";
 import CoverflowTeam from "@/components/library/scenes/team/CoverflowTeam";
+import { useLanguage } from "@/context/LanguageContext";
 
 const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -20,22 +21,58 @@ type TestimonialVideoCoverflowProps = {
   className?: string;
 };
 
-const photo = (id: number) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&w=800`;
-
-const defaultItems: Testimonial[] = [
-  { name: "Clara", caption: "Clara fuels up right", quote: "The brunch stack is the best way to start a Saturday. I come back every week.", imageSrc: photo(774909) },
-  { name: "Anna", caption: "Anna found her vibe", quote: "Warm buns, good coffee and a room full of people who look happy to be there.", imageSrc: photo(30567143) },
-  { name: "Isabella", caption: "Isabella approves", quote: "I ordered one burger and left planning my next visit. Soft bun, crisp edges, perfect.", imageSrc: photo(15483629) },
-  { name: "Emma", caption: "Emma is hooked on cold brew", quote: "Their cold brew is smooth and strong, and the staff remember my order.", imageSrc: photo(35018082) },
-  { name: "Mia and Roy", caption: "Mia and Roy found their spot", quote: "We booked the baking workshop for a date night and it was the highlight of our month.", imageSrc: photo(1222271) },
-];
-
-const TestimonialVideoCoverflow = ({ label = "Social buzz", title = "What do people say about us?", items = defaultItems, interval = 6, angle = 36, ariaLabel, className }: TestimonialVideoCoverflowProps) => {
+const TestimonialVideoCoverflow = ({
+  label,
+  title,
+  items,
+  interval = 6,
+  angle = 36,
+  ariaLabel,
+  className,
+}: TestimonialVideoCoverflowProps) => {
+  const { t } = useLanguage();
   const reduce = useReducedMotion() ?? false;
   const kit = useKitMotion();
-  const list = items.slice(0, 12);
+
+  const displayLabel = label ?? t("testimonials.label", "Dicono di noi");
+  const displayTitle = title ?? t("testimonials.title", "Le opinioni dei nostri ospiti");
+
+  const displayItems: Testimonial[] = items ?? [
+    {
+      name: "Leopoldo Murino",
+      caption: t("test.cap1", "Cliente abituale"),
+      quote: t("test.q1", "Carne strepitosa cucinata in modo impeccabile. Lo chef Antonio è davvero superlativo!"),
+      imageSrc: "https://img.b2bpic.net/free-photo/view-delicious-burger-with-buns-cheese_23-2150887800.jpg",
+    },
+    {
+      name: "James Christian",
+      caption: t("test.cap2", "Turista in visita"),
+      quote: t("test.q2", "Dopo giorni di cucina locale volevo un grande burger. Carne succosa e patate croccanti."),
+      imageSrc: "https://img.b2bpic.net/free-photo/dinner-with-wine_1182-784.jpg?_wi=2",
+    },
+    {
+      name: "Marco Russo",
+      caption: t("test.cap3", "Cliente di Desenzano"),
+      quote: t("test.q3", "Aperitivo perfetto nel cortile coperto. Uno Spritz preparato a regola d'arte."),
+      imageSrc: "https://img.b2bpic.net/free-photo/friends-having-fun-white-party_23-2149530394.jpg",
+    },
+    {
+      name: "Martina Conti",
+      caption: t("test.cap4", "Ospite del weekend"),
+      quote: t("test.q4", "Ambiente davvero accogliente e hamburger spettacolari. Una garanzia in centro."),
+      imageSrc: "https://img.b2bpic.net/free-photo/delicious-italian-cocktail-with-realistic-background_23-2150062921.jpg?_wi=2",
+    },
+    {
+      name: "Federico Ricci",
+      caption: t("test.cap5", "Cliente abituale"),
+      quote: t("test.q5", "Ottime birre alla spina e ingredienti sempre freschissimi. Tappa fissa a Desenzano."),
+      imageSrc: "https://img.b2bpic.net/free-photo/enjoying-street-food-fest_23-2151543708.jpg",
+    },
+  ];
+
+  const list = displayItems.slice(0, 12);
   const count = list.length;
-  const words = title ? title.split(/\s+/) : [];
+  const words = displayTitle ? displayTitle.split(/\s+/) : [];
   const loop = count > 2;
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -87,14 +124,14 @@ const TestimonialVideoCoverflow = ({ label = "Social buzz", title = "What do peo
 
   if (!count) return null;
 
-  const current = list[active] ?? list[0];
-  const quoteWords = current.quote ? `“${current.quote}”`.split(/\s+/) : [];
+  const currentItem = list[active] ?? list[0];
+  const quoteWords = currentItem.quote ? `“${currentItem.quote}”`.split(/\s+/) : [];
   const timed = !reduce && !paused && inView && interval > 0;
 
   return (
     <section
       ref={sectionRef}
-      aria-label={ariaLabel ?? title ?? label ?? "Testimonials"}
+      aria-label={ariaLabel ?? displayTitle ?? displayLabel ?? "Testimonials"}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -103,16 +140,16 @@ const TestimonialVideoCoverflow = ({ label = "Social buzz", title = "What do peo
     >
       <div className="relative flex flex-col items-center justify-center gap-[clamp(1.25rem,3svh,2.5rem)] overflow-x-clip py-[var(--section-space)] lg:sticky lg:top-0 lg:h-svh lg:py-[clamp(2rem,6svh,4rem)]">
         <motion.div aria-hidden="true" style={{ opacity: shade }} className="pointer-events-none absolute inset-0 z-[30] hidden bg-black lg:block" />
-        {(label || title) && (
+        {(displayLabel || displayTitle) && (
           <div className="mx-auto flex w-[var(--container)] max-w-[48rem] flex-col items-center gap-[clamp(0.75rem,1.6vw,1.25rem)] text-center">
-            {label && (
-              <motion.p {...rise(0)} className="font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] text-foreground before:content-['/']">
-                {label}
+            {displayLabel && (
+              <motion.p {...rise(0)} className="font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] text-accent before:content-['/']">
+                {displayLabel}
               </motion.p>
             )}
-            {title && (
+            {displayTitle && (
               <h2 className="text-balance text-[length:var(--text-h1)] leading-[var(--heading-leading)] tracking-[var(--heading-tracking)] [font-weight:var(--heading-weight)] [overflow-wrap:anywhere]">
-                <div className="sr-only">{title}</div>
+                <div className="sr-only">{displayTitle}</div>
                 <div aria-hidden="true">
                 {words.map((word, i) => (
                   <div key={i} className={cn("-mb-[0.15em] inline-block overflow-hidden pb-[0.15em] align-bottom", i < words.length - 1 && "mr-[0.25em]")}>
@@ -178,9 +215,9 @@ const TestimonialVideoCoverflow = ({ label = "Social buzz", title = "What do peo
                   variants={{ leave: { opacity: 0, transition: { duration: kit.fast } } }}
                   className="flex flex-col items-center gap-[0.875rem]"
                 >
-                  {current.quote && (
+                  {currentItem.quote && (
                     <blockquote className="text-balance font-[family-name:var(--font-heading)] text-[length:var(--text-h3)] leading-[1.2] [overflow-wrap:anywhere]">
-                      <p className="sr-only">{current.quote}</p>
+                      <p className="sr-only">{currentItem.quote}</p>
                       {quoteWords.map((word, i) => (
                         <div key={i} aria-hidden="true" className={cn("-mb-[0.15em] inline-block overflow-hidden pb-[0.15em] align-bottom", i < quoteWords.length - 1 && "mr-[0.25em]")}>
                           <motion.div
@@ -198,14 +235,14 @@ const TestimonialVideoCoverflow = ({ label = "Social buzz", title = "What do peo
                       variants={{ enter: { opacity: 0, y: "0.5em" }, show: { opacity: 1, y: 0, transition: { duration: kit.base, ease: kit.ease, delay: 0.2 } } }}
                       className="text-[length:var(--text-body)] font-medium leading-[1.3]"
                     >
-                      {current.name}
+                      {currentItem.name}
                     </motion.p>
-                    {current.caption && (
+                    {currentItem.caption && (
                       <motion.p
                         variants={{ enter: { opacity: 0, y: "0.5em" }, show: { opacity: 1, y: 0, transition: { duration: kit.base, ease: kit.ease, delay: 0.28 } } }}
                         className="font-mono text-[length:var(--text-small)] uppercase leading-none tracking-[var(--label-tracking)] text-muted-foreground before:content-['/']"
                       >
-                        {current.caption}
+                        {currentItem.caption}
                       </motion.p>
                     )}
                   </figcaption>

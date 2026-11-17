@@ -5,6 +5,7 @@ import './index.css'
 import '@/components/kit/videoPlayback'
 import App from './App.tsx'
 import { initVisualEdit } from '@/utils/visual-edit'
+import { LanguageProvider } from '@/context/LanguageContext'
 
 initVisualEdit()
 
@@ -80,7 +81,9 @@ function Root() {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <Root />
+      <LanguageProvider>
+        <Root />
+      </LanguageProvider>
     </BrowserRouter>
   </StrictMode>,
 )

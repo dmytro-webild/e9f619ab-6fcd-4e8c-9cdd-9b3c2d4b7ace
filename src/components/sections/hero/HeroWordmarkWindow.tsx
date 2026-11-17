@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { animate, motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useCoverNext } from "@/components/kit/sectionNeighbour";
 import { MotionMedia } from "@/components/kit/Media";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Cta = { text: string; href?: string };
 
@@ -29,24 +30,34 @@ const STRIPES = {
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
 const HeroWordmarkWindow = ({
-  title = "Crumb & Butter",
-  description = "All-day brunch and smash burgers on a Chicago corner, made from scratch every morning.",
+  title = "Spritz & Burger",
+  description,
   primaryButton,
-  imageSrc = "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  imageAlt = "",
-  leftLabel = "/Serving since 2012",
-  rightLabel = "/Scroll down",
-  marquee = ["Bun", "Based in Chicago", "Your corner for crispiness"],
+  imageSrc = "https://img.b2bpic.net/free-photo/delicious-sandwich-ketchup-tomatoes-with-stem-dark-mix-color-surface-with-free-space_179666-42225.jpg",
+  imageAlt = "classic beef burger on dark surface",
+  leftLabel,
+  rightLabel,
+  marquee,
   introDelay = 0,
   handoff = false,
   ariaLabel,
 }: HeroWordmarkWindowProps) => {
+  const { t } = useLanguage();
   const ref = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
   useCoverNext(ref);
   const reduce = !!useReducedMotion();
   const live = !reduce;
+
+  const displayDescription = description ?? t("hero.description", "Gourmet burger e aperitivi a Desenzano. Carne fresca ogni giorno e cortile coperto.");
+  const displayLeftLabel = leftLabel ?? t("hero.leftLabel", "/Attivi dal 2012");
+  const displayRightLabel = rightLabel ?? t("hero.rightLabel", "/Scopri il menu");
+  const displayMarquee = marquee ?? [
+    t("hero.marquee1", "Hamburger Gourmet"),
+    t("hero.marquee2", "Aperitivo Italiano"),
+    t("hero.marquee3", "Cortile Coperto"),
+  ];
 
   const top = useMotionValue(40);
   const slit = useMotionValue(live ? 50 : 0);
@@ -89,7 +100,7 @@ const HeroWordmarkWindow = ({
   const shade = useTransform(pin, (v) => (live ? clamp01((v - 0.35) / 0.65) * 0.35 : 0));
 
   const words = title.trim().split(/\s+/);
-  const line = `${marquee.join(" // ")} //`;
+  const line = `${displayMarquee.join(" // ")} //`;
   const rise = (delay: number) =>
     live
       ? { initial: { opacity: 0, y: "0.75rem" }, animate: { opacity: 1, y: "0rem" }, transition: { duration: 0.9, ease: EASE_OUT, delay } }
@@ -128,12 +139,12 @@ const HeroWordmarkWindow = ({
                 </Fragment>
               ))}
             </h1>
-            {description && (
+            {displayDescription && (
               <motion.p
                 {...rise(textAt)}
                 className="mt-[clamp(0.75rem,2.5svh,1.5rem)] w-[min(var(--container),27rem)] text-balance text-[length:var(--text-body-lg)] leading-[1.45] text-muted-foreground"
               >
-                {description}
+                {displayDescription}
               </motion.p>
             )}
             {primaryButton && (
@@ -161,8 +172,8 @@ const HeroWordmarkWindow = ({
             </motion.div>
             <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-linear-to-t from-black/45 to-transparent" />
             <div className="absolute bottom-0 left-1/2 flex w-[var(--container)] -translate-x-1/2 items-end justify-between gap-[1rem] pb-[clamp(1.5rem,4svh,2.75rem)] font-mono text-[length:var(--text-label)] uppercase leading-none tracking-[var(--label-tracking)] text-white">
-              <p>{leftLabel}</p>
-              <p>{rightLabel}</p>
+              <p>{displayLeftLabel}</p>
+              <p>{displayRightLabel}</p>
             </div>
           </motion.div>
         </div>

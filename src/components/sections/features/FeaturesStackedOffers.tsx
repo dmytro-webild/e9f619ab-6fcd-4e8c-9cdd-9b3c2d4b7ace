@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { useKitMotion } from "@/components/kit/kitMotion";
 import ImageScrollParallax from "@/components/animation/ImageScrollParallax";
 import SnellenbergWordRise from "@/components/kit/SnellenbergWordRise";
+import { useLanguage } from "@/context/LanguageContext";
 
 const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -25,14 +26,6 @@ type FeaturesStackedOffersProps = {
   ariaLabel?: string;
   className?: string;
 };
-
-const px = (id: number) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
-
-const defaultItems: Offer[] = [
-  { title: "Dining", description: "Farm fresh ingredients and a chef led menu, served with a wink on the side.", imageSrc: px(5638732), detailSrc: px(1639557), cta: { text: "View menu", href: "#menu" } },
-  { title: "Events", description: "Music that moves you and nights that stick. We host feelings, not just events.", imageSrc: px(696218), detailSrc: px(3171837), cta: { text: "See events", href: "#events" } },
-  { title: "Workshops", description: "Hands on sessions in our kitchen, from sourdough to latte art.", imageSrc: px(2696064), detailSrc: px(3218467), cta: { text: "Book a seat", href: "#workshops" } },
-];
 
 type RowProps = { item: Offer; index: number; total: number; progress: MotionValue<number> };
 
@@ -107,24 +100,67 @@ const Row = ({ item, index, total, progress }: RowProps) => {
 };
 
 const FeaturesStackedOffers = ({
-  label = "Services provided",
-  title = "The corner that's always up to something",
-  items = defaultItems,
+  label,
+  title,
+  items,
   ariaLabel,
   className,
 }: FeaturesStackedOffersProps) => {
+  const { t } = useLanguage();
   const reduce = useReducedMotion();
   const kit = useKitMotion();
   const listRef = useRef<HTMLUListElement>(null);
   const { scrollYProgress } = useScroll({ target: listRef, offset: ["start start", "end end"] });
   const progress = useSpring(scrollYProgress, { stiffness: 220, damping: 40, restDelta: 0.0005 });
 
+  const displayLabel = label ?? t("services.label", "APERITIVO SUL GARDA");
+  const displayTitle = title ?? t("services.title", "L'ora dello spritz a Desenzano");
+
+  const displayItems: Offer[] = items ?? [
+    {
+      title: t("services.item1Title", "Spritz Classici"),
+      description: t("services.item1Desc", "Aperol, Campari o Hugo preparati a regola d'arte con Prosecco selezionato e guarnizioni fresche nel nostro cortile."),
+      imageSrc: "https://img.b2bpic.net/free-photo/tropical-cocktail-with-grapefruit-flavor_140725-65.jpg?_wi=2",
+      imageAlt: "tropical cocktail with grapefruit flavor",
+      detailSrc: "https://img.b2bpic.net/free-photo/side-view-friends-holding-cocktails_23-2150124815.jpg",
+      detailAlt: "Side view friends holding cocktails",
+      cta: {
+        text: t("services.item1Cta", "Scopri i burger"),
+        href: "#menu",
+      },
+    },
+    {
+      title: t("services.item2Title", "Birre Artigianali"),
+      description: t("services.item2Desc", "Bionde e rosse alla spina selezionate per esaltare i sapori intensi dei nostri hamburger di carne fresca."),
+      imageSrc: "https://img.b2bpic.net/free-photo/man-with-glass-beer_107420-65569.jpg?_wi=2",
+      imageAlt: "Man with glass of beer",
+      detailSrc: "https://img.b2bpic.net/free-photo/couple-drinking-craft-beer-outdoors_23-2148111307.jpg",
+      detailAlt: "Couple drinking craft beer outdoors",
+      cta: {
+        text: t("services.item2Cta", "Vedi menu"),
+        href: "#menu",
+      },
+    },
+    {
+      title: t("services.item3Title", "Cortile Coperto"),
+      description: t("services.item3Desc", "Un'atmosfera rilassata e accogliente a due passi dal lago, perfetta per la convivialità e il relax serale."),
+      imageSrc: "https://img.b2bpic.net/free-photo/medium-shot-happy-people-with-sangria_23-2149436821.jpg?_wi=2",
+      imageAlt: "Medium shot happy people with sangria",
+      detailSrc: "https://img.b2bpic.net/free-photo/always-is-great-spend-some-time-with-friends_329181-2895.jpg",
+      detailAlt: "Always is great to spend some time with friends",
+      cta: {
+        text: t("services.item3Cta", "Prenota tavolo"),
+        href: "#contact-reserve-form",
+      },
+    },
+  ];
+
   return (
-    <section aria-label={ariaLabel ?? title ?? "Services"} className={cn("relative overflow-x-clip bg-background py-[var(--section-space)] text-foreground", className)}>
+    <section aria-label={ariaLabel ?? displayTitle ?? "Services"} className={cn("relative overflow-x-clip bg-background py-[var(--section-space)] text-foreground", className)}>
       <div className="mx-auto w-[var(--container)]">
-        {(label || title) && (
+        {(displayLabel || displayTitle) && (
           <div className="mx-auto mb-[clamp(2rem,4vw,3.5rem)] flex max-w-[40rem] flex-col items-center gap-[clamp(0.75rem,1.4vw,1.25rem)] text-center">
-            {label && (
+            {displayLabel && (
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -132,21 +168,21 @@ const FeaturesStackedOffers = ({
                 transition={{ duration: kit.base, ease: kit.ease }}
                 className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] before:content-['/']"
               >
-                {label}
+                {displayLabel}
               </motion.p>
             )}
-            {title && (
+            {displayTitle && (
               <SnellenbergWordRise
                 tag="h2"
-                text={title}
+                text={displayTitle}
                 className="max-w-[14em] text-balance text-[length:var(--text-h1)] leading-[var(--heading-leading)] tracking-[var(--heading-tracking)] [font-family:var(--font-heading)] [font-weight:var(--heading-weight)] [overflow-wrap:anywhere]"
               />
             )}
           </div>
         )}
         <ul ref={listRef} className="flex flex-col gap-[12svh]">
-          {items.map((item, index) => (
-            <Row key={index} item={item} index={index} total={items.length} progress={progress} />
+          {displayItems.map((item, index) => (
+            <Row key={index} item={item} index={index} total={displayItems.length} progress={progress} />
           ))}
         </ul>
       </div>

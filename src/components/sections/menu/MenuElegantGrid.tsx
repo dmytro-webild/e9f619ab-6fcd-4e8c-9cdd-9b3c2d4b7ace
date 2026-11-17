@@ -4,6 +4,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useKitMotion } from "@/components/kit/kitMotion";
 import SnellenbergWordRise from "@/components/kit/SnellenbergWordRise";
+import { useLanguage } from "@/context/LanguageContext";
 import {
   Flame,
   Sparkles,
@@ -801,14 +802,15 @@ export type MenuGridProps = {
 };
 
 export default function MenuElegantGrid({
-  label = "/Il Menu di Spritz & Burger",
-  title = "Menu completo & specialità della casa",
-  description = "Tutti i nostri hamburger con carne fresca 100% manzo, i nostri Special Burgers gourmet, la linea Gli Incredibili, opzioni Veggie, menu Bimbi, Fish & Chips, insalate, dolci fatti in casa, extra, aperitivi, birre e vini a Desenzano del Garda.",
+  label,
+  title,
+  description,
   categories = DEFAULT_CATEGORIES,
   items = DEFAULT_MENU_ITEMS,
   ariaLabel = "Menu completo di Spritz & Burger",
   className,
 }: MenuGridProps) {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const kit = useKitMotion();
@@ -816,6 +818,10 @@ export default function MenuElegantGrid({
   const [dietaryFilter, setDietaryFilter] = useState<"all" | "veggie" | "vegan" | "gluten-free">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+
+  const displayLabel = label ?? t("menu.label", "/Il Menu di Desenzano");
+  const displayTitle = title ?? t("menu.title", "Le nostre specialità gourmet & aperitivi");
+  const displayDescription = description ?? t("menu.description", "Carne fresca 100% manzo selezionata ogni giorno, pane artigianale dorato, contorni croccanti e i leggendari Spritz preparati nel nostro cortile a Desenzano del Garda.");
 
   const filteredItems = items.filter((item) => {
     const matchesCategory = activeCategory === "all" || item.category === activeCategory;
@@ -844,7 +850,7 @@ export default function MenuElegantGrid({
       <div className="mx-auto w-[var(--container)]">
         {/* Header */}
         <div className="mx-auto mb-[clamp(2.5rem,5vw,3.5rem)] flex max-w-[48rem] flex-col items-center gap-[clamp(0.875rem,1.8vw,1.5rem)] text-center">
-          {label && (
+          {displayLabel && (
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -852,11 +858,11 @@ export default function MenuElegantGrid({
               transition={{ duration: kit.base, ease: kit.ease }}
               className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-accent before:content-['/']"
             >
-              {label}
+              {displayLabel}
             </motion.p>
           )}
 
-          {title && (
+          {displayTitle && (
             <motion.h2
               initial={reduce ? false : { opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -864,11 +870,11 @@ export default function MenuElegantGrid({
               transition={{ duration: kit.base, ease: kit.ease, delay: 0.08 }}
               className="font-heading text-[length:var(--text-h1)] font-[var(--heading-weight)] tracking-[var(--heading-tracking)] leading-[var(--heading-leading)] text-foreground"
             >
-              <SnellenbergWordRise text={title} />
+              <SnellenbergWordRise text={displayTitle} />
             </motion.h2>
           )}
 
-          {description && (
+          {displayDescription && (
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -876,7 +882,7 @@ export default function MenuElegantGrid({
               transition={{ duration: kit.base, ease: kit.ease, delay: 0.16 }}
               className="max-w-[36rem] font-sans text-[length:var(--text-body-lg)] text-muted-foreground"
             >
-              {description}
+              {displayDescription}
             </motion.p>
           )}
         </div>
@@ -894,7 +900,7 @@ export default function MenuElegantGrid({
             <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Cerca per nome o ingrediente (es. tartufo, capra, heidi, spritz)..."
+              placeholder={t("menu.searchPlaceholder", "Cerca per nome o ingrediente...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full rounded-full border border-border/80 bg-card py-2.5 pl-10 pr-4 font-sans text-[length:var(--text-small)] text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all shadow-sm"
@@ -915,6 +921,7 @@ export default function MenuElegantGrid({
             {categories.map((cat) => {
               const isActive = activeCategory === cat.key;
               const Icon = cat.icon;
+              const catLabel = t(`cat.${cat.key}`, cat.label);
               return (
                 <button
                   key={cat.key}
@@ -930,7 +937,7 @@ export default function MenuElegantGrid({
                   )}
                 >
                   {Icon && <Icon className="size-4 shrink-0" />}
-                  <span>{cat.label}</span>
+                  <span>{catLabel}</span>
                 </button>
               );
             })}
@@ -939,7 +946,7 @@ export default function MenuElegantGrid({
           {/* Dietary Legend / Filter Pills */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-border/40 w-full max-w-2xl">
             <span className="font-mono text-[0.75rem] text-muted-foreground uppercase tracking-wider mr-1">
-              Filtra Opzioni:
+              {t("menu.filterLabel", "Filtra Opzioni:")}
             </span>
             <button
               type="button"
@@ -951,7 +958,7 @@ export default function MenuElegantGrid({
                   : "bg-card text-muted-foreground hover:text-foreground border border-border/60"
               )}
             >
-              <span>Tutti</span>
+              <span>{t("menu.filterAll", "Tutti")}</span>
             </button>
             <button
               type="button"
@@ -964,7 +971,7 @@ export default function MenuElegantGrid({
               )}
             >
               <Leaf className="size-3.5" />
-              <span>Vegetariano</span>
+              <span>{t("menu.filterVeggie", "Vegetariano")}</span>
             </button>
             <button
               type="button"
@@ -977,7 +984,7 @@ export default function MenuElegantGrid({
               )}
             >
               <VeganIcon className="size-3.5" />
-              <span>Vegano</span>
+              <span>{t("menu.filterVegan", "Vegano")}</span>
             </button>
             <button
               type="button"
@@ -990,7 +997,7 @@ export default function MenuElegantGrid({
               )}
             >
               <GlutenFreeIcon className="size-3.5" />
-              <span>Senza Glutine</span>
+              <span>{t("menu.filterGlutenFree", "Senza Glutine")}</span>
             </button>
           </div>
         </motion.div>
@@ -1174,7 +1181,7 @@ export default function MenuElegantGrid({
                               onClick={() => setSelectedItem(item)}
                               className="inline-flex items-center gap-1.5 font-mono text-[length:var(--text-small)] text-primary hover:text-accent transition-colors duration-200 font-medium cursor-pointer"
                             >
-                              <span>Dettagli & Allergeni</span>
+                              <span>{t("menu.detailsBtn", "Dettagli & Allergeni")}</span>
                               <ChevronRight className="size-4" />
                             </button>
                           </div>
@@ -1201,15 +1208,15 @@ export default function MenuElegantGrid({
             </div>
             <div>
               <h4 className="font-heading text-[length:var(--text-h3)] text-foreground">
-                Vuoi un tavolo nel nostro cortile coperto a Desenzano?
+                {t("menu.ctaTitle", "Vuoi un tavolo nel nostro cortile coperto a Desenzano?")}
               </h4>
               <p className="font-sans text-[length:var(--text-small)] text-muted-foreground mt-0.5">
-                Prenota in anticipo per goderti hamburger gourmet e spritz rinfrescanti.
+                {t("menu.ctaSub", "Prenota in anticipo per goderti hamburger gourmet e spritz rinfrescanti.")}
               </p>
             </div>
           </div>
           <a href="#contact-reserve-form" className="btn-primary shrink-0">
-            <span className="btn-label">Prenota un Tavolo</span>
+            <span className="btn-label">{t("menu.ctaBtn", "Prenota un Tavolo")}</span>
           </a>
         </motion.div>
       </div>
@@ -1230,7 +1237,7 @@ export default function MenuElegantGrid({
                 type="button"
                 onClick={() => setSelectedItem(null)}
                 className="absolute top-4 right-4 z-20 flex size-9 items-center justify-center rounded-full bg-muted/80 text-foreground hover:bg-muted transition-colors shadow-sm"
-                aria-label="Chiudi"
+                aria-label={t("menu.closeModal", "Chiudi")}
               >
                 <X className="size-5" />
               </button>
@@ -1246,19 +1253,19 @@ export default function MenuElegantGrid({
                   {selectedItem.isVegetarian && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 font-mono text-[0.75rem] font-medium">
                       <Leaf className="size-3.5" />
-                      <span>Vegetariano</span>
+                      <span>{t("menu.filterVeggie", "Vegetariano")}</span>
                     </span>
                   )}
                   {selectedItem.isVegan && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/30 px-2.5 py-0.5 font-mono text-[0.75rem] font-medium">
                       <VeganIcon className="size-3.5" />
-                      <span>Vegano</span>
+                      <span>{t("menu.filterVegan", "Vegano")}</span>
                     </span>
                   )}
                   {selectedItem.isGlutenFree && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-2.5 py-0.5 font-mono text-[0.75rem] font-medium">
                       <GlutenFreeIcon className="size-3.5" />
-                      <span>Senza Glutine</span>
+                      <span>{t("menu.filterGlutenFree", "Senza Glutine")}</span>
                     </span>
                   )}
                 </div>
@@ -1290,7 +1297,7 @@ export default function MenuElegantGrid({
                 {selectedItem.ingredients && selectedItem.ingredients.length > 0 && (
                   <div className="mt-6">
                     <h4 className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-foreground mb-3 before:content-['/']">
-                      Ingredienti & Composizione
+                      {t("menu.ingredientsLabel", "Ingredienti principali:")}
                     </h4>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {selectedItem.ingredients.map((ing, i) => (
@@ -1305,7 +1312,7 @@ export default function MenuElegantGrid({
 
                 {selectedItem.allergens && (
                   <div className="mt-6 pt-4 border-t border-border/60 flex items-center justify-between text-[length:var(--text-small)]">
-                    <span className="font-mono text-muted-foreground">Allergeni:</span>
+                    <span className="font-mono text-muted-foreground">{t("menu.allergensLabel", "Allergeni:")}</span>
                     <span className="font-mono text-foreground font-medium">{selectedItem.allergens}</span>
                   </div>
                 )}
@@ -1316,14 +1323,14 @@ export default function MenuElegantGrid({
                     onClick={() => setSelectedItem(null)}
                     className="btn-secondary"
                   >
-                    <span className="btn-label">Chiudi</span>
+                    <span className="btn-label">{t("menu.closeModal", "Chiudi")}</span>
                   </button>
                   <a
                     href="#contact-reserve-form"
                     onClick={() => setSelectedItem(null)}
                     className="btn-primary"
                   >
-                    <span className="btn-label">Ordina / Prenota Tavolo</span>
+                    <span className="btn-label">{t("menu.orderModal", "Ordina / Prenota Tavolo")}</span>
                   </a>
                 </div>
               </div>

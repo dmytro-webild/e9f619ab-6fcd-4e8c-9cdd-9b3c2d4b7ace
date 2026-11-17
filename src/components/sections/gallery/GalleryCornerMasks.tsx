@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { useKitMotion } from "@/components/kit/kitMotion";
 import ImageScrollParallax from "@/components/animation/ImageScrollParallax";
 import SnellenbergWordRise from "@/components/kit/SnellenbergWordRise";
+import { useLanguage } from "@/context/LanguageContext";
 
 const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -17,17 +18,6 @@ type GalleryCornerMasksProps = {
   ariaLabel?: string;
   className?: string;
 };
-
-const px = (id: number) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
-
-const defaultItems: Photo[] = [
-  { imageSrc: px(1813466), caption: "Morning regulars" },
-  { imageSrc: px(357573) },
-  { imageSrc: px(1267697), caption: "Friday crowd" },
-  { imageSrc: px(1633578) },
-  { imageSrc: px(4253312), caption: "At the pass" },
-  { imageSrc: px(1565982) },
-];
 
 const ratios = ["aspect-[4/5]", "aspect-[1/1]", "aspect-[3/4]", "aspect-[4/3]", "aspect-[2/3]", "aspect-[5/6]"];
 
@@ -61,18 +51,55 @@ const Tile = ({ item, index }: TileProps) => {
 };
 
 const GalleryCornerMasks = ({
-  label = "Life at the corner",
-  title = "Come for the buns, stay for the people",
-  items = defaultItems,
+  label,
+  title,
+  items,
   ariaLabel,
   className,
 }: GalleryCornerMasksProps) => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const kit = useKitMotion();
   const [desktop, setDesktop] = useState(true);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const fast = useTransform(scrollYProgress, [0, 1], ["10%", "-10%"]);
+
+  const displayLabel = label ?? t("gallery.label", "IL LOCALE");
+  const displayTitle = title ?? t("gallery.title", "Il cortile coperto");
+
+  const displayItems: Photo[] = items ?? [
+    {
+      imageSrc: "https://img.b2bpic.net/free-photo/closeup-shot-appetizing-burger-with-onion-rings_181624-46590.jpg?_wi=2",
+      imageAlt: "Closeup shot of an appetizing burger with onion rings",
+      caption: t("gallery.cap1", "I nostri burger e birre"),
+    },
+    {
+      imageSrc: "https://img.b2bpic.net/free-photo/hand-holding-italian-cocktail-still-life_23-2150645773.jpg",
+      imageAlt: "Hand holding italian cocktail still life",
+      caption: t("gallery.cap2", "Aperitivo Aperol Spritz"),
+    },
+    {
+      imageSrc: "https://img.b2bpic.net/free-photo/smiling-waitress-holding-tray_23-2147985012.jpg",
+      imageAlt: "Smiling waitress holding tray",
+      caption: t("gallery.cap3", "Ambiente accogliente"),
+    },
+    {
+      imageSrc: "https://img.b2bpic.net/free-photo/medium-shot-smiley-women-with-drinks_23-2148947909.jpg",
+      imageAlt: "Medium shot smiley women with drinks",
+      caption: t("gallery.cap4", "Serate in compagnia"),
+    },
+    {
+      imageSrc: "https://img.b2bpic.net/free-photo/meat-burger-tomato-cucumber-egg-coleslaw-lettuce-cheese-olives-side-view_141793-1801.jpg",
+      imageAlt: "Meat burger tomato cucumber egg coleslaw lettuce cheese olives side view",
+      caption: t("gallery.cap5", "Selezione carne dello chef"),
+    },
+    {
+      imageSrc: "https://img.b2bpic.net/free-photo/hanging-lamp_1339-2398.jpg",
+      imageAlt: "hanging lamp",
+      caption: t("gallery.cap6", "Dettagli del locale"),
+    },
+  ];
 
   useEffect(() => {
     const query = window.matchMedia("(min-width: 880px)");
@@ -82,29 +109,29 @@ const GalleryCornerMasks = ({
     return () => query.removeEventListener("change", update);
   }, []);
 
-  const count = Math.min(desktop ? 3 : 2, Math.max(items.length, 1));
-  const columns = Array.from({ length: count }, (_, column) => items.map((item, index) => ({ item, index })).filter(({ index }) => index % count === column));
+  const count = Math.min(desktop ? 3 : 2, Math.max(displayItems.length, 1));
+  const columns = Array.from({ length: count }, (_, column) => displayItems.map((item, index) => ({ item, index })).filter(({ index }) => index % count === column));
 
   return (
-    <section ref={sectionRef} aria-label={ariaLabel ?? title ?? "Gallery"} className={cn("relative overflow-x-clip bg-background py-[var(--section-space)] text-foreground", className)}>
+    <section ref={sectionRef} aria-label={ariaLabel ?? displayTitle ?? "Gallery"} className={cn("relative overflow-x-clip bg-background py-[var(--section-space)] text-foreground", className)}>
       <div className="mx-auto w-[var(--container)]">
-        {(label || title) && (
+        {(displayLabel || displayTitle) && (
           <div className="mx-auto mb-[clamp(2rem,4vw,3.5rem)] flex max-w-[40rem] flex-col items-center gap-[clamp(0.75rem,1.4vw,1.25rem)] text-center">
-            {label && (
+            {displayLabel && (
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: kit.base, ease: kit.ease }}
-                className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] before:content-['/']"
+                className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-accent before:content-['/']"
               >
-                {label}
+                {displayLabel}
               </motion.p>
             )}
-            {title && (
+            {displayTitle && (
               <SnellenbergWordRise
                 tag="h2"
-                text={title}
+                text={displayTitle}
                 className="max-w-[14em] text-balance text-[length:var(--text-h1)] leading-[var(--heading-leading)] tracking-[var(--heading-tracking)] [font-family:var(--font-heading)] [font-weight:var(--heading-weight)] [overflow-wrap:anywhere]"
               />
             )}

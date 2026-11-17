@@ -5,7 +5,23 @@ import { twMerge } from "tailwind-merge";
 import { useKitMotion } from "@/components/kit/kitMotion";
 import Media from "@/components/kit/Media";
 import SnellenbergWordRise from "@/components/kit/SnellenbergWordRise";
-import { Utensils, Flame, Sparkles, Smile, Salad, ChevronRight, X, Check, Search } from "lucide-react";
+import {
+  Utensils,
+  Flame,
+  Sparkles,
+  Smile,
+  Salad,
+  Fish,
+  IceCream,
+  PlusCircle,
+  GlassWater,
+  Beer,
+  Wine,
+  ChevronRight,
+  X,
+  Check,
+  Search
+} from "lucide-react";
 
 const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -16,7 +32,13 @@ export type MenuCategoryKey =
   | "gli-incredibili"
   | "veggie"
   | "per-i-piccoli"
-  | "contorni-insalate";
+  | "fish-and-chips"
+  | "insalate"
+  | "desserts"
+  | "extra"
+  | "bevande"
+  | "birre"
+  | "vini";
 
 export type MenuItem = {
   id: string;
@@ -42,11 +64,17 @@ export type MenuCategory = {
 const DEFAULT_CATEGORIES: MenuCategory[] = [
   { key: "all", label: "Tutti i Prodotti", icon: Sparkles },
   { key: "burgers", label: "Burgers", icon: Utensils },
-  { key: "special-burgers", label: "Special Burgers", icon: Flame },
+  { key: "special-burgers", label: "Specials", icon: Flame },
   { key: "gli-incredibili", label: "Gli Incredibili", icon: Sparkles },
   { key: "veggie", label: "Veggie", icon: Salad },
   { key: "per-i-piccoli", label: "Per I Piccoli", icon: Smile },
-  { key: "contorni-insalate", label: "Contorni & Insalate", icon: Salad },
+  { key: "fish-and-chips", label: "Fish & Chips", icon: Fish },
+  { key: "insalate", label: "Insalate", icon: Salad },
+  { key: "desserts", label: "Desserts", icon: IceCream },
+  { key: "extra", label: "Extra", icon: PlusCircle },
+  { key: "bevande", label: "Bevande", icon: GlassWater },
+  { key: "birre", label: "Birre", icon: Beer },
+  { key: "vini", label: "Vini", icon: Wine },
 ];
 
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
@@ -72,7 +100,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane croccante, deliziosa cotoletta di pollo impanata dorata, insalata fresca, pomodoro, formaggio fuso e salsa speciale della casa.",
     ingredients: ["Pane Artigianale", "Cotoletta di Pollo Croccante", "Insalata Fresca", "Pomodoro Rosso", "Formaggio Fuso", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/5639466/pexels-photo-5639466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=1",
+    imageSrc: "https://images.pexels.com/photos/5639466/pexels-photo-5639466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
     imageAlt: "Chicken Burger con cotoletta di pollo",
     tag: "Croccante",
     badgeColor: "accent",
@@ -85,7 +113,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale, saporita carne di manzo, insalata croccante, pomodoro fresco, morbida mozzarella filante e salsa agrodolce aromatica.",
     ingredients: ["Pane Artigianale", "Carne di Manzo", "Mozzarella Filante", "Insalata & Pomodoro", "Salsa Agrodolce"],
-    imageSrc: "https://images.pexels.com/photos/4628466/pexels-photo-4628466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=1",
+    imageSrc: "https://images.pexels.com/photos/4628466/pexels-photo-4628466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
     imageAlt: "Asia Burger con mozzarella e salsa agrodolce",
     tag: "Fusion",
     badgeColor: "secondary",
@@ -98,7 +126,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale soffice, carne di manzo gustosa, bacon croccante, insalata, pomodoro fresco, cremoso formaggio Brie fuso e salsa della casa.",
     ingredients: ["Pane Artigianale", "Carne di Manzo", "Formaggio Brie Cremoso", "Bacon Croccante", "Pomodoro & Insalata", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/687824/pexels-photo-687824.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=1",
+    imageSrc: "https://images.pexels.com/photos/687824/pexels-photo-687824.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
     imageAlt: "French Burger con formaggio brie",
     tag: "Brie Cremoso",
     badgeColor: "primary",
@@ -138,7 +166,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane dorato, carne di manzo, bacon croccante, insalata, pomodoro, cipolla e saporito gorgonzola cremoso con salsa della casa.",
     ingredients: ["Carne Scelta", "Gorgonzola Cremoso DOP", "Bacon Croccante", "Cipolla", "Pomodoro & Insalata", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/15523382/pexels-photo-15523382.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=1",
+    imageSrc: "https://images.pexels.com/photos/15523382/pexels-photo-15523382.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
     imageAlt: "Monte Burger con gorgonzola e bacon",
     tag: "Gorgonzola",
     badgeColor: "secondary",
@@ -161,7 +189,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     id: "b9",
     name: "Hawaii",
     category: "burgers",
-    price: "€9.50",
+    price: "€11.30",
     description: "Pane soffice, carne di manzo, ananas dolce, insalata fresca, formaggio fuso, salsa alle fragole e salsa speciale della casa.",
     ingredients: ["Ananas Grigliato", "Carne di Manzo", "Formaggio Fuso", "Salsa alle Fragole", "Insalata", "Salsa della Casa"],
     imageSrc: "https://images.pexels.com/photos/28760156/pexels-photo-28760156.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
@@ -177,7 +205,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale, carne di manzo gustosa, insalata croccante, pomodoro, cipolla rossa, formaggio feta sbriciolato e salsa all'aglio.",
     ingredients: ["Carne di Manzo", "Feta Greca", "Cipolla Rossa", "Salsa all'Aglio", "Pomodoro & Insalata"],
-    imageSrc: "https://images.pexels.com/photos/2299981/pexels-photo-2299981.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=1",
+    imageSrc: "https://images.pexels.com/photos/2299981/pexels-photo-2299981.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
     imageAlt: "Greco Burger con feta e aglio",
     tag: "Feta & Aglio",
     badgeColor: "secondary",
@@ -190,7 +218,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale dorato, carne saporita, bacon croccante, insalata, pomodoro fresco, morbida crema Philadelphia e salsa della casa.",
     ingredients: ["Crema Philadelphia", "Carne di Manzo", "Bacon Croccante", "Pomodoro & Insalata", "Salsa della Casa"],
-    imageSrc: "https://picsum.photos/seed/223816668/1200/800",
+    imageSrc: "https://images.pexels.com/photos/28841121/pexels-photo-28841121.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
     imageAlt: "Philadelphia Burger con formaggio spalmabile",
     tag: "Philadelphia",
     badgeColor: "primary",
@@ -198,16 +226,29 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "b12",
-    name: "Fish & Chips",
+    name: "Heidi Burger",
     category: "burgers",
-    price: "€10.50",
-    description: "Croccanti filetti di nasello fritti in pastella dorata, serviti con abbondanti patatine fritte croccanti e deliziosa salsa tartar.",
-    ingredients: ["Filetti di Nasello in Pastella", "Patatine Fritte Croccanti", "Salsa Tartar", "Spicchio di Limone"],
-    imageSrc: "https://picsum.photos/seed/744315841/1200/800",
-    imageAlt: "Fish and Chips servito con patatine",
-    tag: "Piatto Unico",
+    price: "€11.50",
+    description: "Pane artigianale tostato, carne di manzo fresca, morbido formaggio di capra artigianale, deliziosa marmellata di fichi dolce, insalata fresca e salsa della casa.",
+    ingredients: ["Formaggio di Capra", "Marmellata di Fichi", "Carne 100% Manzo", "Insalata Fresca", "Salsa della Casa"],
+    imageSrc: "https://images.pexels.com/photos/31450808/pexels-photo-31450808.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Heidi Burger con formaggio di capra e marmellata di fichi",
+    tag: "Capra & Fichi",
     badgeColor: "accent",
-    allergens: "Glutine, Pesce, Uova"
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "b13",
+    name: "Vegetarian",
+    category: "burgers",
+    price: "€9.50",
+    description: "Pane soffice, insalata croccante, deliziosa cotoletta di soia dorata, olive nere, pomodoro maturo e formaggio fuso a scelta.",
+    ingredients: ["Cotoletta di Soia", "Olive Nere", "Pomodoro Maturo", "Formaggio Fuso", "Insalata Fresca"],
+    imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg?_wi=2",
+    imageAlt: "Vegetarian burger con cotoletta di soia",
+    tag: "Vegetariano",
+    badgeColor: "primary",
+    allergens: "Glutine, Soia, Lattosio"
   },
 
   // --- SPECIAL BURGERS ---
@@ -284,7 +325,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€12.00",
     description: "Pane dorato, tenero pollo sfilacciato e speziato, insalata croccante, maionese alla paprika dolce e formaggio cheddar fuso.",
     ingredients: ["Pulled Chicken Speziato", "Cheddar Fuso", "Maionese alla Paprika", "Insalata Croccante"],
-    imageSrc: "https://picsum.photos/seed/1921229844/1200/800",
+    imageSrc: "https://images.pexels.com/photos/32177596/pexels-photo-32177596.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
     imageAlt: "Pulled Chicken Burger speziato",
     tag: "Pollo Speziato",
     badgeColor: "secondary",
@@ -320,19 +361,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
   },
   {
     id: "inc2",
-    name: "Pulled Pork Deluxe",
-    category: "gli-incredibili",
-    price: "€14.00",
-    description: "Pane brioche tostato, spalla di maiale sfilacciata marinata 12 ore e affumicata, cheddar fuso, cipolla croccante e coleslaw fresco.",
-    ingredients: ["Pulled Pork 12h", "Cipolla Croccante", "Coleslaw", "Cheddar Fuso", "Pane Brioche"],
-    imageSrc: "https://images.pexels.com/photos/5639466/pexels-photo-5639466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=3",
-    imageAlt: "Pulled Pork Deluxe in pane brioche",
-    tag: "Deluxe",
-    badgeColor: "accent",
-    allergens: "Glutine, Lattosio, Senape"
-  },
-  {
-    id: "inc3",
     name: "Monster Burger",
     category: "gli-incredibili",
     price: "€17.50",
@@ -345,7 +373,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     allergens: "Glutine, Lattosio"
   },
   {
-    id: "inc4",
+    id: "inc3",
     name: "Double Bacon Cheese",
     category: "gli-incredibili",
     price: "€14.50",
@@ -358,7 +386,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     allergens: "Glutine, Lattosio"
   },
   {
-    id: "inc5",
+    id: "inc4",
     name: "Tower Burger",
     category: "gli-incredibili",
     price: "€16.50",
@@ -379,7 +407,7 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale soffice, burger vegetale saporito a base di legumi e verdure, insalata fresca, pomodoro, formaggio e salsa della casa.",
     ingredients: ["Burger Vegetale ai Legumi", "Insalata Fresca", "Pomodoro Rosso", "Formaggio Fuso", "Salsa della Casa"],
-    imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg?_wi=2",
+    imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg?_wi=3",
     imageAlt: "Veggie Classic burger vegetariano",
     tag: "Vegetariano",
     badgeColor: "primary",
@@ -412,23 +440,23 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     allergens: "Glutine, Lattosio"
   },
 
-  // --- PER I PICCOLI ---
+  // --- PER I PICCOLI (SEZIONE BIMBI) ---
   {
     id: "p1",
-    name: "Mini Burger & Patatine",
+    name: "Menu Bimbo Burger",
     category: "per-i-piccoli",
     price: "€8.50",
     description: "Mini hamburger di manzo 100g con formaggio fuso, servito con un'abbondante porzione di patatine fritte dorate e bibita a scelta.",
     ingredients: ["Hamburger 100g Manzo", "Formaggio Fuso", "Patatine Fritte Dorate", "Bibita a scelta"],
-    imageSrc: "https://images.pexels.com/photos/4628466/pexels-photo-4628466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=3",
-    imageAlt: "Mini Burger & Patatine per bambini",
+    imageSrc: "https://images.pexels.com/photos/28841121/pexels-photo-28841121.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Mini Burger e patatine per bambini",
     tag: "Menu Bimbi",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
   },
   {
     id: "p2",
-    name: "Cotoletta & Patatine",
+    name: "Menu Bimbo Cotoletta",
     category: "per-i-piccoli",
     price: "€8.00",
     description: "Tenera cotoletta di petto di pollo dorata e croccante impanata, servita con patatine fritte e ketchup della casa.",
@@ -446,91 +474,313 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€7.50",
     description: "6 croccanti bocconcini di pollo fritti, accompagnati da patatine fritte croccanti e maionese delicata.",
     ingredients: ["6x Nuggets di Pollo Croccanti", "Patatine Fritte", "Maionese Delicata"],
-    imageSrc: "https://picsum.photos/seed/107682344/1200/800?_wi=1",
+    imageSrc: "https://images.pexels.com/photos/10183543/pexels-photo-10183543.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
     imageAlt: "Nuggets di pollo con patatine per bimbi",
     tag: "Menu Bimbi",
     badgeColor: "secondary",
     allergens: "Glutine, Uova"
   },
-
-  // --- CONTORNI E INSALATE ---
   {
-    id: "ci1",
-    name: "Patatine Fritte",
-    category: "contorni-insalate",
-    price: "€4.50",
-    description: "Patate fritte classiche dorate e croccanti all'esterno, soffici all'interno, speziate con sale marino fino.",
-    ingredients: ["Patate Fritte Croccanti", "Sale Marino Fino"],
-    imageSrc: "https://img.b2bpic.net/free-photo/chicken-cutlet-with-zucchini_2829-10809.jpg?_wi=2",
-    imageAlt: "Patatine fritte dorate",
-    tag: "Classico Contorno",
+    id: "p4",
+    name: "Spritz Kid",
+    category: "per-i-piccoli",
+    price: "€8.50",
+    description: "Delizioso hamburger per bambini servito con insalata fresca, pomodoro, cipolla dolce, formaggio fuso, maionese e patatine fritte.",
+    ingredients: ["Mini Burger Manzo", "Insalata & Pomodoro", "Formaggio Fuso", "Maionese", "Patatine Fritte"],
+    imageSrc: "https://images.pexels.com/photos/38896796/pexels-photo-38896796.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Spritz Kid burger con patatine",
+    tag: "Menu Bimbi",
     badgeColor: "primary",
-    allergens: "Nessun allergene diretto"
+    allergens: "Glutine, Lattosio, Uova"
   },
+
+  // --- FISH & CHIPS ---
   {
-    id: "ci2",
-    name: "Anelli di Cipolla",
-    category: "contorni-insalate",
-    price: "€5.50",
-    description: "8 anelli di cipolla dolce bionda pastellati alla birra artigianale e fritti dorati, serviti con salsa BBQ affumicata.",
-    ingredients: ["8x Anelli di Cipolla", "Pastella alla Birra Artigianale", "Salsa BBQ"],
-    imageSrc: "https://img.b2bpic.net/free-photo/closeup-shot-appetizing-burger-with-onion-rings_181624-46590.jpg?_wi=1",
-    imageAlt: "Anelli di cipolla dorati",
-    tag: "Croccanti",
+    id: "fc1",
+    name: "Fish & Chips Lago",
+    category: "fish-and-chips",
+    price: "€9.50",
+    description: "Croccanti filetti di nasello fritti in pastella dorata, serviti con abbondanti patatine fritte croccanti e deliziosa salsa tartar della casa.",
+    ingredients: ["Filetti di Nasello in Pastella", "Patatine Fritte Croccanti", "Salsa Tartar della Casa", "Spicchio di Limone"],
+    imageSrc: "https://images.pexels.com/photos/33649028/pexels-photo-33649028.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Fish and Chips servito con patatine croccanti",
+    tag: "Specialità Pesce",
     badgeColor: "accent",
-    allergens: "Glutine"
+    allergens: "Glutine, Pesce, Uova"
+  },
+
+  // --- INSALATE ---
+  {
+    id: "in1",
+    name: "Martina",
+    category: "insalate",
+    price: "€14.00",
+    description: "Insalata mista croccante, sfilacci di petto di pollo grigliato speziato, crostini dorati al forno, scaglie di Grana Padano DOP e salsa Caesar della casa.",
+    ingredients: ["Sfilacci di Pollo Grigliato", "Insalata Mista Fresca", "Crostini Dorati", "Grana Padano DOP", "Salsa Caesar"],
+    imageSrc: "https://images.pexels.com/photos/28933157/pexels-photo-28933157.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Insalata Martina con pollo e salsa Caesar",
+    tag: "Caesar Special",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio, Uova"
   },
   {
-    id: "ci3",
-    name: "Mozzarelline Fritte",
-    category: "contorni-insalate",
-    price: "€6.00",
-    description: "8 deliziosi bocconcini di mozzarella fresca italiana impanati con erbe aromatiche e fritti al momento.",
-    ingredients: ["8x Mozzarelline Impanate", "Mozzarella Fresca", "Erbe Aromatiche"],
-    imageSrc: "https://picsum.photos/seed/1736047732/1200/800",
-    imageAlt: "Mozzarelline fritte dorate e filanti",
-    tag: "Filanti",
-    badgeColor: "secondary",
+    id: "in2",
+    name: "Spritz & Burger",
+    category: "insalate",
+    price: "€14.00",
+    description: "Insalata mista fresca di stagione, 150g di deliziose polpette di manzo grigliate al momento, pomodorini secchi e salsa della casa.",
+    ingredients: ["150g Polpette di Manzo", "Insalata Mista Fresca", "Pomodorini Secchi", "Salsa della Casa"],
+    imageSrc: "https://images.pexels.com/photos/18582299/pexels-photo-18582299.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    imageAlt: "Insalata Spritz & Burger con polpette di manzo",
+    tag: "Specialità Casa",
+    badgeColor: "accent",
     allergens: "Glutine, Lattosio"
   },
   {
-    id: "ci4",
-    name: "Chicken Nuggets",
-    category: "contorni-insalate",
-    price: "€6.50",
-    description: "8 bocconcini croccanti di puro filetto di pollo fritti in panatura saporita, serviti con salsa a scelta.",
-    ingredients: ["8x Nuggets di Pollo", "Panatura Speziata", "Salsa a Scelta"],
-    imageSrc: "https://picsum.photos/seed/107682344/1200/800?_wi=2",
-    imageAlt: "8 chicken nuggets croccanti",
-    tag: "8 Pezzi",
-    badgeColor: "primary",
-    allergens: "Glutine, Uova"
-  },
-  {
-    id: "ci5",
-    name: "Insalata Caesar",
-    category: "contorni-insalate",
-    price: "€9.50",
-    description: "Insalata misto verde croccante, bocconcini di pollo grigliato speziato, crostini dorati, scaglie di Grana Padano e salsa Caesar originale.",
-    ingredients: ["Pollo Grigliato Speziato", "Insalata Mista Fresca", "Crostini Dorati", "Grana Padano", "Salsa Caesar"],
-    imageSrc: "https://picsum.photos/seed/430703175/1200/800",
-    imageAlt: "Insalata Caesar fresca con pollo e crostini",
-    tag: "Insalata Ricca",
-    badgeColor: "accent",
-    allergens: "Glutine, Lattosio, Uova, Pesce (nella salsa)"
-  },
-  {
-    id: "ci6",
+    id: "in3",
     name: "Insalata Greca",
-    category: "contorni-insalate",
-    price: "€9.00",
-    description: "Fresca insalata misto verde, pomodoro maturo, cetrioli freschi, cipolla rossa di Tropea, olive nere, formaggio feta greca e origano.",
+    category: "insalate",
+    price: "€9.50",
+    description: "Fresca insalata misto verde, pomodoro maturo, cetrioli croccanti, cipolla rossa di Tropea, olive nere, formaggio feta greca originale e origano.",
     ingredients: ["Formaggio Feta Greca", "Pomodoro Maturo", "Cetrioli Freschi", "Cipolla Rossa di Tropea", "Olive Nere", "Origano"],
-    imageSrc: "https://picsum.photos/seed/1002397820/1200/800",
+    imageSrc: "https://images.pexels.com/photos/28933157/pexels-photo-28933157.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
     imageAlt: "Insalata Greca con feta e olive",
     tag: "Fresca & Light",
     badgeColor: "secondary",
     allergens: "Lattosio"
+  },
+
+  // --- DESSERTS ---
+  {
+    id: "d1",
+    name: "Tiramisù Della Casa",
+    category: "desserts",
+    price: "€6.00",
+    description: "Il classico tiramisù artigianale preparato con savoiardi imbevuti di vero caffè espresso, crema al mascarpone e spolverata di cacao amaro.",
+    ingredients: ["Savoiardi Artigianali", "Caffè Espresso", "Crema al Mascarpone", "Cacao Amaro in Polvere"],
+    imageSrc: "https://picsum.photos/seed/1893328875/1200/800",
+    imageAlt: "Tiramisù della casa artigianale",
+    tag: "Fatto in Casa",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio, Uova"
+  },
+  {
+    id: "d2",
+    name: "Cheesecake Della Casa",
+    category: "desserts",
+    price: "€6.00",
+    description: "Deliziosa e morbida cheesecake artigianale con base di biscotto croccante, servita con topping ai frutti di bosco freschi o cioccolato.",
+    ingredients: ["Base Biscotto Croccante", "Crema al Formaggio", "Coulis ai Frutti di Bosco"],
+    imageSrc: "https://picsum.photos/seed/313042379/1200/800",
+    imageAlt: "Cheesecake artigianale ai frutti di bosco",
+    tag: "Frutti di Bosco",
+    badgeColor: "accent",
+    allergens: "Glutine, Lattosio"
+  },
+  {
+    id: "d3",
+    name: "Panna Cotta Della Casa",
+    category: "desserts",
+    price: "€6.00",
+    description: "Panna cotta vellutata e delicata preparata fresca ogni giorno, servita con coulì di fragole mature o caramello mou.",
+    ingredients: ["Panna Fresca Italiana", "Bacche di Vaniglia", "Coulì di Fragole Fresche"],
+    imageSrc: "https://picsum.photos/seed/2077404405/1200/800",
+    imageAlt: "Panna cotta della casa con fragole",
+    tag: "Vellutata",
+    badgeColor: "secondary",
+    allergens: "Lattosio"
+  },
+
+  // --- EXTRA ---
+  {
+    id: "ex1",
+    name: "Selezione Salse Gourmet",
+    category: "extra",
+    price: "€1.50",
+    description: "Salse artigianali per accompagnare burger e patatine: Salsa BBQ Affumicata (€1.50), Salsa Piccante (€1.50), Guacamole Fresco (€2.00), Sour Cream (€1.50), Salsa alla Cipolla (€1.50), Dip al Formaggio Caldo (€2.00).",
+    ingredients: ["Salsa BBQ", "Salsa Piccante", "Guacamole", "Sour Cream", "Salsa Cipolla", "Dip Formaggio"],
+    imageSrc: "https://picsum.photos/seed/413406889/1200/800",
+    imageAlt: "Ciotoline di salse e dip della casa",
+    tag: "Salse & Dip",
+    badgeColor: "primary",
+    allergens: "Lattosio, Uova"
+  },
+  {
+    id: "ex2",
+    name: "Condimenti & Extra",
+    category: "extra",
+    price: "€1.50",
+    description: "Personalizza il tuo burger con i nostri extra freschi: Uovo all'occhio di bue (€1.50), Bacon Croccante (€2.00), Formaggio Fuso (€1.50), Cipolla Caramellata (€2.00), Cetrioli Freschi / Sottaceto (€2.50).",
+    ingredients: ["Uovo Fritto", "Bacon Croccante", "Formaggio Fuso", "Cipolla Caramellata", "Cetrioli Freschi/Sottaceto"],
+    imageSrc: "https://picsum.photos/seed/1477227413/1200/800",
+    imageAlt: "Bacon croccante e ingredienti extra",
+    tag: "Extra Top",
+    badgeColor: "accent",
+    allergens: "Uova, Lattosio"
+  },
+  {
+    id: "ex3",
+    name: "Pane Gluten Free",
+    category: "extra",
+    price: "€2.50",
+    description: "Soffice pane per hamburger senza glutine di altissima qualità, tostato al momento e disponibile per qualsiasi burger a menu.",
+    ingredients: ["Pane per Burger Senza Glutine Certificato"],
+    imageSrc: "https://images.pexels.com/photos/28841121/pexels-photo-28841121.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
+    imageAlt: "Pane per burger gluten free",
+    tag: "Senza Glutine",
+    badgeColor: "secondary",
+    allergens: "Senza Glutine"
+  },
+
+  // --- BEVANDE ---
+  {
+    id: "bev1",
+    name: "Spritz Aperol della Casa",
+    category: "bevande",
+    price: "€8.50",
+    description: "Il classico Spritz del Garda con Aperol, Prosecco DOC selezionato, selz frizzante e fetta d'arancia fresca. Servito con ghiaccio.",
+    ingredients: ["Aperol", "Prosecco DOC", "Soda / Selz", "Fetta d'Arancia Fresca"],
+    imageSrc: "https://img.b2bpic.net/free-photo/delicious-italian-cocktail-with-realistic-background_23-2150062921.jpg",
+    imageAlt: "Spritz Aperol fresco servito con ghiaccio",
+    tag: "Aperitivo Top",
+    badgeColor: "accent",
+    allergens: "Solfiti"
+  },
+  {
+    id: "bev2",
+    name: "Spritz Campari",
+    category: "bevande",
+    price: "€8.50",
+    description: "Spritz dal carattere deciso con Bitter Campari, Prosecco DOC, soda e scorza d'arancio.",
+    ingredients: ["Bitter Campari", "Prosecco DOC", "Soda", "Ghiaccio & Arancia"],
+    imageSrc: "https://img.b2bpic.net/free-photo/tropical-cocktail-with-grapefruit-flavor_140725-65.jpg",
+    imageAlt: "Spritz Campari con ghiaccio",
+    tag: "Intenso",
+    badgeColor: "primary",
+    allergens: "Solfiti"
+  },
+  {
+    id: "bev3",
+    name: "Sangria della Casa",
+    category: "bevande",
+    price: "€10.00",
+    description: "Profumata sangria artigianale preparata con vino rosso locale, frutta fresca a pezzetti e spezie. Disponibile da 1/2 Litro (€10.00) o 1 Litro (€18.00).",
+    grammage: "1/2 Litro (€10.00) / 1 Litro (€18.00)",
+    ingredients: ["Vino Rosso locale", "Frutta Fresca di Stagione", "Spezie & Agrumi"],
+    imageSrc: "https://img.b2bpic.net/free-photo/medium-shot-happy-people-with-sangria_23-2149436821.jpg",
+    imageAlt: "Caraffa di Sangria della casa con frutta",
+    tag: "Caraffa",
+    badgeColor: "secondary",
+    allergens: "Solfiti"
+  },
+  {
+    id: "bev4",
+    name: "Bibite Analcoliche & Acqua",
+    category: "bevande",
+    price: "€2.00",
+    description: "Acqua minerale 0.5L Naturale/Frizzante (€2.00), Coca Cola 0.33L (€3.50), Fanta 0.33L (€3.50), Sprite 0.33L (€3.50), Ice Tea Limone/Pesca 0.33L (€3.50), Succo di Frutta 0.2L (€3.00).",
+    ingredients: ["Acqua 0.5L", "Coca Cola", "Fanta", "Sprite", "Ice Tea", "Succhetto di Frutta"],
+    imageSrc: "https://picsum.photos/seed/2065098086/1200/800",
+    imageAlt: "Bibita fredda con ghiaccio",
+    tag: "Refresh",
+    badgeColor: "primary",
+    allergens: "Nessuno"
+  },
+  {
+    id: "bev5",
+    name: "Caffetteria & Tè",
+    category: "bevande",
+    price: "€1.50",
+    description: "Caffè Espresso (€1.50), Caffè d'Orzo (€1.80), Ginseng (€2.00), Cappuccino (€2.50), Caffè Americano (€2.20), Tè Zenzero e Limone (€3.50), Tè Melograno e Mirtillo (€3.50).",
+    ingredients: ["Miscela Espresso Italiana", "Orzo / Ginseng", "Latte Fresco", "Infusi e Tè Pregiati"],
+    imageSrc: "https://picsum.photos/seed/2060191151/1200/800",
+    imageAlt: "Tazzina di caffè espresso italiano",
+    tag: "Caffè & Tè",
+    badgeColor: "secondary",
+    allergens: "Lattosio (per cappuccino)"
+  },
+
+  // --- BIRRE ---
+  {
+    id: "bir1",
+    name: "Birra alla Spina",
+    category: "birre",
+    price: "€3.50",
+    description: "Birra bionda lager tedesca alla spina, fresca, dorata e fragrante con schiuma compatta. Disponibile in formato Piccola 0.2L (€3.50), Media 0.4L (€6.00) o Caraffa 2L (€22.00).",
+    grammage: "Formati: 0.2L (€3.50), 0.4L (€6.00), Caraffa 2L (€22.00)",
+    ingredients: ["Lager Bionda alla Spina", "Malto d'Orzo", "Luppolo Selezione"],
+    imageSrc: "https://img.b2bpic.net/free-photo/man-with-glass-beer_107420-65569.jpg",
+    imageAlt: "Bicchiere di birra bionda alla spina",
+    tag: "Alla Spina",
+    badgeColor: "primary",
+    allergens: "Glutine"
+  },
+  {
+    id: "bir2",
+    name: "Birra Weizen 0,5 L",
+    category: "birre",
+    price: "€6.50",
+    description: "Classica birra di frumento bavarese non filtrata 0.5L, dal gusto fruttato, con note di chiodo di garofano e banana.",
+    ingredients: ["Malto di Frumento", "Malto d'Orzo", "Lievito Non Filtrato"],
+    imageSrc: "https://img.b2bpic.net/free-photo/couple-drinking-craft-beer-outdoors_23-2148111307.jpg",
+    imageAlt: "Birra Weizen in bicchiere alto",
+    tag: "Weizen 50cl",
+    badgeColor: "accent",
+    allergens: "Glutine"
+  },
+  {
+    id: "bir3",
+    name: "Birra in Bottiglia 0,33 L",
+    category: "birre",
+    price: "€4.50",
+    description: "Selezione di birre bionde e rosse in bottiglia 33cl delle migliori tradizioni brassicole.",
+    ingredients: ["Birra in Bottiglia 33cl"],
+    imageSrc: "https://picsum.photos/seed/1783709483/1200/800",
+    imageAlt: "Bottiglia di birra artigianale",
+    tag: "Bottiglia 33cl",
+    badgeColor: "secondary",
+    allergens: "Glutine"
+  },
+  {
+    id: "bir4",
+    name: "Birra Gluten Free 0,33 L",
+    category: "birre",
+    price: "€5.00",
+    description: "Birra senza glutine in bottiglia 33cl, gusto pieno e rinfrescante senza compromessi.",
+    ingredients: ["Birra Senza Glutine Certificata 33cl"],
+    imageSrc: "https://picsum.photos/seed/2143583723/1200/800",
+    imageAlt: "Birra senza glutine in bottiglia",
+    tag: "Senza Glutine",
+    badgeColor: "primary",
+    allergens: "Senza Glutine"
+  },
+
+  // --- VINI ---
+  {
+    id: "vin1",
+    name: "Vino del Garda al Calice",
+    category: "vini",
+    price: "€5.00",
+    description: "Selezione di vini locali del Garda serviti al calice: Vino Bianco (Lugana DOC / Custoza), Vino Rosso (Bardolino DOC / Groppello) o Prosecco DOC Bollicine.",
+    ingredients: ["Lugana DOC / Custoza", "Bardolino DOC / Groppello", "Prosecco DOC Brut"],
+    imageSrc: "https://img.b2bpic.net/free-photo/dinner-with-wine_1182-784.jpg",
+    imageAlt: "Calice di vino rosso e bianco del Garda",
+    tag: "Al Calice",
+    badgeColor: "accent",
+    allergens: "Solfiti"
+  },
+  {
+    id: "vin2",
+    name: "Bottiglia Vino del Garda / Prosecco",
+    category: "vini",
+    price: "€22.00",
+    description: "Bottiglia 0.75L selezionata dalla nostra cantina: Lugana DOC, Bardolino DOC Rosso o Prosecco DOC Treviso Brut.",
+    ingredients: ["Bottiglia 75cl Vino DOC del Garda / Prosecco"],
+    imageSrc: "https://img.b2bpic.net/free-photo/top-view-friends-clinking-glasses_23-2149412441.jpg",
+    imageAlt: "Bottiglia di vino e calici",
+    tag: "Bottiglia 75cl",
+    badgeColor: "secondary",
+    allergens: "Solfiti"
   }
 ];
 
@@ -547,7 +797,7 @@ export type MenuGridProps = {
 export default function MenuElegantGrid({
   label = "/Il Menu di Spritz & Burger",
   title = "Menu completo & specialità della casa",
-  description = "Tutti i nostri hamburger con carne fresca 100% manzo, i nostri Special Burgers gourmet, la linea Gli Incredibili, opzioni Veggie, menu Bimbi, contorni croccanti e fresche insalate a Desenzano del Garda.",
+  description = "Tutti i nostri hamburger con carne fresca 100% manzo, i nostri Special Burgers gourmet, la linea Gli Incredibili, opzioni Veggie, menu Bimbi, Fish & Chips, insalate, dolci fatti in casa, extra, aperitivi, birre e vini a Desenzano del Garda.",
   categories = DEFAULT_CATEGORIES,
   items = DEFAULT_MENU_ITEMS,
   ariaLabel = "Menu completo di Spritz & Burger",
@@ -632,7 +882,7 @@ export default function MenuElegantGrid({
             <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Cerca per nome o ingrediente (es. tartufo, bacon, feta)..."
+              placeholder="Cerca per nome o ingrediente (es. tartufo, capra, heidi, spritz)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full rounded-full border border-border/80 bg-card py-2.5 pl-10 pr-4 font-sans text-[length:var(--text-small)] text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all shadow-sm"

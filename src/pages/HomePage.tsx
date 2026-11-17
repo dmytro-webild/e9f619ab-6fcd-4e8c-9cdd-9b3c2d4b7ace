@@ -1,5 +1,6 @@
 import HeroWordmarkWindow from "@/components/sections/hero/HeroWordmarkWindow";
 import ProductBestsellerTrack from "@/components/sections/product/ProductBestsellerTrack";
+import MenuElegantGrid from "@/components/sections/menu/MenuElegantGrid";
 import FeaturesStackedOffers from "@/components/sections/features/FeaturesStackedOffers";
 import PricingWorkshopTickets from "@/components/sections/pricing/PricingWorkshopTickets";
 import GalleryCornerMasks from "@/components/sections/gallery/GalleryCornerMasks";
@@ -40,9 +41,17 @@ export default function HomePage() {
         />
       </div>
 
+      <div id="menu" data-webild-section="MenuElegantGrid" data-webild-section-id="MenuElegantGrid-1" data-section="menu" data-scene>
+        <MenuElegantGrid
+          label="/Il Menu di Desenzano"
+          title="Le nostre specialità gourmet & aperitivi"
+          description="Carne fresca 100% manzo selezionata ogni giorno, pane artigianale dorato, contorni croccanti e i leggendari Spritz preparati nel nostro cortile a Desenzano del Garda."
+        />
+      </div>
+
       <div id="product" data-webild-section="ProductBestsellerTrack" data-webild-section-id="ProductBestsellerTrack-1" data-section="product" data-scene>
         <ProductBestsellerTrack
-          label="/I nostri burger"
+          label="/I bestseller della casa"
           title="Gusto unico e carne fresca ogni giorno a Desenzano"
           items={[
             {
@@ -79,7 +88,7 @@ export default function HomePage() {
               name: "Bavarian Style",
               price: "€16",
               imageSrc: "https://img.b2bpic.net/free-photo/american-diner-aesthetics_23-2151854439.jpg",
-              imageAlt: "American diner  aesthetics"
+              imageAlt: "American diner aesthetics"
             },
             {
               name: "Patate a spicchi",
@@ -89,8 +98,8 @@ export default function HomePage() {
             }
           ]}
           button={{
-            text: "Scopri il menu",
-            href: "#product"
+            text: "Esplora tutto il Menu",
+            href: "#menu"
           }}
         />
       </div>

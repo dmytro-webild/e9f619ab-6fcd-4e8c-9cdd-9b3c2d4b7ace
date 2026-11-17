@@ -1,5 +1,4 @@
 import HeroWordmarkWindow from "@/components/sections/hero/HeroWordmarkWindow";
-import ProductBestsellerTrack from "@/components/sections/product/ProductBestsellerTrack";
 import MenuElegantGrid from "@/components/sections/menu/MenuElegantGrid";
 import FeaturesStackedOffers from "@/components/sections/features/FeaturesStackedOffers";
 import PricingWorkshopTickets from "@/components/sections/pricing/PricingWorkshopTickets";
@@ -49,59 +48,6 @@ export default function HomePage() {
         />
       </div>
 
-      <div id="product" data-webild-section="ProductBestsellerTrack" data-webild-section-id="ProductBestsellerTrack-1" data-section="product" data-scene>
-        <ProductBestsellerTrack
-          items={[
-            {
-              name: "Classic Royal",
-              price: "€14",
-              imageSrc: "https://img.b2bpic.net/free-photo/front-view-meat-burger-with-salad-cheese-tomatoes-dark-desk-bun-sandwich-fast-food_140725-89542.jpg?_wi=3",
-              imageAlt: "Front view meat burger with salad cheese and tomatoes on dark desk bun sandwich fast-food"
-            },
-            {
-              name: "Crispy Bacon",
-              price: "€16",
-              imageSrc: "https://img.b2bpic.net/free-photo/side-view-burger-with-beef-patty-grilled-red-onion-tomato-lettuce-burger-buns-french-fries-orange-drink-table_141793-3607.jpg?_wi=3",
-              imageAlt: "Side view burger with beef patty grilled red onion tomato lettuce in burger buns french fries and orange drink on the table"
-            },
-            {
-              name: "Truffle Delight",
-              price: "€18",
-              imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg?_wi=4",
-              imageAlt: "Potato patties topped with beef patties and shoe strings"
-            },
-            {
-              name: "Garden Fresh",
-              price: "€15",
-              imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg?_wi=3",
-              imageAlt: "High angle close-up of burger on wooden board"
-            },
-            {
-              name: "Spicy Desenzano",
-              price: "€17",
-              imageSrc: "https://img.b2bpic.net/free-photo/black-burger-with-side-fries-cola_140725-2702.jpg?_wi=2",
-              imageAlt: "Black burger with side fries and cola"
-            },
-            {
-              name: "Bavarian Style",
-              price: "€16",
-              imageSrc: "https://img.b2bpic.net/free-photo/american-diner-aesthetics_23-2151854439.jpg",
-              imageAlt: "American diner aesthetics"
-            },
-            {
-              name: "Patate a spicchi",
-              price: "€6",
-              imageSrc: "https://img.b2bpic.net/free-photo/chicken-cutlet-with-zucchini_2829-10809.jpg?_wi=3",
-              imageAlt: "Chicken cutlet with zucchini"
-            }
-          ]}
-          button={{
-            text: "Esplora tutto il Menu",
-            href: "#menu"
-          }}
-        />
-      </div>
-
       <div id="services" data-webild-section="FeaturesStackedOffers" data-webild-section-id="FeaturesStackedOffers-1" data-section="services" data-scene>
         <FeaturesStackedOffers
           label="APERITIVO SUL GARDA"
@@ -116,7 +62,7 @@ export default function HomePage() {
               detailAlt: "Side view friends holding cocktails",
               cta: {
                 text: "Scopri i burger",
-                href: "#product"
+                href: "#menu"
               }
             },
             {
@@ -128,7 +74,7 @@ export default function HomePage() {
               detailAlt: "Couple drinking craft beer outdoors",
               cta: {
                 text: "Vedi menu",
-                href: "#product"
+                href: "#menu"
               }
             },
             {

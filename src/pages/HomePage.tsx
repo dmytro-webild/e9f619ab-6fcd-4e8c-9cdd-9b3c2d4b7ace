@@ -112,7 +112,7 @@ export default function HomePage() {
             {
               title: "Spritz Classici",
               description: "Aperol, Campari o Hugo preparati a regola d'arte con Prosecco selezionato e guarnizioni fresche nel nostro cortile.",
-              imageSrc: "https://img.b2bpic.net/free-photo/tropical-cocktail-with-grapefruit-flavor_140725-65.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/tropical-cocktail-with-grapefruit-flavor_140725-65.jpg?_wi=2",
               imageAlt: "tropical cocktail with grapefruit flavor",
               detailSrc: "https://img.b2bpic.net/free-photo/side-view-friends-holding-cocktails_23-2150124815.jpg",
               detailAlt: "Side view friends holding cocktails",
@@ -124,7 +124,7 @@ export default function HomePage() {
             {
               title: "Birre Artigianali",
               description: "Bionde e rosse alla spina selezionate per esaltare i sapori intensi dei nostri hamburger di carne fresca.",
-              imageSrc: "https://img.b2bpic.net/free-photo/man-with-glass-beer_107420-65569.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/man-with-glass-beer_107420-65569.jpg?_wi=2",
               imageAlt: "Man with glass of beer",
               detailSrc: "https://img.b2bpic.net/free-photo/couple-drinking-craft-beer-outdoors_23-2148111307.jpg",
               detailAlt: "Couple drinking craft beer outdoors",
@@ -136,7 +136,7 @@ export default function HomePage() {
             {
               title: "Cortile Coperto",
               description: "Un'atmosfera rilassata e accogliente a due passi dal lago, perfetta per la convivialità e il relax serale.",
-              imageSrc: "https://img.b2bpic.net/free-photo/medium-shot-happy-people-with-sangria_23-2149436821.jpg",
+              imageSrc: "https://img.b2bpic.net/free-photo/medium-shot-happy-people-with-sangria_23-2149436821.jpg?_wi=2",
               imageAlt: "Medium shot happy people with sangria",
               detailSrc: "https://img.b2bpic.net/free-photo/always-is-great-spend-some-time-with-friends_329181-2895.jpg",
               detailAlt: "Always is great to spend some time with friends",
@@ -262,7 +262,7 @@ export default function HomePage() {
               name: "James Christian",
               caption: "Turista in visita",
               quote: "Dopo giorni di cucina locale volevo un grande burger. Carne succosa e patate croccanti.",
-              imageSrc: "https://img.b2bpic.net/free-photo/dinner-with-wine_1182-784.jpg"
+              imageSrc: "https://img.b2bpic.net/free-photo/dinner-with-wine_1182-784.jpg?_wi=2"
             },
             {
               name: "Marco Russo",
@@ -274,7 +274,7 @@ export default function HomePage() {
               name: "Martina Conti",
               caption: "Ospite del weekend",
               quote: "Ambiente davvero accogliente e hamburger spettacolari. Una garanzia in centro.",
-              imageSrc: "https://img.b2bpic.net/free-photo/delicious-italian-cocktail-with-realistic-background_23-2150062921.jpg"
+              imageSrc: "https://img.b2bpic.net/free-photo/delicious-italian-cocktail-with-realistic-background_23-2150062921.jpg?_wi=2"
             },
             {
               name: "Federico Ricci",

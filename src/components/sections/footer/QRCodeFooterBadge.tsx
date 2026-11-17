@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { QrCode, Sparkles, X, ExternalLink, Smartphone } from "lucide-react";
+import { QrCode, X, ExternalLink, Smartphone } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { generateQRCodeMatrix } from "@/utils/qrCodeGenerator";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -14,146 +15,124 @@ export type QRCodeFooterBadgeProps = {
 
 export default function QRCodeFooterBadge({
   className,
-  menuUrl = "https://spritzandburgerdesenzano.it/#menu",
+  menuUrl = "#menu",
 }: QRCodeFooterBadgeProps) {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
+  // Full URL for QR Code scanner resolution
+  const targetUrl = useMemo(() => {
+    if (typeof window !== "undefined" && menuUrl.startsWith("#")) {
+      return `${window.location.origin}${window.location.pathname}${menuUrl}`;
+    }
+    return menuUrl.startsWith("http") ? menuUrl : "https://spritzandburgerdesenzano.it/#menu";
+  }, [menuUrl]);
+
+  // Generate 2D QR matrix dynamically
+  const matrix = useMemo(() => {
+    try {
+      return generateQRCodeMatrix(targetUrl);
+    } catch {
+      // Fallback matrix if generator fails
+      return generateQRCodeMatrix("https://spritzandburgerdesenzano.it/#menu");
+    }
+  }, [targetUrl]);
+
+  const matrixSize = matrix.length;
+
   return (
     <>
       <motion.div
-        whileHover={{ scale: 1.02, y: -2 }}
+        whileHover={{ scale: 1.01, y: -2 }}
         className={cn(
-          "group relative flex flex-col items-center justify-between overflow-hidden rounded-2xl bg-card border border-border/80 p-5 shadow-lg transition-all duration-300 hover:border-accent/60 hover:shadow-2xl max-w-[22rem]",
+          "group relative flex flex-col items-center justify-between rounded-2xl bg-card border border-border/80 p-5 shadow-md transition-all duration-300 hover:border-accent/50 hover:shadow-lg max-w-[22rem]",
           className
         )}
       >
-        {/* Glow ambient background */}
-        <div className="absolute -right-12 -top-12 size-36 rounded-full bg-accent/15 blur-2xl group-hover:bg-accent/25 transition-all duration-500 pointer-events-none" />
-        <div className="absolute -left-12 -bottom-12 size-36 rounded-full bg-primary/15 blur-2xl group-hover:bg-primary/25 transition-all duration-500 pointer-events-none" />
-
-        {/* Top Header Label & Badge */}
-        <div className="w-full flex items-center justify-between mb-3 border-b border-border/40 pb-2.5">
+        {/* Header Label */}
+        <div className="w-full flex items-center justify-between mb-3 border-b border-border/50 pb-2.5">
           <div className="flex items-center gap-2">
             <QrCode className="size-4 text-accent" />
             <span className="font-heading text-[length:var(--text-small)] font-bold text-foreground">
               {t("qr.title", "Menu Digitale QR")}
             </span>
           </div>
-          <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 text-accent border border-accent/30 px-2 py-0.5 font-mono text-[0.65rem] font-semibold uppercase tracking-wider animate-pulse">
-            <Sparkles className="size-2.5" />
-            <span>{t("qr.badge", "SCAN MENU")}</span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-accent/10 text-accent border border-accent/20 px-2.5 py-0.5 font-mono text-[0.65rem] font-semibold uppercase tracking-wider">
+            {t("qr.badge", "MENU ONLINE")}
           </span>
         </div>
 
-        {/* Custom Eye-Catching SVG QR Code */}
+        {/* Classic Functional Black & White QR Code */}
         <div
           onClick={() => setIsOpen(true)}
-          className="relative my-2 flex cursor-pointer items-center justify-center rounded-xl bg-white p-3.5 shadow-md border-2 border-border/60 transition-transform duration-300 group-hover:scale-105"
+          className="relative my-2 flex cursor-pointer items-center justify-center rounded-xl bg-white p-4 shadow-sm border border-border transition-transform duration-200 group-hover:scale-105"
           title={t("qr.clickToEnlarge", "Clicca per ingrandire")}
         >
-          {/* Stylized QR Code SVG Representation */}
           <svg
-            viewBox="0 0 200 200"
+            viewBox={`0 0 ${matrixSize + 4} ${matrixSize + 4}`}
             className="size-36 w-36 h-36 shrink-0"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            shapeRendering="crispEdges"
           >
-            {/* Dark background matrix */}
-            <rect width="200" height="200" rx="16" fill="#FFFFFF" />
+            {/* White quiet zone */}
+            <rect width={matrixSize + 4} height={matrixSize + 4} fill="#FFFFFF" />
 
-            {/* Position Detection Pattern - Top Left */}
-            <rect x="12" y="12" width="56" height="56" rx="12" fill="#0F172A" />
-            <rect x="24" y="24" width="32" height="32" rx="6" fill="#FFFFFF" />
-            <rect x="32" y="32" width="16" height="16" rx="4" fill="#F97316" />
-
-            {/* Position Detection Pattern - Top Right */}
-            <rect x="132" y="12" width="56" height="56" rx="12" fill="#0F172A" />
-            <rect x="144" y="24" width="32" height="32" rx="6" fill="#FFFFFF" />
-            <rect x="152" y="32" width="16" height="16" rx="4" fill="#F97316" />
-
-            {/* Position Detection Pattern - Bottom Left */}
-            <rect x="12" y="132" width="56" height="56" rx="12" fill="#0F172A" />
-            <rect x="24" y="144" width="32" height="32" rx="6" fill="#FFFFFF" />
-            <rect x="32" y="152" width="16" height="16" rx="4" fill="#F97316" />
-
-            {/* Alignment / Data Modules (Rounded dots & bars for custom style) */}
-            <g fill="#0F172A">
-              {/* Row 1-3 data */}
-              <rect x="80" y="16" width="12" height="12" rx="3" />
-              <rect x="104" y="16" width="12" height="12" rx="3" />
-              <rect x="80" y="40" width="12" height="12" rx="3" />
-              <rect x="104" y="40" width="12" height="12" rx="3" fill="#F97316" />
-
-              {/* Timing pattern */}
-              <rect x="76" y="32" width="8" height="8" rx="2" />
-              <rect x="116" y="32" width="8" height="8" rx="2" />
-
-              {/* Middle Section */}
-              <rect x="16" y="80" width="12" height="12" rx="3" />
-              <rect x="40" y="80" width="12" height="12" rx="3" fill="#F97316" />
-              <rect x="16" y="104" width="12" height="12" rx="3" />
-              <rect x="40" y="104" width="12" height="12" rx="3" />
-
-              <rect x="144" y="80" width="12" height="12" rx="3" />
-              <rect x="168" y="80" width="12" height="12" rx="3" />
-              <rect x="144" y="104" width="12" height="12" rx="3" fill="#F97316" />
-              <rect x="168" y="104" width="12" height="12" rx="3" />
-
-              {/* Bottom Right Data */}
-              <rect x="80" y="132" width="12" height="12" rx="3" />
-              <rect x="104" y="132" width="12" height="12" rx="3" fill="#F97316" />
-              <rect x="132" y="132" width="12" height="12" rx="3" />
-              <rect x="156" y="132" width="12" height="12" rx="3" />
-
-              <rect x="80" y="156" width="12" height="12" rx="3" />
-              <rect x="104" y="156" width="12" height="12" rx="3" />
-              <rect x="132" y="156" width="12" height="12" rx="3" fill="#F97316" />
-              <rect x="156" y="156" width="12" height="12" rx="3" />
-
-              <rect x="80" y="176" width="12" height="12" rx="3" />
-              <rect x="104" y="176" width="12" height="12" rx="3" />
-              <rect x="132" y="176" width="12" height="12" rx="3" />
-              <rect x="156" y="176" width="12" height="12" rx="3" />
-            </g>
-
-            {/* Center Custom Logo Badge (Spritz & Burger icon) */}
-            <rect x="74" y="74" width="52" height="52" rx="14" fill="#0F172A" stroke="#F97316" strokeWidth="3" />
-            {/* Burger / Cocktail graphic in center */}
-            <text x="100" y="107" fontSize="26" textAnchor="middle" dominantBaseline="central">
-              🍔
-            </text>
+            {/* Matrix modules */}
+            {matrix.map((row, r) =>
+              row.map((cell, c) =>
+                cell ? (
+                  <rect
+                    key={`${r}-${c}`}
+                    x={c + 2}
+                    y={r + 2}
+                    width={1}
+                    height={1}
+                    fill="#000000"
+                  />
+                ) : null
+              )
+            )}
           </svg>
 
-          {/* Hover overlay indicator */}
-          <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <span className="rounded-full bg-white/90 px-3 py-1 font-mono text-[0.7rem] font-bold text-black shadow-md">
+          {/* Hover indicator overlay */}
+          <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            <span className="rounded-full bg-white px-3 py-1 font-mono text-[0.7rem] font-bold text-black shadow-sm">
               🔍 {t("qr.clickToEnlarge", "Ingrandisci")}
             </span>
           </div>
         </div>
 
-        {/* Caption & Instruction */}
+        {/* Text Caption & Scan Hint */}
         <div className="w-full text-center mt-2">
           <p className="font-sans text-[length:var(--text-small)] font-medium text-foreground">
-            {t("qr.subtitle", "Scansiona col telefono per consultare il menu completo!")}
+            {t("qr.subtitle", "Scansiona per consultare il menu completo dal tuo smartphone")}
           </p>
-          <div className="mt-1.5 flex items-center justify-center gap-1.5 font-mono text-[0.725rem] text-accent">
-            <Smartphone className="size-3.5" />
-            <span>{t("qr.scanHint", "Inquadra con la fotocamera")}</span>
+          <div className="mt-2 flex items-center justify-center gap-1.5 font-mono text-[0.725rem] text-muted-foreground">
+            <Smartphone className="size-3.5 text-accent" />
+            <span>{t("qr.scanHint", "Inquadra il codice con la fotocamera")}</span>
           </div>
         </div>
+
+        {/* Direct Link Action */}
+        <a
+          href={menuUrl}
+          className="mt-3 w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground py-2 px-3 font-mono text-[0.75rem] font-medium transition-colors border border-border/60"
+        >
+          <span>{t("qr.directLink", "Apri Menu direttamente")}</span>
+          <ExternalLink className="size-3.5 opacity-70" />
+        </a>
       </motion.div>
 
-      {/* Expanded Modal Preview */}
+      {/* Modal Preview for Scanning on Desktop */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
             <motion.div
-              initial={{ opacity: 0, scale: 0.85, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.85, y: 20 }}
-              className="relative w-full max-w-sm rounded-3xl bg-card border border-border p-6 text-foreground shadow-2xl flex flex-col items-center text-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="relative w-full max-w-sm rounded-2xl bg-card border border-border p-6 text-foreground shadow-2xl flex flex-col items-center text-center"
             >
               <button
                 type="button"
@@ -164,7 +143,7 @@ export default function QRCodeFooterBadge({
                 <X className="size-4" />
               </button>
 
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-1">
                 <QrCode className="size-5 text-accent" />
                 <h3 className="font-heading text-[length:var(--text-h3)] font-bold">
                   {t("qr.title", "Menu Digitale QR")}
@@ -172,71 +151,33 @@ export default function QRCodeFooterBadge({
               </div>
 
               <p className="font-sans text-[length:var(--text-small)] text-muted-foreground mb-4">
-                {t("qr.subtitle", "Scansiona col telefono per consultare il menu digitale da tavolo!")}
+                {t("qr.subtitle", "Scansiona il QR code per consultare il menu digitale")}
               </p>
 
-              {/* High-res QR Representation */}
-              <div className="rounded-2xl bg-white p-5 shadow-xl border-4 border-accent/30 my-2">
+              {/* High-res Classic Black & White QR */}
+              <div className="rounded-xl bg-white p-5 shadow-md border border-border my-2">
                 <svg
-                  viewBox="0 0 200 200"
+                  viewBox={`0 0 ${matrixSize + 4} ${matrixSize + 4}`}
                   className="size-56 w-56 h-56"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  shapeRendering="crispEdges"
                 >
-                  <rect width="200" height="200" rx="16" fill="#FFFFFF" />
-
-                  {/* Top Left */}
-                  <rect x="12" y="12" width="56" height="56" rx="12" fill="#0F172A" />
-                  <rect x="24" y="24" width="32" height="32" rx="6" fill="#FFFFFF" />
-                  <rect x="32" y="32" width="16" height="16" rx="4" fill="#F97316" />
-
-                  {/* Top Right */}
-                  <rect x="132" y="12" width="56" height="56" rx="12" fill="#0F172A" />
-                  <rect x="144" y="24" width="32" height="32" rx="6" fill="#FFFFFF" />
-                  <rect x="152" y="32" width="16" height="16" rx="4" fill="#F97316" />
-
-                  {/* Bottom Left */}
-                  <rect x="12" y="132" width="56" height="56" rx="12" fill="#0F172A" />
-                  <rect x="24" y="144" width="32" height="32" rx="6" fill="#FFFFFF" />
-                  <rect x="32" y="152" width="16" height="16" rx="4" fill="#F97316" />
-
-                  <g fill="#0F172A">
-                    <rect x="80" y="16" width="12" height="12" rx="3" />
-                    <rect x="104" y="16" width="12" height="12" rx="3" />
-                    <rect x="80" y="40" width="12" height="12" rx="3" />
-                    <rect x="104" y="40" width="12" height="12" rx="3" fill="#F97316" />
-
-                    <rect x="16" y="80" width="12" height="12" rx="3" />
-                    <rect x="40" y="80" width="12" height="12" rx="3" fill="#F97316" />
-                    <rect x="16" y="104" width="12" height="12" rx="3" />
-                    <rect x="40" y="104" width="12" height="12" rx="3" />
-
-                    <rect x="144" y="80" width="12" height="12" rx="3" />
-                    <rect x="168" y="80" width="12" height="12" rx="3" />
-                    <rect x="144" y="104" width="12" height="12" rx="3" fill="#F97316" />
-                    <rect x="168" y="104" width="12" height="12" rx="3" />
-
-                    <rect x="80" y="132" width="12" height="12" rx="3" />
-                    <rect x="104" y="132" width="12" height="12" rx="3" fill="#F97316" />
-                    <rect x="132" y="132" width="12" height="12" rx="3" />
-                    <rect x="156" y="132" width="12" height="12" rx="3" />
-
-                    <rect x="80" y="156" width="12" height="12" rx="3" />
-                    <rect x="104" y="156" width="12" height="12" rx="3" />
-                    <rect x="132" y="156" width="12" height="12" rx="3" fill="#F97316" />
-                    <rect x="156" y="156" width="12" height="12" rx="3" />
-
-                    <rect x="80" y="176" width="12" height="12" rx="3" />
-                    <rect x="104" y="176" width="12" height="12" rx="3" />
-                    <rect x="132" y="176" width="12" height="12" rx="3" />
-                    <rect x="156" y="176" width="12" height="12" rx="3" />
-                  </g>
-
-                  {/* Center Badge */}
-                  <rect x="74" y="74" width="52" height="52" rx="14" fill="#0F172A" stroke="#F97316" strokeWidth="3" />
-                  <text x="100" y="107" fontSize="26" textAnchor="middle" dominantBaseline="central">
-                    🍔
-                  </text>
+                  <rect width={matrixSize + 4} height={matrixSize + 4} fill="#FFFFFF" />
+                  {matrix.map((row, r) =>
+                    row.map((cell, c) =>
+                      cell ? (
+                        <rect
+                          key={`${r}-${c}`}
+                          x={c + 2}
+                          y={r + 2}
+                          width={1}
+                          height={1}
+                          fill="#000000"
+                        />
+                      ) : null
+                    )
+                  )}
                 </svg>
               </div>
 
@@ -247,7 +188,7 @@ export default function QRCodeFooterBadge({
                   className="btn-primary w-full inline-flex items-center justify-center gap-2"
                 >
                   <ExternalLink className="size-4" />
-                  <span className="btn-label">Apri Menu Digitale</span>
+                  <span className="btn-label">{t("qr.openMenu", "Apri Menu Digitale")}</span>
                 </a>
                 <button
                   type="button"

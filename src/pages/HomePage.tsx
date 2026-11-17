@@ -51,8 +51,6 @@ export default function HomePage() {
 
       <div id="product" data-webild-section="ProductBestsellerTrack" data-webild-section-id="ProductBestsellerTrack-1" data-section="product" data-scene>
         <ProductBestsellerTrack
-          label="/I bestseller della casa"
-          title="Gusto unico e carne fresca ogni giorno a Desenzano"
           items={[
             {
               name: "Classic Royal",

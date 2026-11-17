@@ -3,27 +3,105 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useKitMotion } from "@/components/kit/kitMotion";
-import Media from "@/components/kit/Media";
 import SnellenbergWordRise from "@/components/kit/SnellenbergWordRise";
 import {
-  Utensils,
   Flame,
   Sparkles,
   Smile,
   Salad,
   Fish,
   IceCream,
-  PlusCircle,
   GlassWater,
   Beer,
   Wine,
   ChevronRight,
   X,
   Check,
-  Search
+  Search,
+  Leaf,
+  Crown,
+  Utensils
 } from "lucide-react";
 
 const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
+
+// Thematic SVG Icons
+function BurgerIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M4 11a8 8 0 0 1 16 0H4z" />
+      <path d="M2 11h20" />
+      <path d="M4 14h16" />
+      <path d="M3 18h18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+    </svg>
+  );
+}
+
+function FriesIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M5 11 7 3h10l2 8" />
+      <path d="M3 11h18l-2 10H5L3 11z" />
+      <line x1="8.5" y1="3" x2="8.5" y2="11" />
+      <line x1="12" y1="3" x2="12" y2="11" />
+      <line x1="15.5" y1="3" x2="15.5" y2="11" />
+    </svg>
+  );
+}
+
+function GlutenFreeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="m2 2 20 20" />
+      <path d="M12 2v6" />
+      <path d="M9 6a3 3 0 0 1 6 0" />
+      <path d="M12 12v10" />
+      <path d="M8 15a4 4 0 0 0 4 4" />
+      <path d="M16 13.5a4 4 0 0 1-2.5 3.5" />
+    </svg>
+  );
+}
+
+function VeganIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" />
+      <path d="M12 22V12" />
+    </svg>
+  );
+}
 
 export type MenuCategoryKey =
   | "all"
@@ -48,30 +126,31 @@ export type MenuItem = {
   description: string;
   ingredients?: string[];
   grammage?: string;
-  imageSrc: string;
-  imageAlt?: string;
   tag?: string;
   badgeColor?: "primary" | "accent" | "secondary";
   allergens?: string;
+  isVegetarian?: boolean;
+  isVegan?: boolean;
+  isGlutenFree?: boolean;
 };
 
 export type MenuCategory = {
   key: MenuCategoryKey;
   label: string;
-  icon?: typeof Utensils;
+  icon?: React.ComponentType<{ className?: string }>;
 };
 
 const DEFAULT_CATEGORIES: MenuCategory[] = [
   { key: "all", label: "Tutti i Prodotti", icon: Sparkles },
-  { key: "burgers", label: "Burgers", icon: Utensils },
+  { key: "burgers", label: "Burgers", icon: BurgerIcon },
   { key: "special-burgers", label: "Specials", icon: Flame },
-  { key: "gli-incredibili", label: "Gli Incredibili", icon: Sparkles },
-  { key: "veggie", label: "Veggie", icon: Salad },
+  { key: "gli-incredibili", label: "Gli Incredibili", icon: Crown },
+  { key: "veggie", label: "Veggie", icon: Leaf },
   { key: "per-i-piccoli", label: "Per I Piccoli", icon: Smile },
   { key: "fish-and-chips", label: "Fish & Chips", icon: Fish },
   { key: "insalate", label: "Insalate", icon: Salad },
   { key: "desserts", label: "Desserts", icon: IceCream },
-  { key: "extra", label: "Extra", icon: PlusCircle },
+  { key: "extra", label: "Extra & Contorni", icon: FriesIcon },
   { key: "bevande", label: "Bevande", icon: GlassWater },
   { key: "birre", label: "Birre", icon: Beer },
   { key: "vini", label: "Vini", icon: Wine },
@@ -87,8 +166,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     description: "Pane fragrante, carne di manzo scelta, bacon croccante, insalata fresca, pomodoro, cipolla, formaggio fuso e la nostra salsa speciale della casa.",
     grammage: "Disponibile da: 150g (€9.50), 200g (€11.50), 300g (€13.50), 400g (€15.50)",
     ingredients: ["Pane Artigianale", "Carne Scelta 100% Manzo", "Bacon Croccante", "Insalata & Pomodoro", "Cipolla & Formaggio Fuso", "Salsa della Casa"],
-    imageSrc: "https://img.b2bpic.net/free-photo/front-view-meat-burger-with-salad-cheese-tomatoes-dark-desk-bun-sandwich-fast-food_140725-89542.jpg?_wi=1",
-    imageAlt: "Classic Burger con bacon e formaggio",
     tag: "Classico",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -100,8 +177,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane croccante, deliziosa cotoletta di pollo impanata dorata, insalata fresca, pomodoro, formaggio fuso e salsa speciale della casa.",
     ingredients: ["Pane Artigianale", "Cotoletta di Pollo Croccante", "Insalata Fresca", "Pomodoro Rosso", "Formaggio Fuso", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/5639466/pexels-photo-5639466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Chicken Burger con cotoletta di pollo",
     tag: "Croccante",
     badgeColor: "accent",
     allergens: "Glutine, Lattosio, Uova"
@@ -113,8 +188,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale, saporita carne di manzo, insalata croccante, pomodoro fresco, morbida mozzarella filante e salsa agrodolce aromatica.",
     ingredients: ["Pane Artigianale", "Carne di Manzo", "Mozzarella Filante", "Insalata & Pomodoro", "Salsa Agrodolce"],
-    imageSrc: "https://images.pexels.com/photos/4628466/pexels-photo-4628466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Asia Burger con mozzarella e salsa agrodolce",
     tag: "Fusion",
     badgeColor: "secondary",
     allergens: "Glutine, Lattosio"
@@ -126,8 +199,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale soffice, carne di manzo gustosa, bacon croccante, insalata, pomodoro fresco, cremoso formaggio Brie fuso e salsa della casa.",
     ingredients: ["Pane Artigianale", "Carne di Manzo", "Formaggio Brie Cremoso", "Bacon Croccante", "Pomodoro & Insalata", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/687824/pexels-photo-687824.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "French Burger con formaggio brie",
     tag: "Brie Cremoso",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -139,8 +210,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane dorato, carne fresca, insalata, pomodoro, profumato pesto alla genovese artigianale, mozzarella filante e salsa della casa.",
     ingredients: ["Pane Dorato", "Carne Fresca", "Pesto Fresco alla Genovese", "Mozzarella Filante", "Pomodoro & Insalata", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/31450802/pexels-photo-31450802.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Genovese Burger con pesto e mozzarella",
     tag: "Pesto Fresco",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio, Frutta a guscio"
@@ -153,8 +222,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     description: "Pane soffice, insalata fresca, croccante filetto di nasello fritto in pastella dorata, pomodoro e salsa speciale della casa.",
     grammage: "Disponibile da: 100g (€9.50), 200g (€12.50)",
     ingredients: ["Filetto di Nasello Fritto", "Pane Soffice", "Insalata Croccante", "Pomodoro Rosso", "Salsa Speciale della Casa"],
-    imageSrc: "https://images.pexels.com/photos/31463149/pexels-photo-31463149.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Lago Burger con filetto di nasello",
     tag: "Specialità Pesce",
     badgeColor: "accent",
     allergens: "Glutine, Pesce, Uova"
@@ -166,8 +233,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane dorato, carne di manzo, bacon croccante, insalata, pomodoro, cipolla e saporito gorgonzola cremoso con salsa della casa.",
     ingredients: ["Carne Scelta", "Gorgonzola Cremoso DOP", "Bacon Croccante", "Cipolla", "Pomodoro & Insalata", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/15523382/pexels-photo-15523382.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Monte Burger con gorgonzola e bacon",
     tag: "Gorgonzola",
     badgeColor: "secondary",
     allergens: "Glutine, Lattosio"
@@ -179,8 +244,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale, carne saporita, bacon croccante, deliziosi funghi porcini saltati in padella, cipolla, insalata, pomodoro e salsa della casa.",
     ingredients: ["Funghi Porcini Saltati", "Carne di Manzo", "Bacon Croccante", "Cipolla", "Pomodoro & Insalata", "Salsa della Casa"],
-    imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg?_wi=1",
-    imageAlt: "Forest Burger con funghi porcini",
     tag: "Funghi Porcini",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -192,8 +255,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€11.30",
     description: "Pane soffice, carne di manzo, ananas dolce, insalata fresca, formaggio fuso, salsa alle fragole e salsa speciale della casa.",
     ingredients: ["Ananas Grigliato", "Carne di Manzo", "Formaggio Fuso", "Salsa alle Fragole", "Insalata", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/28760156/pexels-photo-28760156.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Hawaii Burger con ananas",
     tag: "Exotic",
     badgeColor: "accent",
     allergens: "Glutine, Lattosio"
@@ -205,8 +266,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale, carne di manzo gustosa, insalata croccante, pomodoro, cipolla rossa, formaggio feta sbriciolato e salsa all'aglio.",
     ingredients: ["Carne di Manzo", "Feta Greca", "Cipolla Rossa", "Salsa all'Aglio", "Pomodoro & Insalata"],
-    imageSrc: "https://images.pexels.com/photos/2299981/pexels-photo-2299981.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Greco Burger con feta e aglio",
     tag: "Feta & Aglio",
     badgeColor: "secondary",
     allergens: "Glutine, Lattosio"
@@ -218,8 +277,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale dorato, carne saporita, bacon croccante, insalata, pomodoro fresco, morbida crema Philadelphia e salsa della casa.",
     ingredients: ["Crema Philadelphia", "Carne di Manzo", "Bacon Croccante", "Pomodoro & Insalata", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/28841121/pexels-photo-28841121.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=1",
-    imageAlt: "Philadelphia Burger con formaggio spalmabile",
     tag: "Philadelphia",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -231,8 +288,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€11.50",
     description: "Pane artigianale tostato, carne di manzo fresca, morbido formaggio di capra artigianale, deliziosa marmellata di fichi dolce, insalata fresca e salsa della casa.",
     ingredients: ["Formaggio di Capra", "Marmellata di Fichi", "Carne 100% Manzo", "Insalata Fresca", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/31450808/pexels-photo-31450808.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Heidi Burger con formaggio di capra e marmellata di fichi",
     tag: "Capra & Fichi",
     badgeColor: "accent",
     allergens: "Glutine, Lattosio"
@@ -244,11 +299,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane soffice, insalata croccante, deliziosa cotoletta di soia dorata, olive nere, pomodoro maturo e formaggio fuso a scelta.",
     ingredients: ["Cotoletta di Soia", "Olive Nere", "Pomodoro Maturo", "Formaggio Fuso", "Insalata Fresca"],
-    imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg?_wi=2",
-    imageAlt: "Vegetarian burger con cotoletta di soia",
     tag: "Vegetariano",
     badgeColor: "primary",
-    allergens: "Glutine, Soia, Lattosio"
+    allergens: "Glutine, Soia, Lattosio",
+    isVegetarian: true
   },
 
   // --- SPECIAL BURGERS ---
@@ -260,8 +314,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     description: "Pane artigianale, carne scelta di manzo, pregiato olio al tartufo nero, formaggio Brie cremoso, insalata fresca e pomodoro.",
     grammage: "Disponibile da: 150g (€12.50), 200g (€14.50), 300g (€16.50), 400g (€18.50)",
     ingredients: ["Carne Scelta 100% Manzo", "Olio al Tartufo Nero", "Formaggio Brie Cremoso", "Insalata Fresca", "Pomodoro Rosso"],
-    imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg?_wi=2",
-    imageAlt: "Special Burger Tartufo con brie",
     tag: "Tartufo Gourmet",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -273,8 +325,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€12.50",
     description: "Pane artigianale, carne scelta, saporiti pomodorini secchi datterini, philadelphia, bacon croccante, insalata e salsa della casa.",
     ingredients: ["Pomodorini Secchi Datterini", "Philadelphia Cremoso", "Carne Scelta", "Bacon Croccante", "Insalata & Salsa"],
-    imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg?_wi=1",
-    imageAlt: "Special Burger Datterino",
     tag: "Datterini Secchi",
     badgeColor: "accent",
     allergens: "Glutine, Lattosio"
@@ -286,8 +336,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€12.50",
     description: "Pane brioche, carne saporita, bacon croccante affumicato, provola affumicata fusa, funghi porcini e profumata salsa BBQ affumicata.",
     ingredients: ["Provola Affumicata Fusa", "Funghi Porcini", "Bacon Affumicato", "Salsa BBQ", "Carne di Manzo"],
-    imageSrc: "https://img.b2bpic.net/free-photo/black-burger-with-side-fries-cola_140725-2702.jpg?_wi=1",
-    imageAlt: "Smoky Forest Burger affumicato",
     tag: "Smoky BBQ",
     badgeColor: "secondary",
     allergens: "Glutine, Lattosio"
@@ -299,8 +347,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€13.00",
     description: "Pane artigianale soffice, carne di manzo, vellutata crema di pistacchio artigianale, bacon croccante, provola fusa e abbondante granella di pistacchi.",
     ingredients: ["Crema di Pistacchio", "Granella di Pistacchio", "Bacon Croccante", "Provola Fusa", "Carne Scelta"],
-    imageSrc: "https://images.pexels.com/photos/15523382/pexels-photo-15523382.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
-    imageAlt: "Special Burger Pistacchio & Bacon",
     tag: "Top Seller",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio, Frutta a guscio"
@@ -312,8 +358,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€12.50",
     description: "Pane artigianale, succulenta spalla di maiale sfilacciata cotta a bassa temperatura in salsa BBQ, insalata coleslaw e formaggio fuso.",
     ingredients: ["Pulled Pork Cotto 12h", "Salsa BBQ", "Coleslaw Fresco", "Formaggio Fuso", "Pane Artigianale"],
-    imageSrc: "https://images.pexels.com/photos/5639466/pexels-photo-5639466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
-    imageAlt: "Pulled Pork Burger con coleslaw",
     tag: "Slow Cooked",
     badgeColor: "accent",
     allergens: "Glutine, Lattosio, Senape"
@@ -325,8 +369,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€12.00",
     description: "Pane dorato, tenero pollo sfilacciato e speziato, insalata croccante, maionese alla paprika dolce e formaggio cheddar fuso.",
     ingredients: ["Pulled Chicken Speziato", "Cheddar Fuso", "Maionese alla Paprika", "Insalata Croccante"],
-    imageSrc: "https://images.pexels.com/photos/32177596/pexels-photo-32177596.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Pulled Chicken Burger speziato",
     tag: "Pollo Speziato",
     badgeColor: "secondary",
     allergens: "Glutine, Lattosio, Uova"
@@ -338,8 +380,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€12.50",
     description: "Pane artigianale, carne scelta, abbondante doppio bacon croccante, doppio formaggio cheddar fuso, cipolla caramellata e salsa house.",
     ingredients: ["Doppio Bacon Croccante", "Doppio Cheddar Fuso", "Cipolla Caramellata", "Salsa della Casa"],
-    imageSrc: "https://img.b2bpic.net/free-photo/side-view-burger-with-beef-patty-grilled-red-onion-tomato-lettuce-burger-buns-french-fries-orange-drink-table_141793-3607.jpg?_wi=1",
-    imageAlt: "Bacon Cheese Burger con doppio cheddar",
     tag: "Doppio Bacon",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -353,8 +393,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€13.50",
     description: "Soffice pane brioche, doppio patty smash 200g schiacciato sulla piastra rovente per bordi super croccanti, cheddar fuso, bacon e salsa Smash.",
     ingredients: ["Doppio Patty Smash 200g", "Cheddar Fuso", "Bacon Croccante", "Pane Brioche Tostato", "Salsa Smash"],
-    imageSrc: "https://images.pexels.com/photos/4628466/pexels-photo-4628466.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
-    imageAlt: "Smash Burger doppio patty",
     tag: "Smash Style",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -366,8 +404,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€17.50",
     description: "Il re del menu! Pane brioche, triplo patty 450g di carne fresca, triplo bacon croccante, triplo cheddar, anelli di cipolla e salsa BBQ.",
     ingredients: ["Triplo Patty 450g Manzo", "Triplo Bacon Croccante", "Triplo Cheddar", "Anelli di Cipolla", "Salsa BBQ"],
-    imageSrc: "https://img.b2bpic.net/free-photo/front-view-meat-burger-with-salad-cheese-tomatoes-dark-desk-bun-sandwich-fast-food_140725-89542.jpg?_wi=2",
-    imageAlt: "Monster Burger gigante con 3 patty",
     tag: "XL 450g",
     badgeColor: "secondary",
     allergens: "Glutine, Lattosio"
@@ -379,8 +415,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€14.50",
     description: "Pane brioche tostato, doppio patty 300g di carne fresca, 4 fette di bacon croccante, doppio cheddar fuso e salsa speciale della casa.",
     ingredients: ["Doppio Patty 300g Manzo", "4x Bacon Croccante", "Doppio Cheddar", "Salsa della Casa"],
-    imageSrc: "https://img.b2bpic.net/free-photo/side-view-burger-with-beef-patty-grilled-red-onion-tomato-lettuce-burger-buns-french-fries-orange-drink-table_141793-3607.jpg?_wi=2",
-    imageAlt: "Double Bacon Cheese Burger incredibile",
     tag: "Double 300g",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -392,8 +426,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€16.50",
     description: "Torre spettacolare con quadruplo patty di manzo 100%, abbondante cheddar fuso a cascata, bacon croccante e salsa speciale house.",
     ingredients: ["Quadruplo Patty Manzo", "Cheddar Fuso a Cascata", "Bacon Croccante", "Salsa House"],
-    imageSrc: "https://img.b2bpic.net/free-photo/potato-patties-topped-with-beef-patties-shoe-strings_140725-5889.jpg?_wi=3",
-    imageAlt: "Tower Burger torre di carne",
     tag: "Quadruplo Patty",
     badgeColor: "accent",
     allergens: "Glutine, Lattosio"
@@ -407,11 +439,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Pane artigianale soffice, burger vegetale saporito a base di legumi e verdure, insalata fresca, pomodoro, formaggio e salsa della casa.",
     ingredients: ["Burger Vegetale ai Legumi", "Insalata Fresca", "Pomodoro Rosso", "Formaggio Fuso", "Salsa della Casa"],
-    imageSrc: "https://img.b2bpic.net/free-photo/high-angle-close-up-burger-wooden-board_23-2148238518.jpg?_wi=3",
-    imageAlt: "Veggie Classic burger vegetariano",
     tag: "Vegetariano",
     badgeColor: "primary",
-    allergens: "Glutine, Lattosio"
+    allergens: "Glutine, Lattosio",
+    isVegetarian: true
   },
   {
     id: "v2",
@@ -420,11 +451,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€10.00",
     description: "Pane artigianale, gustoso burger vegetale, pesto fresco alla genovese con basilico, mozzarella fresca filante e pomodoro maturo.",
     ingredients: ["Burger Vegetale", "Pesto alla Genovese", "Mozzarella Fresca", "Pomodoro Rosso"],
-    imageSrc: "https://images.pexels.com/photos/687824/pexels-photo-687824.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
-    imageAlt: "Veggie Genovese con pesto",
     tag: "Pesto & Mozzarella",
     badgeColor: "accent",
-    allergens: "Glutine, Lattosio, Frutta a guscio"
+    allergens: "Glutine, Lattosio, Frutta a guscio",
+    isVegetarian: true
   },
   {
     id: "v3",
@@ -433,11 +463,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€10.00",
     description: "Pane artigianale dorato, burger vegetale alle verdure, formaggio feta saporito, cipolla croccante, pomodoro, insalata e salsa all'aglio.",
     ingredients: ["Burger Vegetale", "Formaggio Feta Greca", "Cipolla Croccante", "Salsa all'Aglio", "Insalata & Pomodoro"],
-    imageSrc: "https://images.pexels.com/photos/2299981/pexels-photo-2299981.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
-    imageAlt: "Veggie Greco con feta",
     tag: "Feta & Aglio",
     badgeColor: "secondary",
-    allergens: "Glutine, Lattosio"
+    allergens: "Glutine, Lattosio",
+    isVegetarian: true
   },
 
   // --- PER I PICCOLI (SEZIONE BIMBI) ---
@@ -448,8 +477,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€8.50",
     description: "Mini hamburger di manzo 100g con formaggio fuso, servito con un'abbondante porzione di patatine fritte dorate e bibita a scelta.",
     ingredients: ["Hamburger 100g Manzo", "Formaggio Fuso", "Patatine Fritte Dorate", "Bibita a scelta"],
-    imageSrc: "https://images.pexels.com/photos/28841121/pexels-photo-28841121.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
-    imageAlt: "Mini Burger e patatine per bambini",
     tag: "Menu Bimbi",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio"
@@ -461,8 +488,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€8.00",
     description: "Tenera cotoletta di petto di pollo dorata e croccante impanata, servita con patatine fritte e ketchup della casa.",
     ingredients: ["Cotoletta di Pollo Croccante", "Patatine Fritte Dorate", "Ketchup della Casa"],
-    imageSrc: "https://img.b2bpic.net/free-photo/chicken-cutlet-with-zucchini_2829-10809.jpg?_wi=1",
-    imageAlt: "Cotoletta di pollo e patatine per bimbi",
     tag: "Menu Bimbi",
     badgeColor: "accent",
     allergens: "Glutine, Uova"
@@ -474,8 +499,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€7.50",
     description: "6 croccanti bocconcini di pollo fritti, accompagnati da patatine fritte croccanti e maionese delicata.",
     ingredients: ["6x Nuggets di Pollo Croccanti", "Patatine Fritte", "Maionese Delicata"],
-    imageSrc: "https://images.pexels.com/photos/10183543/pexels-photo-10183543.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Nuggets di pollo con patatine per bimbi",
     tag: "Menu Bimbi",
     badgeColor: "secondary",
     allergens: "Glutine, Uova"
@@ -487,8 +510,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€8.50",
     description: "Delizioso hamburger per bambini servito con insalata fresca, pomodoro, cipolla dolce, formaggio fuso, maionese e patatine fritte.",
     ingredients: ["Mini Burger Manzo", "Insalata & Pomodoro", "Formaggio Fuso", "Maionese", "Patatine Fritte"],
-    imageSrc: "https://images.pexels.com/photos/38896796/pexels-photo-38896796.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Spritz Kid burger con patatine",
     tag: "Menu Bimbi",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio, Uova"
@@ -502,8 +523,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Croccanti filetti di nasello fritti in pastella dorata, serviti con abbondanti patatine fritte croccanti e deliziosa salsa tartar della casa.",
     ingredients: ["Filetti di Nasello in Pastella", "Patatine Fritte Croccanti", "Salsa Tartar della Casa", "Spicchio di Limone"],
-    imageSrc: "https://images.pexels.com/photos/33649028/pexels-photo-33649028.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Fish and Chips servito con patatine croccanti",
     tag: "Specialità Pesce",
     badgeColor: "accent",
     allergens: "Glutine, Pesce, Uova"
@@ -517,8 +536,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€14.00",
     description: "Insalata mista croccante, sfilacci di petto di pollo grigliato speziato, crostini dorati al forno, scaglie di Grana Padano DOP e salsa Caesar della casa.",
     ingredients: ["Sfilacci di Pollo Grigliato", "Insalata Mista Fresca", "Crostini Dorati", "Grana Padano DOP", "Salsa Caesar"],
-    imageSrc: "https://images.pexels.com/photos/28933157/pexels-photo-28933157.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Insalata Martina con pollo e salsa Caesar",
     tag: "Caesar Special",
     badgeColor: "primary",
     allergens: "Glutine, Lattosio, Uova"
@@ -530,8 +547,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€14.00",
     description: "Insalata mista fresca di stagione, 150g di deliziose polpette di manzo grigliate al momento, pomodorini secchi e salsa della casa.",
     ingredients: ["150g Polpette di Manzo", "Insalata Mista Fresca", "Pomodorini Secchi", "Salsa della Casa"],
-    imageSrc: "https://images.pexels.com/photos/18582299/pexels-photo-18582299.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
-    imageAlt: "Insalata Spritz & Burger con polpette di manzo",
     tag: "Specialità Casa",
     badgeColor: "accent",
     allergens: "Glutine, Lattosio"
@@ -543,11 +558,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€9.50",
     description: "Fresca insalata misto verde, pomodoro maturo, cetrioli croccanti, cipolla rossa di Tropea, olive nere, formaggio feta greca originale e origano.",
     ingredients: ["Formaggio Feta Greca", "Pomodoro Maturo", "Cetrioli Freschi", "Cipolla Rossa di Tropea", "Olive Nere", "Origano"],
-    imageSrc: "https://images.pexels.com/photos/28933157/pexels-photo-28933157.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
-    imageAlt: "Insalata Greca con feta e olive",
     tag: "Fresca & Light",
     badgeColor: "secondary",
-    allergens: "Lattosio"
+    allergens: "Lattosio",
+    isVegetarian: true,
+    isGlutenFree: true
   },
 
   // --- DESSERTS ---
@@ -558,11 +573,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€6.00",
     description: "Il classico tiramisù artigianale preparato con savoiardi imbevuti di vero caffè espresso, crema al mascarpone e spolverata di cacao amaro.",
     ingredients: ["Savoiardi Artigianali", "Caffè Espresso", "Crema al Mascarpone", "Cacao Amaro in Polvere"],
-    imageSrc: "https://picsum.photos/seed/1893328875/1200/800",
-    imageAlt: "Tiramisù della casa artigianale",
     tag: "Fatto in Casa",
     badgeColor: "primary",
-    allergens: "Glutine, Lattosio, Uova"
+    allergens: "Glutine, Lattosio, Uova",
+    isVegetarian: true
   },
   {
     id: "d2",
@@ -571,11 +585,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€6.00",
     description: "Deliziosa e morbida cheesecake artigianale con base di biscotto croccante, servita con topping ai frutti di bosco freschi o cioccolato.",
     ingredients: ["Base Biscotto Croccante", "Crema al Formaggio", "Coulis ai Frutti di Bosco"],
-    imageSrc: "https://picsum.photos/seed/313042379/1200/800",
-    imageAlt: "Cheesecake artigianale ai frutti di bosco",
     tag: "Frutti di Bosco",
     badgeColor: "accent",
-    allergens: "Glutine, Lattosio"
+    allergens: "Glutine, Lattosio",
+    isVegetarian: true
   },
   {
     id: "d3",
@@ -584,11 +597,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€6.00",
     description: "Panna cotta vellutata e delicata preparata fresca ogni giorno, servita con coulì di fragole mature o caramello mou.",
     ingredients: ["Panna Fresca Italiana", "Bacche di Vaniglia", "Coulì di Fragole Fresche"],
-    imageSrc: "https://picsum.photos/seed/2077404405/1200/800",
-    imageAlt: "Panna cotta della casa con fragole",
     tag: "Vellutata",
     badgeColor: "secondary",
-    allergens: "Lattosio"
+    allergens: "Lattosio",
+    isVegetarian: true,
+    isGlutenFree: true
   },
 
   // --- EXTRA ---
@@ -599,11 +612,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€1.50",
     description: "Salse artigianali per accompagnare burger e patatine: Salsa BBQ Affumicata (€1.50), Salsa Piccante (€1.50), Guacamole Fresco (€2.00), Sour Cream (€1.50), Salsa alla Cipolla (€1.50), Dip al Formaggio Caldo (€2.00).",
     ingredients: ["Salsa BBQ", "Salsa Piccante", "Guacamole", "Sour Cream", "Salsa Cipolla", "Dip Formaggio"],
-    imageSrc: "https://picsum.photos/seed/413406889/1200/800",
-    imageAlt: "Ciotoline di salse e dip della casa",
     tag: "Salse & Dip",
     badgeColor: "primary",
-    allergens: "Lattosio, Uova"
+    allergens: "Lattosio, Uova",
+    isVegetarian: true
   },
   {
     id: "ex2",
@@ -612,11 +624,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€1.50",
     description: "Personalizza il tuo burger con i nostri extra freschi: Uovo all'occhio di bue (€1.50), Bacon Croccante (€2.00), Formaggio Fuso (€1.50), Cipolla Caramellata (€2.00), Cetrioli Freschi / Sottaceto (€2.50).",
     ingredients: ["Uovo Fritto", "Bacon Croccante", "Formaggio Fuso", "Cipolla Caramellata", "Cetrioli Freschi/Sottaceto"],
-    imageSrc: "https://picsum.photos/seed/1477227413/1200/800",
-    imageAlt: "Bacon croccante e ingredienti extra",
     tag: "Extra Top",
     badgeColor: "accent",
-    allergens: "Uova, Lattosio"
+    allergens: "Uova, Lattosio",
+    isVegetarian: true
   },
   {
     id: "ex3",
@@ -625,11 +636,12 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€2.50",
     description: "Soffice pane per hamburger senza glutine di altissima qualità, tostato al momento e disponibile per qualsiasi burger a menu.",
     ingredients: ["Pane per Burger Senza Glutine Certificato"],
-    imageSrc: "https://images.pexels.com/photos/28841121/pexels-photo-28841121.jpeg?auto=compress&cs=tinysrgb&h=650&w=940&_wi=2",
-    imageAlt: "Pane per burger gluten free",
     tag: "Senza Glutine",
     badgeColor: "secondary",
-    allergens: "Senza Glutine"
+    allergens: "Senza Glutine",
+    isGlutenFree: true,
+    isVegetarian: true,
+    isVegan: true
   },
 
   // --- BEVANDE ---
@@ -640,11 +652,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€8.50",
     description: "Il classico Spritz del Garda con Aperol, Prosecco DOC selezionato, selz frizzante e fetta d'arancia fresca. Servito con ghiaccio.",
     ingredients: ["Aperol", "Prosecco DOC", "Soda / Selz", "Fetta d'Arancia Fresca"],
-    imageSrc: "https://img.b2bpic.net/free-photo/delicious-italian-cocktail-with-realistic-background_23-2150062921.jpg?_wi=1",
-    imageAlt: "Spritz Aperol fresco servito con ghiaccio",
     tag: "Aperitivo Top",
     badgeColor: "accent",
-    allergens: "Solfiti"
+    allergens: "Solfiti",
+    isGlutenFree: true,
+    isVegan: true
   },
   {
     id: "bev2",
@@ -653,11 +665,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€8.50",
     description: "Spritz dal carattere deciso con Bitter Campari, Prosecco DOC, soda e scorza d'arancio.",
     ingredients: ["Bitter Campari", "Prosecco DOC", "Soda", "Ghiaccio & Arancia"],
-    imageSrc: "https://img.b2bpic.net/free-photo/tropical-cocktail-with-grapefruit-flavor_140725-65.jpg?_wi=1",
-    imageAlt: "Spritz Campari con ghiaccio",
     tag: "Intenso",
     badgeColor: "primary",
-    allergens: "Solfiti"
+    allergens: "Solfiti",
+    isGlutenFree: true,
+    isVegan: true
   },
   {
     id: "bev3",
@@ -667,11 +679,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     description: "Profumata sangria artigianale preparata con vino rosso locale, frutta fresca a pezzetti e spezie. Disponibile da 1/2 Litro (€10.00) o 1 Litro (€18.00).",
     grammage: "1/2 Litro (€10.00) / 1 Litro (€18.00)",
     ingredients: ["Vino Rosso locale", "Frutta Fresca di Stagione", "Spezie & Agrumi"],
-    imageSrc: "https://img.b2bpic.net/free-photo/medium-shot-happy-people-with-sangria_23-2149436821.jpg?_wi=1",
-    imageAlt: "Caraffa di Sangria della casa con frutta",
     tag: "Caraffa",
     badgeColor: "secondary",
-    allergens: "Solfiti"
+    allergens: "Solfiti",
+    isGlutenFree: true,
+    isVegan: true
   },
   {
     id: "bev4",
@@ -680,11 +692,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€2.00",
     description: "Acqua minerale 0.5L Naturale/Frizzante (€2.00), Coca Cola 0.33L (€3.50), Fanta 0.33L (€3.50), Sprite 0.33L (€3.50), Ice Tea Limone/Pesca 0.33L (€3.50), Succo di Frutta 0.2L (€3.00).",
     ingredients: ["Acqua 0.5L", "Coca Cola", "Fanta", "Sprite", "Ice Tea", "Succhetto di Frutta"],
-    imageSrc: "https://picsum.photos/seed/2065098086/1200/800",
-    imageAlt: "Bibita fredda con ghiaccio",
     tag: "Refresh",
     badgeColor: "primary",
-    allergens: "Nessuno"
+    allergens: "Nessuno",
+    isGlutenFree: true,
+    isVegan: true
   },
   {
     id: "bev5",
@@ -693,11 +705,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€1.50",
     description: "Caffè Espresso (€1.50), Caffè d'Orzo (€1.80), Ginseng (€2.00), Cappuccino (€2.50), Caffè Americano (€2.20), Tè Zenzero e Limone (€3.50), Tè Melograno e Mirtillo (€3.50).",
     ingredients: ["Miscela Espresso Italiana", "Orzo / Ginseng", "Latte Fresco", "Infusi e Tè Pregiati"],
-    imageSrc: "https://picsum.photos/seed/2060191151/1200/800",
-    imageAlt: "Tazzina di caffè espresso italiano",
     tag: "Caffè & Tè",
     badgeColor: "secondary",
-    allergens: "Lattosio (per cappuccino)"
+    allergens: "Lattosio (per cappuccino)",
+    isGlutenFree: true,
+    isVegetarian: true
   },
 
   // --- BIRRE ---
@@ -709,8 +721,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     description: "Birra bionda lager tedesca alla spina, fresca, dorata e fragrante con schiuma compatta. Disponibile in formato Piccola 0.2L (€3.50), Media 0.4L (€6.00) o Caraffa 2L (€22.00).",
     grammage: "Formati: 0.2L (€3.50), 0.4L (€6.00), Caraffa 2L (€22.00)",
     ingredients: ["Lager Bionda alla Spina", "Malto d'Orzo", "Luppolo Selezione"],
-    imageSrc: "https://img.b2bpic.net/free-photo/man-with-glass-beer_107420-65569.jpg?_wi=1",
-    imageAlt: "Bicchiere di birra bionda alla spina",
     tag: "Alla Spina",
     badgeColor: "primary",
     allergens: "Glutine"
@@ -722,8 +732,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€6.50",
     description: "Classica birra di frumento bavarese non filtrata 0.5L, dal gusto fruttato, con note di chiodo di garofano e banana.",
     ingredients: ["Malto di Frumento", "Malto d'Orzo", "Lievito Non Filtrato"],
-    imageSrc: "https://img.b2bpic.net/free-photo/couple-drinking-craft-beer-outdoors_23-2148111307.jpg",
-    imageAlt: "Birra Weizen in bicchiere alto",
     tag: "Weizen 50cl",
     badgeColor: "accent",
     allergens: "Glutine"
@@ -735,8 +743,6 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€4.50",
     description: "Selezione di birre bionde e rosse in bottiglia 33cl delle migliori tradizioni brassicole.",
     ingredients: ["Birra in Bottiglia 33cl"],
-    imageSrc: "https://picsum.photos/seed/1783709483/1200/800",
-    imageAlt: "Bottiglia di birra artigianale",
     tag: "Bottiglia 33cl",
     badgeColor: "secondary",
     allergens: "Glutine"
@@ -748,11 +754,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€5.00",
     description: "Birra senza glutine in bottiglia 33cl, gusto pieno e rinfrescante senza compromessi.",
     ingredients: ["Birra Senza Glutine Certificata 33cl"],
-    imageSrc: "https://picsum.photos/seed/2143583723/1200/800",
-    imageAlt: "Birra senza glutine in bottiglia",
     tag: "Senza Glutine",
     badgeColor: "primary",
-    allergens: "Senza Glutine"
+    allergens: "Senza Glutine",
+    isGlutenFree: true,
+    isVegan: true
   },
 
   // --- VINI ---
@@ -763,11 +769,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€5.00",
     description: "Selezione di vini locali del Garda serviti al calice: Vino Bianco (Lugana DOC / Custoza), Vino Rosso (Bardolino DOC / Groppello) o Prosecco DOC Bollicine.",
     ingredients: ["Lugana DOC / Custoza", "Bardolino DOC / Groppello", "Prosecco DOC Brut"],
-    imageSrc: "https://img.b2bpic.net/free-photo/dinner-with-wine_1182-784.jpg?_wi=1",
-    imageAlt: "Calice di vino rosso e bianco del Garda",
     tag: "Al Calice",
     badgeColor: "accent",
-    allergens: "Solfiti"
+    allergens: "Solfiti",
+    isGlutenFree: true,
+    isVegan: true
   },
   {
     id: "vin2",
@@ -776,11 +782,11 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     price: "€22.00",
     description: "Bottiglia 0.75L selezionata dalla nostra cantina: Lugana DOC, Bardolino DOC Rosso o Prosecco DOC Treviso Brut.",
     ingredients: ["Bottiglia 75cl Vino DOC del Garda / Prosecco"],
-    imageSrc: "https://img.b2bpic.net/free-photo/top-view-friends-clinking-glasses_23-2149412441.jpg",
-    imageAlt: "Bottiglia di vino e calici",
     tag: "Bottiglia 75cl",
     badgeColor: "secondary",
-    allergens: "Solfiti"
+    allergens: "Solfiti",
+    isGlutenFree: true,
+    isVegan: true
   }
 ];
 
@@ -807,18 +813,27 @@ export default function MenuElegantGrid({
   const reduce = useReducedMotion();
   const kit = useKitMotion();
   const [activeCategory, setActiveCategory] = useState<MenuCategoryKey>("all");
+  const [dietaryFilter, setDietaryFilter] = useState<"all" | "veggie" | "vegan" | "gluten-free">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
 
   const filteredItems = items.filter((item) => {
     const matchesCategory = activeCategory === "all" || item.category === activeCategory;
+    const matchesDietary =
+      dietaryFilter === "all" ||
+      (dietaryFilter === "veggie" && (item.isVegetarian || item.isVegan)) ||
+      (dietaryFilter === "vegan" && item.isVegan) ||
+      (dietaryFilter === "gluten-free" && item.isGlutenFree);
     const matchesSearch =
       searchQuery.trim() === "" ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.ingredients?.some((ing) => ing.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesDietary && matchesSearch;
   });
+
+  const activeCatObject = categories.find((c) => c.key === activeCategory);
+  const ActiveCatIcon = activeCatObject?.icon ?? Utensils;
 
   return (
     <section
@@ -911,27 +926,93 @@ export default function MenuElegantGrid({
                     setActiveCategory(cat.key);
                   }}
                   className={cn(
-                    "relative inline-flex items-center gap-2 rounded-full px-4 py-2.5 font-mono text-[length:var(--text-small)] transition-all duration-300 cursor-pointer select-none",
+                    "relative inline-flex items-center gap-2 rounded-full px-4 py-2 font-mono text-[length:var(--text-small)] transition-all duration-300 cursor-pointer select-none",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-md scale-105"
                       : "bg-card text-foreground hover:bg-muted border border-border/70"
                   )}
                 >
-                  {Icon && <Icon className="size-3.5 shrink-0" />}
+                  {Icon && <Icon className="size-4 shrink-0" />}
                   <span>{cat.label}</span>
                 </button>
               );
             })}
           </div>
+
+          {/* Dietary Legend / Filter Pills */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-border/40 w-full max-w-2xl">
+            <span className="font-mono text-[0.75rem] text-muted-foreground uppercase tracking-wider mr-1">
+              Filtra Opzioni:
+            </span>
+            <button
+              type="button"
+              onClick={() => setDietaryFilter("all")}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[0.75rem] transition-all cursor-pointer",
+                dietaryFilter === "all"
+                  ? "bg-foreground text-background font-semibold"
+                  : "bg-card text-muted-foreground hover:text-foreground border border-border/60"
+              )}
+            >
+              <span>Tutti</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDietaryFilter(dietaryFilter === "veggie" ? "all" : "veggie")}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[0.75rem] transition-all cursor-pointer border",
+                dietaryFilter === "veggie"
+                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500 font-semibold"
+                  : "bg-card text-emerald-600 dark:text-emerald-400/80 border-emerald-500/30 hover:bg-emerald-500/10"
+              )}
+            >
+              <Leaf className="size-3.5" />
+              <span>Vegetariano</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDietaryFilter(dietaryFilter === "vegan" ? "all" : "vegan")}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[0.75rem] transition-all cursor-pointer border",
+                dietaryFilter === "vegan"
+                  ? "bg-green-500/20 text-green-400 border-green-500 font-semibold"
+                  : "bg-card text-green-600 dark:text-green-400/80 border-green-500/30 hover:bg-green-500/10"
+              )}
+            >
+              <VeganIcon className="size-3.5" />
+              <span>Vegano</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDietaryFilter(dietaryFilter === "gluten-free" ? "all" : "gluten-free")}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[0.75rem] transition-all cursor-pointer border",
+                dietaryFilter === "gluten-free"
+                  ? "bg-amber-500/20 text-amber-400 border-amber-500 font-semibold"
+                  : "bg-card text-amber-600 dark:text-amber-400/80 border-amber-500/30 hover:bg-amber-500/10"
+              )}
+            >
+              <GlutenFreeIcon className="size-3.5" />
+              <span>Senza Glutine</span>
+            </button>
+          </div>
         </motion.div>
 
-        {/* Results Counter / Category Title */}
+        {/* Category Header with Thematic Icon */}
         <div className="mb-6 flex items-center justify-between border-b border-border/50 pb-3">
-          <h3 className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-accent before:content-['/']">
-            {categories.find((c) => c.key === activeCategory)?.label ?? "Prodotti"} ({filteredItems.length})
-          </h3>
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-8 items-center justify-center rounded-full bg-accent/15 text-accent">
+              <ActiveCatIcon className="size-4" />
+            </div>
+            <h3 className="font-heading text-[length:var(--text-h3)] text-foreground flex items-center gap-2">
+              <span>{activeCatObject?.label ?? "Prodotti"}</span>
+              <span className="font-mono text-[length:var(--text-small)] text-accent font-semibold">
+                ({filteredItems.length})
+              </span>
+            </h3>
+          </div>
           {searchQuery && (
-            <p className="font-mono text-[length:var(--text-small)] text-muted-foreground">
+            <p className="font-mono text-[length:var(--text-small)] text-muted-foreground hidden sm:block">
               Risultati per &quot;{searchQuery}&quot;
             </p>
           )}
@@ -943,12 +1024,13 @@ export default function MenuElegantGrid({
             <Utensils className="size-10 text-muted-foreground mb-3 opacity-50" />
             <p className="font-heading text-[length:var(--text-h3)] text-foreground">Nessun prodotto trovato</p>
             <p className="font-sans text-[length:var(--text-small)] text-muted-foreground mt-1">
-              Prova a cambiare la ricerca o la categoria selezionata.
+              Prova a cambiare la ricerca, la categoria o il filtro alimentari.
             </p>
             <button
               type="button"
               onClick={() => {
                 setActiveCategory("all");
+                setDietaryFilter("all");
                 setSearchQuery("");
               }}
               className="btn-secondary mt-4"
@@ -958,110 +1040,142 @@ export default function MenuElegantGrid({
           </div>
         )}
 
-        {/* Items Grid */}
+        {/* Items Grid (Without Dish Photos) */}
         <motion.div
           layout
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8"
         >
           <AnimatePresence mode="popLayout">
-            {filteredItems.map((item, index) => (
-              <motion.div
-                key={item.id}
-                layout
-                initial={reduce ? false : { opacity: 0, scale: 0.94, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.94, y: -20 }}
-                transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.25) }}
-                className="group relative flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-card border border-border/70 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-              >
-                {/* Image Container */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
-                  <Media
-                    src={item.imageSrc}
-                    alt={item.imageAlt ?? item.name}
-                    loading="lazy"
-                    className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
+            {filteredItems.map((item, index) => {
+              const ItemCategoryObj = categories.find((c) => c.key === item.category);
+              const ItemCatIcon = ItemCategoryObj?.icon ?? Utensils;
 
-                  {/* Tag / Badge */}
-                  {item.tag && (
-                    <div className="absolute top-3 left-3 z-10">
-                      <span
-                        className={cn(
-                          "inline-flex items-center gap-1 rounded-full px-3 py-1 font-mono text-[0.75rem] font-medium tracking-wide uppercase shadow-sm",
-                          item.badgeColor === "accent"
-                            ? "bg-accent text-accent-foreground"
-                            : item.badgeColor === "secondary"
-                            ? "bg-secondary text-secondary-foreground"
-                            : "bg-primary text-primary-foreground"
+              return (
+                <motion.div
+                  key={item.id}
+                  layout
+                  initial={reduce ? false : { opacity: 0, scale: 0.94, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.94, y: -20 }}
+                  transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.25) }}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-[var(--radius-card)] bg-card border border-border/70 p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-accent/40"
+                >
+                  <div>
+                    {/* Top Bar inside Card: Category Icon + Tag Badge + Price Badge */}
+                    <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-border/40">
+                      <div className="flex items-center gap-2">
+                        <div className="flex size-7 items-center justify-center rounded-lg bg-primary/15 text-primary shrink-0" title={ItemCategoryObj?.label}>
+                          <ItemCatIcon className="size-3.5" />
+                        </div>
+                        {item.tag && (
+                          <span
+                            className={cn(
+                              "inline-flex items-center rounded-md px-2.5 py-0.5 font-mono text-[0.7rem] font-medium uppercase tracking-wider",
+                              item.badgeColor === "accent"
+                                ? "bg-accent/15 text-accent border border-accent/30"
+                                : item.badgeColor === "secondary"
+                                ? "bg-secondary/15 text-secondary-foreground border border-secondary/30"
+                                : "bg-primary/15 text-primary border border-primary/30"
+                            )}
+                          >
+                            {item.tag}
+                          </span>
                         )}
-                      >
-                        {item.tag}
+                      </div>
+
+                      {/* Price Badge */}
+                      <span className="font-mono text-[length:var(--text-h3)] font-bold text-accent">
+                        {item.price}
                       </span>
                     </div>
-                  )}
 
-                  {/* Price Tag Overlay */}
-                  <div className="absolute bottom-3 right-3 z-10">
-                    <span className="inline-block rounded-full bg-background/90 backdrop-blur-md px-3.5 py-1 font-mono text-[length:var(--text-body)] font-semibold text-foreground shadow-md border border-border/50">
-                      {item.price}
-                    </span>
-                  </div>
-                </div>
+                    {/* Dish Name & Dietary Badges */}
+                    <div className="flex flex-col gap-1.5 mb-2">
+                      <h3 className="font-heading text-[length:var(--text-h3)] font-medium text-foreground group-hover:text-accent transition-colors duration-200">
+                        {item.name}
+                      </h3>
 
-                {/* Content */}
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-heading text-[length:var(--text-h3)] font-normal text-foreground group-hover:text-accent transition-colors duration-200">
-                      {item.name}
-                    </h3>
-                  </div>
-
-                  <p className="mt-2 flex-1 font-sans text-[length:var(--text-small)] leading-relaxed text-muted-foreground line-clamp-3">
-                    {item.description}
-                  </p>
-
-                  {/* Grammage / Note */}
-                  {item.grammage && (
-                    <p className="mt-2 font-mono text-[0.75rem] text-accent/90 bg-accent/10 px-2.5 py-1 rounded">
-                      {item.grammage}
-                    </p>
-                  )}
-
-                  {/* Ingredients Preview */}
-                  {item.ingredients && item.ingredients.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-1.5 pt-3 border-t border-border/50">
-                      {item.ingredients.slice(0, 3).map((ing, i) => (
-                        <span
-                          key={i}
-                          className="inline-flex items-center gap-1 font-mono text-[0.75rem] text-muted-foreground/90 bg-muted/60 px-2 py-0.5 rounded"
-                        >
-                          <Check className="size-3 text-accent shrink-0" />
-                          {ing}
-                        </span>
-                      ))}
-                      {item.ingredients.length > 3 && (
-                        <span className="font-mono text-[0.75rem] text-muted-foreground self-center">
-                          +{item.ingredients.length - 3}
-                        </span>
+                      {/* Dietary Badges Symbols (Vegetariano, Vegano, Senza Glutine) */}
+                      {(item.isVegetarian || item.isVegan || item.isGlutenFree) && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                          {item.isVegetarian && (
+                            <span
+                              className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2 py-0.5 font-mono text-[0.7rem] font-medium"
+                              title="Opzione Vegetariana"
+                            >
+                              <Leaf className="size-3 shrink-0" />
+                              <span>Vegetariano</span>
+                            </span>
+                          )}
+                          {item.isVegan && (
+                            <span
+                              className="inline-flex items-center gap-1 rounded-full bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/30 px-2 py-0.5 font-mono text-[0.7rem] font-medium"
+                              title="Opzione Vegana"
+                            >
+                              <VeganIcon className="size-3 shrink-0" />
+                              <span>Vegano</span>
+                            </span>
+                          )}
+                          {item.isGlutenFree && (
+                            <span
+                              className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-2 py-0.5 font-mono text-[0.7rem] font-medium"
+                              title="Senza Glutine"
+                            >
+                              <GlutenFreeIcon className="size-3 shrink-0" />
+                              <span>Senza Glutine</span>
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
+
+                    {/* Description */}
+                    <p className="font-sans text-[length:var(--text-small)] leading-relaxed text-muted-foreground line-clamp-3">
+                      {item.description}
+                    </p>
+
+                    {/* Grammage / Note */}
+                    {item.grammage && (
+                      <p className="mt-3 font-mono text-[0.725rem] text-accent/90 bg-accent/10 px-2.5 py-1 rounded-md border border-accent/20">
+                        {item.grammage}
+                      </p>
+                    )}
+
+                    {/* Ingredients Preview */}
+                    {item.ingredients && item.ingredients.length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-1.5 pt-3 border-t border-border/40">
+                        {item.ingredients.slice(0, 3).map((ing, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground bg-muted/60 px-2 py-0.5 rounded"
+                          >
+                            <Check className="size-3 text-accent shrink-0" />
+                            {ing}
+                          </span>
+                        ))}
+                        {item.ingredients.length > 3 && (
+                          <span className="font-mono text-[0.7rem] text-muted-foreground self-center">
+                            +{item.ingredients.length - 3}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Action Button */}
-                  <div className="mt-5 flex items-center justify-between pt-2">
+                  <div className="mt-5 flex items-center justify-between pt-3 border-t border-border/40">
                     <button
                       type="button"
                       onClick={() => setSelectedItem(item)}
                       className="inline-flex items-center gap-1.5 font-mono text-[length:var(--text-small)] text-primary hover:text-accent transition-colors duration-200 font-medium cursor-pointer"
                     >
-                      <span>Vedi Dettagli & Foto</span>
+                      <span>Vedi Dettagli & Allergeni</span>
                       <ChevronRight className="size-4" />
                     </button>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </motion.div>
 
@@ -1092,7 +1206,7 @@ export default function MenuElegantGrid({
         </motion.div>
       </div>
 
-      {/* Modal Detail Dialog */}
+      {/* Modal Detail Dialog (Without Dish Photo) */}
       <AnimatePresence>
         {selectedItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm">
@@ -1101,44 +1215,59 @@ export default function MenuElegantGrid({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.25 }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-card border border-border shadow-2xl text-foreground"
+              className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl bg-card border border-border shadow-2xl text-foreground p-6 sm:p-8"
             >
               {/* Close Button */}
               <button
                 type="button"
                 onClick={() => setSelectedItem(null)}
-                className="absolute top-4 right-4 z-20 flex size-9 items-center justify-center rounded-full bg-background/80 text-foreground hover:bg-background transition-colors shadow-md"
+                className="absolute top-4 right-4 z-20 flex size-9 items-center justify-center rounded-full bg-muted/80 text-foreground hover:bg-muted transition-colors shadow-sm"
                 aria-label="Chiudi"
               >
                 <X className="size-5" />
               </button>
 
-              {/* Modal Image Header */}
-              <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted">
-                <Media
-                  src={selectedItem.imageSrc}
-                  alt={selectedItem.imageAlt ?? selectedItem.name}
-                  className="size-full object-cover"
-                />
-                {selectedItem.tag && (
-                  <span className="absolute top-4 left-4 z-10 rounded-full bg-accent px-3 py-1 font-mono text-[0.75rem] uppercase text-accent-foreground font-semibold shadow">
-                    {selectedItem.tag}
-                  </span>
-                )}
-              </div>
+              {/* Modal Header */}
+              <div className="pr-8">
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  {selectedItem.tag && (
+                    <span className="rounded-full bg-accent/15 text-accent border border-accent/30 px-3 py-0.5 font-mono text-[0.75rem] uppercase font-semibold">
+                      {selectedItem.tag}
+                    </span>
+                  )}
+                  {selectedItem.isVegetarian && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 font-mono text-[0.75rem] font-medium">
+                      <Leaf className="size-3.5" />
+                      <span>Vegetariano</span>
+                    </span>
+                  )}
+                  {selectedItem.isVegan && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/30 px-2.5 py-0.5 font-mono text-[0.75rem] font-medium">
+                      <VeganIcon className="size-3.5" />
+                      <span>Vegano</span>
+                    </span>
+                  )}
+                  {selectedItem.isGlutenFree && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-2.5 py-0.5 font-mono text-[0.75rem] font-medium">
+                      <GlutenFreeIcon className="size-3.5" />
+                      <span>Senza Glutine</span>
+                    </span>
+                  )}
+                </div>
 
-              {/* Modal Body */}
-              <div className="p-6 sm:p-8">
                 <div className="flex items-baseline justify-between gap-4">
                   <h3 className="font-heading text-[length:var(--text-h2)] font-normal text-foreground">
                     {selectedItem.name}
                   </h3>
-                  <span className="font-mono text-[length:var(--text-h3)] font-bold text-accent">
+                  <span className="font-mono text-[length:var(--text-h2)] font-bold text-accent">
                     {selectedItem.price}
                   </span>
                 </div>
+              </div>
 
-                <p className="mt-3 font-sans text-[length:var(--text-body)] text-muted-foreground leading-relaxed">
+              {/* Modal Body */}
+              <div className="mt-4">
+                <p className="font-sans text-[length:var(--text-body)] text-muted-foreground leading-relaxed">
                   {selectedItem.description}
                 </p>
 
@@ -1173,7 +1302,7 @@ export default function MenuElegantGrid({
                   </div>
                 )}
 
-                <div className="mt-8 flex justify-end gap-3">
+                <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-border/40">
                   <button
                     type="button"
                     onClick={() => setSelectedItem(null)}

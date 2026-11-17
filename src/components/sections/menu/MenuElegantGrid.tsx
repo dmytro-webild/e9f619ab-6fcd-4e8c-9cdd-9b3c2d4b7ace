@@ -832,9 +832,6 @@ export default function MenuElegantGrid({
     return matchesCategory && matchesDietary && matchesSearch;
   });
 
-  const activeCatObject = categories.find((c) => c.key === activeCategory);
-  const ActiveCatIcon = activeCatObject?.icon ?? Utensils;
-
   return (
     <section
       ref={sectionRef}
@@ -998,26 +995,6 @@ export default function MenuElegantGrid({
           </div>
         </motion.div>
 
-        {/* Category Header with Thematic Icon */}
-        <div className="mb-6 flex items-center justify-between border-b border-border/50 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="flex size-8 items-center justify-center rounded-full bg-accent/15 text-accent">
-              <ActiveCatIcon className="size-4" />
-            </div>
-            <h3 className="font-heading text-[length:var(--text-h3)] text-foreground flex items-center gap-2">
-              <span>{activeCatObject?.label ?? "Prodotti"}</span>
-              <span className="font-mono text-[length:var(--text-small)] text-accent font-semibold">
-                ({filteredItems.length})
-              </span>
-            </h3>
-          </div>
-          {searchQuery && (
-            <p className="font-mono text-[length:var(--text-small)] text-muted-foreground hidden sm:block">
-              Risultati per &quot;{searchQuery}&quot;
-            </p>
-          )}
-        </div>
-
         {/* Empty state */}
         {filteredItems.length === 0 && (
           <div className="my-12 flex flex-col items-center justify-center text-center p-8 rounded-[var(--radius-card)] bg-card border border-border/60">
@@ -1040,144 +1017,175 @@ export default function MenuElegantGrid({
           </div>
         )}
 
-        {/* Items Grid (Without Dish Photos) */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredItems.map((item, index) => {
-              const ItemCategoryObj = categories.find((c) => c.key === item.category);
-              const ItemCatIcon = ItemCategoryObj?.icon ?? Utensils;
+        {/* Dynamic Category Blocks & Product Grid (Without Dish Photos) */}
+        {filteredItems.length > 0 && (
+          <div className="space-y-12">
+            {categories
+              .filter((c) => c.key !== "all" && (activeCategory === "all" || activeCategory === c.key))
+              .map((cat) => {
+                const catItems = filteredItems.filter((i) => i.category === cat.key);
+                if (catItems.length === 0) return null;
+                const CatIcon = cat.icon ?? Utensils;
 
-              return (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={reduce ? false : { opacity: 0, scale: 0.94, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.94, y: -20 }}
-                  transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.25) }}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-[var(--radius-card)] bg-card border border-border/70 p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-accent/40"
-                >
-                  <div>
-                    {/* Top Bar inside Card: Category Icon + Tag Badge + Price Badge */}
-                    <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-border/40">
-                      <div className="flex items-center gap-2">
-                        <div className="flex size-7 items-center justify-center rounded-lg bg-primary/15 text-primary shrink-0" title={ItemCategoryObj?.label}>
-                          <ItemCatIcon className="size-3.5" />
+                return (
+                  <motion.div
+                    key={cat.key}
+                    initial={reduce ? false : { opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-6"
+                  >
+                    {/* Category Header with Thematic Icon */}
+                    <div className="flex items-center justify-between border-b border-border/60 pb-3 pt-2">
+                      <div className="flex items-center gap-3">
+                        <div className="flex size-10 items-center justify-center rounded-xl bg-accent/15 text-accent shadow-sm shrink-0">
+                          <CatIcon className="size-5" />
                         </div>
-                        {item.tag && (
-                          <span
-                            className={cn(
-                              "inline-flex items-center rounded-md px-2.5 py-0.5 font-mono text-[0.7rem] font-medium uppercase tracking-wider",
-                              item.badgeColor === "accent"
-                                ? "bg-accent/15 text-accent border border-accent/30"
-                                : item.badgeColor === "secondary"
-                                ? "bg-secondary/15 text-secondary-foreground border border-secondary/30"
-                                : "bg-primary/15 text-primary border border-primary/30"
-                            )}
-                          >
-                            {item.tag}
+                        <div className="flex items-baseline gap-2.5">
+                          <h3 className="font-heading text-[length:var(--text-h2)] font-bold text-foreground">
+                            {cat.label}
+                          </h3>
+                          <span className="font-mono text-[length:var(--text-small)] text-accent font-semibold">
+                            ({catItems.length})
                           </span>
-                        )}
-                      </div>
-
-                      {/* Price Badge */}
-                      <span className="font-mono text-[length:var(--text-h3)] font-bold text-accent">
-                        {item.price}
-                      </span>
-                    </div>
-
-                    {/* Dish Name & Dietary Badges */}
-                    <div className="flex flex-col gap-1.5 mb-2">
-                      <h3 className="font-heading text-[length:var(--text-h3)] font-medium text-foreground group-hover:text-accent transition-colors duration-200">
-                        {item.name}
-                      </h3>
-
-                      {/* Dietary Badges Symbols (Vegetariano, Vegano, Senza Glutine) */}
-                      {(item.isVegetarian || item.isVegan || item.isGlutenFree) && (
-                        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                          {item.isVegetarian && (
-                            <span
-                              className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2 py-0.5 font-mono text-[0.7rem] font-medium"
-                              title="Opzione Vegetariana"
-                            >
-                              <Leaf className="size-3 shrink-0" />
-                              <span>Vegetariano</span>
-                            </span>
-                          )}
-                          {item.isVegan && (
-                            <span
-                              className="inline-flex items-center gap-1 rounded-full bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/30 px-2 py-0.5 font-mono text-[0.7rem] font-medium"
-                              title="Opzione Vegana"
-                            >
-                              <VeganIcon className="size-3 shrink-0" />
-                              <span>Vegano</span>
-                            </span>
-                          )}
-                          {item.isGlutenFree && (
-                            <span
-                              className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-2 py-0.5 font-mono text-[0.7rem] font-medium"
-                              title="Senza Glutine"
-                            >
-                              <GlutenFreeIcon className="size-3 shrink-0" />
-                              <span>Senza Glutine</span>
-                            </span>
-                          )}
                         </div>
+                      </div>
+                      {searchQuery && activeCategory === "all" && (
+                        <span className="font-mono text-[length:var(--text-small)] text-muted-foreground hidden sm:block">
+                          Risultati ricerca
+                        </span>
                       )}
                     </div>
 
-                    {/* Description */}
-                    <p className="font-sans text-[length:var(--text-small)] leading-relaxed text-muted-foreground line-clamp-3">
-                      {item.description}
-                    </p>
+                    {/* Products Grid in Category */}
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+                      {catItems.map((item, index) => (
+                        <motion.div
+                          key={item.id}
+                          layout
+                          initial={reduce ? false : { opacity: 0, scale: 0.95, y: 16 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: -16 }}
+                          transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.2) }}
+                          className="group relative flex flex-col justify-between overflow-hidden rounded-[var(--radius-card)] bg-card border border-border/70 p-5 sm:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-accent/40"
+                        >
+                          <div>
+                            {/* Card Top: Dish Name + Intolerance Symbols beside it + Price */}
+                            <div className="flex items-start justify-between gap-3 mb-3">
+                              <div className="flex flex-col gap-1.5 min-w-0">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <h3 className="font-heading text-[length:var(--text-h3)] font-semibold text-foreground group-hover:text-accent transition-colors duration-200">
+                                    {item.name}
+                                  </h3>
 
-                    {/* Grammage / Note */}
-                    {item.grammage && (
-                      <p className="mt-3 font-mono text-[0.725rem] text-accent/90 bg-accent/10 px-2.5 py-1 rounded-md border border-accent/20">
-                        {item.grammage}
-                      </p>
-                    )}
+                                  {/* Intolerance / Dietary Symbols right next to the title */}
+                                  {(item.isVegetarian || item.isVegan || item.isGlutenFree) && (
+                                    <div className="inline-flex flex-wrap items-center gap-1">
+                                      {item.isVegetarian && (
+                                        <span
+                                          className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2 py-0.5 font-mono text-[0.6875rem] font-medium"
+                                          title="Opzione Vegetariana"
+                                        >
+                                          <Leaf className="size-3 shrink-0" />
+                                          <span>Veggie</span>
+                                        </span>
+                                      )}
+                                      {item.isVegan && (
+                                        <span
+                                          className="inline-flex items-center gap-1 rounded-full bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/30 px-2 py-0.5 font-mono text-[0.6875rem] font-medium"
+                                          title="Opzione Vegana"
+                                        >
+                                          <VeganIcon className="size-3 shrink-0" />
+                                          <span>Vegan</span>
+                                        </span>
+                                      )}
+                                      {item.isGlutenFree && (
+                                        <span
+                                          className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-2 py-0.5 font-mono text-[0.6875rem] font-medium"
+                                          title="Senza Glutine"
+                                        >
+                                          <GlutenFreeIcon className="size-3 shrink-0" />
+                                          <span>No Glutine</span>
+                                        </span>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
 
-                    {/* Ingredients Preview */}
-                    {item.ingredients && item.ingredients.length > 0 && (
-                      <div className="mt-4 flex flex-wrap gap-1.5 pt-3 border-t border-border/40">
-                        {item.ingredients.slice(0, 3).map((ing, i) => (
-                          <span
-                            key={i}
-                            className="inline-flex items-center gap-1 font-mono text-[0.7rem] text-muted-foreground bg-muted/60 px-2 py-0.5 rounded"
-                          >
-                            <Check className="size-3 text-accent shrink-0" />
-                            {ing}
-                          </span>
-                        ))}
-                        {item.ingredients.length > 3 && (
-                          <span className="font-mono text-[0.7rem] text-muted-foreground self-center">
-                            +{item.ingredients.length - 3}
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                                {item.tag && (
+                                  <span
+                                    className={cn(
+                                      "inline-block rounded-md px-2 py-0.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wider w-fit",
+                                      item.badgeColor === "accent"
+                                        ? "bg-accent/15 text-accent border border-accent/30"
+                                        : item.badgeColor === "secondary"
+                                        ? "bg-secondary/15 text-secondary-foreground border border-secondary/30"
+                                        : "bg-primary/15 text-primary border border-primary/30"
+                                    )}
+                                  >
+                                    {item.tag}
+                                  </span>
+                                )}
+                              </div>
 
-                  {/* Action Button */}
-                  <div className="mt-5 flex items-center justify-between pt-3 border-t border-border/40">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedItem(item)}
-                      className="inline-flex items-center gap-1.5 font-mono text-[length:var(--text-small)] text-primary hover:text-accent transition-colors duration-200 font-medium cursor-pointer"
-                    >
-                      <span>Vedi Dettagli & Allergeni</span>
-                      <ChevronRight className="size-4" />
-                    </button>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
+                              {/* Price */}
+                              <span className="font-mono text-[length:var(--text-h3)] font-bold text-accent shrink-0 pt-0.5">
+                                {item.price}
+                              </span>
+                            </div>
+
+                            {/* Description */}
+                            <p className="font-sans text-[length:var(--text-small)] leading-relaxed text-muted-foreground mt-1">
+                              {item.description}
+                            </p>
+
+                            {/* Grammage */}
+                            {item.grammage && (
+                              <p className="mt-2.5 font-mono text-[0.725rem] text-accent/90 bg-accent/10 px-2.5 py-1 rounded-md border border-accent/20">
+                                {item.grammage}
+                              </p>
+                            )}
+
+                            {/* Ingredients */}
+                            {item.ingredients && item.ingredients.length > 0 && (
+                              <div className="mt-3.5 pt-3 border-t border-border/40">
+                                <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-muted-foreground block mb-1.5">
+                                  Ingredienti principali:
+                                </span>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {item.ingredients.map((ing, i) => (
+                                    <span
+                                      key={i}
+                                      className="inline-flex items-center gap-1 font-mono text-[0.7rem] text-foreground/80 bg-muted/70 border border-border/50 px-2 py-0.5 rounded-md"
+                                    >
+                                      <Check className="size-3 text-accent shrink-0" />
+                                      {ing}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Action Button */}
+                          <div className="mt-4 pt-3 border-t border-border/40 flex items-center justify-between">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedItem(item)}
+                              className="inline-flex items-center gap-1.5 font-mono text-[length:var(--text-small)] text-primary hover:text-accent transition-colors duration-200 font-medium cursor-pointer"
+                            >
+                              <span>Dettagli & Allergeni</span>
+                              <ChevronRight className="size-4" />
+                            </button>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                );
+              })}
+          </div>
+        )}
 
         {/* Bottom CTA / Note */}
         <motion.div

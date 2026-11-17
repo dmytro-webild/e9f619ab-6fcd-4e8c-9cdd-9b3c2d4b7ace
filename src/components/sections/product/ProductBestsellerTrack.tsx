@@ -84,8 +84,8 @@ const DishCard = ({ item, index, trackX }: { item: Dish; index: number; trackX: 
 };
 
 const ProductBestsellerTrack = ({
-  label = "/Our bestsellers",
-  title = "The corner that is always up to something in the most delicious way",
+  label,
+  title,
   items = DEFAULT_ITEMS,
   button = { text: "View food menu", href: "#menu" },
   ariaLabel,
@@ -95,28 +95,29 @@ const ProductBestsellerTrack = ({
   const kit = useKitMotion();
   const trackX = useMotionValue(0);
 
-  const header = (
-    <div className="mx-auto flex max-w-[48rem] flex-col items-center gap-4 text-center">
-      {label && (
-        <motion.p
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: kit.base, ease: kit.ease }}
-          className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-foreground"
-        >
-          {label}
-        </motion.p>
-      )}
-      {title && (
-        <SnellenbergWordRise
-          tag="h2"
-          text={title}
-          className="text-balance text-[length:var(--text-h1)] leading-[var(--heading-leading)] tracking-[var(--heading-tracking)] text-foreground [font-family:var(--font-heading)] [font-weight:var(--heading-weight)]"
-        />
-      )}
-    </div>
-  );
+  const header =
+    label || title ? (
+      <div className="mx-auto flex max-w-[48rem] flex-col items-center gap-4 text-center">
+        {label && (
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: kit.base, ease: kit.ease }}
+            className="font-mono text-[length:var(--text-label)] uppercase tracking-[var(--label-tracking)] text-foreground"
+          >
+            {label}
+          </motion.p>
+        )}
+        {title && (
+          <SnellenbergWordRise
+            tag="h2"
+            text={title}
+            className="text-balance text-[length:var(--text-h1)] leading-[var(--heading-leading)] tracking-[var(--heading-tracking)] text-foreground [font-family:var(--font-heading)] [font-weight:var(--heading-weight)]"
+          />
+        )}
+      </div>
+    ) : undefined;
 
   return (
     <section aria-label={ariaLabel ?? title ?? "Bestsellers"} className={cn("relative overflow-x-clip bg-background pb-[var(--section-space)] text-foreground", className)}>

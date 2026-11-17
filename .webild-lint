@@ -1,0 +1,10 @@
+src/components/Layout.tsx
+src/components/sections/contact/ContactReserveForm.tsx
+src/components/sections/features/FeaturesStackedOffers.tsx
+src/components/sections/footer/FooterWordmarkMarquee.tsx
+src/components/sections/gallery/GalleryCornerMasks.tsx
+src/components/sections/hero/HeroWordmarkWindow.tsx
+src/components/sections/pricing/PricingWorkshopTickets.tsx
+src/components/sections/product/ProductBestsellerTrack.tsx
+src/components/sections/testimonial/TestimonialVideoCoverflow.tsx
+src/pages/HomePage.tsx

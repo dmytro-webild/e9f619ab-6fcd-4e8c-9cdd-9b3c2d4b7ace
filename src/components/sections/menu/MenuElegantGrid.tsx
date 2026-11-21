@@ -308,6 +308,18 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
 
   // --- SPECIAL BURGERS ---
   {
+    id: "sb0",
+    name: "Spritzburger Signature",
+    category: "special-burgers",
+    price: "€13.50",
+    description: "Il burger simbolo della casa! Pane brioche tostato, doppio patty 100% manzo selezionato, riduzione artigianale allo Spritz Aperol, provola affumicata fusa, bacon croccante, cipolla caramellata e salsa house.",
+    grammage: "Disponibile da: 150g (€13.50), 200g (€15.50), 300g (€17.50)",
+    ingredients: ["Doppio Patty 100% Manzo", "Riduzione allo Spritz Aperol", "Provola Affumicata Fusa", "Bacon Croccante", "Cipolla Caramellata", "Pane Brioche Tostato"],
+    tag: "Signature Dish",
+    badgeColor: "primary",
+    allergens: "Glutine, Lattosio"
+  },
+  {
     id: "sb1",
     name: "Tartufo",
     category: "special-burgers",
